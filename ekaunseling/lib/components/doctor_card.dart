@@ -2,7 +2,7 @@ import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:flutter/material.dart';
 
 class DoctorCard extends StatelessWidget {
-  const DoctorCard({Key? key, required this.route}) : super(key: key);
+  const DoctorCard({super.key, required this.route});
 
   final String route;
 
@@ -20,7 +20,7 @@ class DoctorCard extends StatelessWidget {
             children: [
               SizedBox(
                 width: Config.widthSize * 0.33,
-                child: Image.asset('assets/doctor_2.jpg', fit: BoxFit.fill),
+                child: Image.asset('assets/pickauselor.jpg', fit: BoxFit.fill),
               ),
               Flexible(
                 child: Padding(
@@ -32,14 +32,14 @@ class DoctorCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       const Text(
-                        'Dr Richard Tan',
+                        'Puan Syaza',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const Text(
-                        'Dental',
+                        'Kaunselor',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.normal,

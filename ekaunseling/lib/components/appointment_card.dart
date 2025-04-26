@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:doctor_appointment_app/main.dart';
 import 'package:doctor_appointment_app/utils/config.dart';
 
 class AppointmentCard extends StatefulWidget {
-  AppointmentCard({Key? key}) : super(key: key);
+  const AppointmentCard({super.key});
 
   @override
   State<AppointmentCard> createState() => _AppointmentCardState();
@@ -28,7 +27,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 children: [
                   const CircleAvatar(
                     backgroundImage: AssetImage(
-                      'assets/doctor_1.jpg',
+                      'assets/pickauselor.jpg',
                     ), //imagen de doctor
                   ),
                   const SizedBox(width: 10),
@@ -37,11 +36,11 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const <Widget>[
                       Text(
-                        'Dr Richard Tan',
+                        'Puan Syaza',
                         style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(height: 2),
-                      Text('Dental', style: TextStyle(color: Colors.black)),
+                      Text('Kaunselor', style: TextStyle(color: Colors.black)),
                     ],
                   ),
                 ],
@@ -91,7 +90,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
 
 //Schedule Widget
 class ScheduleCard extends StatelessWidget {
-  const ScheduleCard({Key? key}) : super(key: key);
+  const ScheduleCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -108,14 +107,14 @@ class ScheduleCard extends StatelessWidget {
           Icon(Icons.calendar_today, color: Colors.white, size: 15),
           SizedBox(width: 5),
           Text(
-            'Monday, 11/28/2025',
+            'Monday, 25/04/2025',
             style: const TextStyle(color: Colors.white),
           ),
           SizedBox(width: 20),
           Icon(Icons.access_alarm, color: Colors.white, size: 17),
           SizedBox(width: 5),
           Flexible(
-            child: Text('2:00 PM', style: const TextStyle(color: Colors.white)),
+            child: Text('12:00 PM', style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),

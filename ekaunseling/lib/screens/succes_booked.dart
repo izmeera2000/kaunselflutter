@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class AppointmentBooked extends StatelessWidget {
-  const AppointmentBooked({Key? key}) : super(key: key);
+  const AppointmentBooked({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -4,8 +4,11 @@ import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'profile_page';
+
+
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,12 +17,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //
   List<Map<String, dynamic>> medCat = [
-    {"icon": FontAwesomeIcons.userDoctor, "category": "General"},
-    {"icon": FontAwesomeIcons.heartPulse, "category": "Cardiology"},
-    {"icon": FontAwesomeIcons.lungs, "category": "Respirations"},
-    {"icon": FontAwesomeIcons.hand, "category": "Dermatology"},
-    {"icon": FontAwesomeIcons.personPregnant, "category": "Gynecology"},
-    {"icon": FontAwesomeIcons.teeth, "category": "Dental"},
+   // {"icon": FontAwesomeIcons.userDoctor, "category": "General"},
+    {"icon": FontAwesomeIcons.heartPulse, "category": "Kaunseling"},
+   // {"icon": FontAwesomeIcons.lungs, "category": "Respirations"},
+   // {"icon": FontAwesomeIcons.hand, "category": "Dermatology"},
+   // {"icon": FontAwesomeIcons.personPregnant, "category": "Gynecology"},
+   // {"icon": FontAwesomeIcons.teeth, "category": "Dental"},
   ];
   //
   @override
@@ -35,25 +38,33 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const <Widget>[
-                    Text(
-                      'Amanda',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: AssetImage(
-                          'assets/profile1.jpg',
-                        ), //imagen de perfil
-                      ),
-                    ),
-                  ],
-                ),
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: <Widget>[
+    const Text(
+      'Hafizul',
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfilePage(), // Replace with your ProfilePage widget
+          ),
+        );
+      },
+      child: const CircleAvatar(
+        radius: 30,
+        backgroundImage: AssetImage(
+          'assets/jawjoe.jpg',
+        ), // Profile image
+      ),
+    ),
+  ],
+),
                 Config.spaceMedium,
                 //lista de categorias
                 const Text(
@@ -108,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                 AppointmentCard(),
                 Config.spaceSmall,
                 Text(
-                  'Top Doctors',
+                  'Kaunselor',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
 
@@ -116,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                 //doctor card here
                 Config.spaceSmall,
                 Column(
-                  children: List.generate(10, (index) {
+                  children: List.generate(1, (index) {
                     return const DoctorCard(route: 'doctor_details');
                   }),
                 ),

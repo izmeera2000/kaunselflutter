@@ -4,12 +4,12 @@ import '../utils/config.dart';
 
 class Button extends StatelessWidget {
   const Button({
-    Key? key,
+    super.key,
     required this.width,
     required this.title,
     required this.onPressed,
     required this.disable,
-  }) : super(key: key);
+  });
 
   final double width;
   final String title;

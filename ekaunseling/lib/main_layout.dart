@@ -1,10 +1,13 @@
+// ignore_for_file: depend_on_referenced_packages
+
+import 'package:doctor_appointment_app/screens/chatbot_page';
 import 'package:doctor_appointment_app/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/screens/appointment_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({Key? key}) : super(key: key);
+  const MainLayout({super.key});
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -24,7 +27,7 @@ class _MainLayoutState extends State<MainLayout> {
             currentPage = value;
           });
         }),
-        children: const <Widget>[HomePage(), AppointmentPage()],
+        children: <Widget>[HomePage(), ChatbotPage(), AppointmentPage()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
@@ -44,9 +47,13 @@ class _MainLayoutState extends State<MainLayout> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.message),
+            label: 'Chatbot',
+          ),
+          BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
             label: 'Appointments',
-          ),
+          )
         ],
       ),
     );

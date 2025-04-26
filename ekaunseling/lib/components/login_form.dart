@@ -3,7 +3,7 @@ import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:doctor_appointment_app/components/button.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  const LoginForm({super.key});
 
   @override
   State<LoginForm> createState() => _LoginFormState();

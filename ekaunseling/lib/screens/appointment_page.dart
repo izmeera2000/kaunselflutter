@@ -1,8 +1,9 @@
 import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:flutter/material.dart';
+import 'package:doctor_appointment_app/main.dart';
 
 class AppointmentPage extends StatefulWidget {
-  const AppointmentPage({Key? key}) : super(key: key);
+  const AppointmentPage({super.key});
 
   @override
   State<AppointmentPage> createState() => _AppointmentPageState();
@@ -15,28 +16,28 @@ class _AppointmentPageState extends State<AppointmentPage> {
   Alignment _alignment = Alignment.centerLeft;
   List<dynamic> schedules = [
     {
-      "doctor_name": "Richard Tan",
-      "doctor_profile": "assets/doctor_2.jpg",
-      "category": "Dental",
+      "doctor_name": "Puan Syaza",
+      "doctor_profile": "assets/pickauselor.jpg",
+      "category": "Kaunseling",
       "status": FilterStatus.upcoming,
     },
     {
-      "doctor_name": "Max Lim",
-      "doctor_profile": "assets/doctor_3.jpg",
-      "category": "Cardiology",
-      "status": FilterStatus.complete,
+//"doctor_name": "Max Lim",
+ //     "doctor_profile": "assets/doctor_3.jpg",
+   //   "category": "Cardiology",
+   //   "status": FilterStatus.complete,
     },
     {
-      "doctor_name": "Jane Wong",
-      "doctor_profile": "assets/doctor_4.jpg",
-      "category": "Respiration",
-      "status": FilterStatus.complete,
+   //   "doctor_name": "Jane Wong",
+   //   "doctor_profile": "assets/doctor_4.jpg",
+   //   "category": "Respiration",
+   //   "status": FilterStatus.complete,
     },
     {
-      "doctor_name": "Jenny Song",
-      "doctor_profile": "assets/doctor_5.jpg",
-      "category": "General",
-      "status": FilterStatus.cancel,
+   //   "doctor_name": "Jenny Song",
+    //  "doctor_profile": "assets/doctor_5.jpg",
+    //  "category": "General",
+   //   "status": FilterStatus.cancel,
     },
   ];
 
@@ -137,7 +138,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
               child: ListView.builder(
                 itemCount: filteredSchedules.length,
                 itemBuilder: ((context, index) {
-                  var _schedule = filteredSchedules[index];
+                  var schedule = filteredSchedules[index];
                   bool isLastElement = filteredSchedules.length + 1 == index;
                   return Card(
                     shape: RoundedRectangleBorder(
@@ -157,7 +158,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             children: [
                               CircleAvatar(
                                 backgroundImage: AssetImage(
-                                  _schedule['doctor_profile'],
+                                  schedule['doctor_profile'],
                                 ),
                               ),
                               Config.spaceSmall,
@@ -166,7 +167,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    _schedule['doctor_name'],
+                                    schedule['doctor_name'],
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
@@ -174,7 +175,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                   ),
                                   const SizedBox(height: 5),
                                   Text(
-                                    _schedule['category'],
+                                    schedule['category'],
                                     style: const TextStyle(
                                       color: Colors.grey,
                                       fontSize: 12,
@@ -233,7 +234,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 }
 
 class ScheduleCard extends StatelessWidget {
-  const ScheduleCard({Key? key}) : super(key: key);
+  const ScheduleCard({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/utils/text.dart';
 import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:doctor_appointment_app/components/login_form.dart';
-import 'package:doctor_appointment_app/components/social_button.dart';
+//import 'package:doctor_appointment_app/components/social_button.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key}) : super(key: key);
+  const AuthPage({super.key});
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -60,36 +60,36 @@ class _AuthPageState extends State<AuthPage> {
               const Spacer(),
               Center(
                 child: Text(
-                  AppText.enText['social-login']!,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                    color: Colors.grey.shade500,
-                  ),
-                ),
-              ),
-              Config.spaceSmall,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const <Widget>[
+             //     AppText.enText['social-login']!,
+             //     style: TextStyle(
+             //       fontSize: 16,
+              //      fontWeight: FontWeight.normal,
+              //      color: Colors.grey.shade500,
+            //      ),
+            //    ),
+//),
+           //   Config.spaceSmall,
+          //    Row(
+           //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //      children: const <Widget>[
                   //social button
-                  SocialButton(social: 'google'),
-                  SocialButton(social: 'facebook'),
-                ],
-              ),
-              Config.spaceSmall,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    AppText.enText['signUp_text']!,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                  const Text(
+               //   SocialButton(social: 'google'),
+               //   SocialButton(social: 'facebook'),
+             //   ],
+            //  ),
+            //  Config.spaceSmall,
+            //  Row(
+           //     mainAxisAlignment: MainAxisAlignment.center,
+           //     children: <Widget>[
+           //       Text(
+           //         AppText.enText['signUp_text']!,
+           //         style: TextStyle(
+           //           fontSize: 16,
+           //           fontWeight: FontWeight.normal,
+           //           color: Colors.grey.shade500,
+           //         ),
+           //       ),
+           //       const Text(
                     'Sign Up',
                     style: TextStyle(
                       fontSize: 16,
@@ -97,7 +97,7 @@ class _AuthPageState extends State<AuthPage> {
                       color: Colors.black,
                     ),
                   ),
-                ],
+           //     ],
               ),
             ],
           ),

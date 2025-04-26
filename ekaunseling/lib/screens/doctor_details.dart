@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:doctor_appointment_app/components/custom_appbar.dart';
 
 class DoctorDetails extends StatefulWidget {
-  const DoctorDetails({Key? key}) : super(key: key);
+  const DoctorDetails({super.key});
 
   @override
   State<DoctorDetails> createState() => _DoctorDetailsState();
@@ -17,7 +17,7 @@ class _DoctorDetailsState extends State<DoctorDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        appTitle: 'Doctor Details',
+        appTitle: 'Puan Syaza',
         icon: const FaIcon(Icons.arrow_back_ios),
         actions: [
           //Favarite Button
@@ -57,24 +57,24 @@ class _DoctorDetailsState extends State<DoctorDetails> {
 }
 
 class AboutDoctor extends StatelessWidget {
-  const AboutDoctor({Key? key}) : super(key: key);
+  const AboutDoctor({super.key});
 
   @override
   Widget build(BuildContext context) {
     Config().init(context);
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         children: <Widget>[
           const CircleAvatar(
             radius: 65.0,
-            backgroundImage: AssetImage('assets/doctor_2.jpg'),
+            backgroundImage: AssetImage('assets/pickauselor.jpg'),
             backgroundColor: Colors.white,
           ),
           Config.spaceMedium,
           const Text(
-            'Dr Richard Tan',
-            style: const TextStyle(
+            'Puan Syaza',
+            style: TextStyle(
               color: Colors.black,
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
@@ -94,7 +94,7 @@ class AboutDoctor extends StatelessWidget {
           SizedBox(
             width: Config.widthSize * 0.75,
             child: const Text(
-              'Sarawak General Hospital',
+              'ADTEC Taiping',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class AboutDoctor extends StatelessWidget {
 }
 
 class DetailBody extends StatelessWidget {
-  const DetailBody({Key? key}) : super(key: key);
+  const DetailBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -125,12 +125,12 @@ class DetailBody extends StatelessWidget {
           const DoctorInfo(),
           Config.spaceBig,
           const Text(
-            'About Doctor',
+            'About',
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
           ),
           Config.spaceMedium,
           const Text(
-            'Dr. Richard Tan is an experience Dental at Sarawak, graduated since 2008, and completed his/her training at Sungai Buloh General Hospital.',
+            'Puan Syaza merupakan seorang kaunselor terlatih yang bertugas di Institusi Pengajian Tinggi ADTEC Taiping.',
             style: TextStyle(fontWeight: FontWeight.w500, height: 1.5),
             softWrap: true,
             textAlign: TextAlign.justify,
@@ -142,13 +142,13 @@ class DetailBody extends StatelessWidget {
 }
 
 class DoctorInfo extends StatelessWidget {
-  const DoctorInfo({Key? key}) : super(key: key);
+  const DoctorInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: const <Widget>[
-        InfoCard(label: 'Patients', value: '109'),
+        InfoCard(label: 'Students', value: '109'),
         SizedBox(width: 15),
         InfoCard(label: 'Experiences', value: '10 years'),
         SizedBox(width: 15),
@@ -159,8 +159,7 @@ class DoctorInfo extends StatelessWidget {
 }
 
 class InfoCard extends StatelessWidget {
-  const InfoCard({Key? key, required this.label, required this.value})
-    : super(key: key);
+  const InfoCard({super.key, required this.label, required this.value});
 
   final String label;
   final String value;

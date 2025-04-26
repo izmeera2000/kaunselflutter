@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     //define theme data here
     return MaterialApp(
       navigatorKey: navigatorKey,
-      title: 'Flutter Doctor App',
+      title: 'Flutter e-Kaunseling App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         //pre-define input decoration
