@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:doctor_appointment_app/screens/auth_page.dart';
+import 'package:doctor_appointment_app/screens/login_page.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -50,7 +50,7 @@ class ProfilePage extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const AuthPage()),
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
               },
             ),

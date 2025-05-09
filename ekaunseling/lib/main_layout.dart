@@ -1,6 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:doctor_appointment_app/screens/chatbot_page';
+import 'package:doctor_appointment_app/screens/chatbot_page.dart';
 import 'package:doctor_appointment_app/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/screens/appointment_page.dart';

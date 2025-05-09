@@ -3,8 +3,10 @@ import 'package:doctor_appointment_app/screens/doctor_details.dart';
 import 'package:doctor_appointment_app/screens/succes_booked.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/utils/config.dart';
-import 'package:doctor_appointment_app/screens/auth_page.dart';
+import 'package:doctor_appointment_app/screens/login_page.dart';
+import 'package:doctor_appointment_app/screens/register_page.dart';
 import 'package:doctor_appointment_app/main_layout.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,6 +17,21 @@ class MyApp extends StatelessWidget {
 
   //this is for push navigator
   static final navigatorKey = GlobalKey<NavigatorState>();
+
+   Future<void> checkLoginStatus(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    
+    // Retrieve the saved user ID (or other details)
+    String? userId = prefs.getString('user_id');
+
+    if (userId != null) {
+      // User is logged in, navigate to the main page
+      Navigator.of(context).pushReplacementNamed('main');
+    } else {
+      // User is not logged in, stay on the login page
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
+  }
 
   // This widget is the root of your application.
   @override
@@ -46,9 +63,10 @@ class MyApp extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context) => const AuthPage(),
+        '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
         'main': (context) => const MainLayout(),
         'doctor_details': (context) => const DoctorDetails(),
         'booking_page': (context) => BookingPage(),

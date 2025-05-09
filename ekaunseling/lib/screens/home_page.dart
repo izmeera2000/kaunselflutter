@@ -3,9 +3,9 @@ import 'package:doctor_appointment_app/components/doctor_card.dart';
 import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'profile_page';
-
+import 'package:doctor_appointment_app/screens/profile_page.dart';
+import 'package:doctor_appointment_app/components/retrive_user.dart';  // Ensure this import is correct
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,16 +15,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //
   List<Map<String, dynamic>> medCat = [
-   // {"icon": FontAwesomeIcons.userDoctor, "category": "General"},
     {"icon": FontAwesomeIcons.heartPulse, "category": "Kaunseling"},
-   // {"icon": FontAwesomeIcons.lungs, "category": "Respirations"},
-   // {"icon": FontAwesomeIcons.hand, "category": "Dermatology"},
-   // {"icon": FontAwesomeIcons.personPregnant, "category": "Gynecology"},
-   // {"icon": FontAwesomeIcons.teeth, "category": "Dental"},
   ];
-  //
+
+  String userName = 'Loading...';  // Default value for the user name
+  String userProfileImage = 'assets/jawjoe.jpg';  // Default profile image
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserDetails();  // Fetch user details when the page loads
+  }
+
+  // Fetch user details from SharedPreferences
+  Future<void> fetchUserDetails() async {
+    Map<String, String> userDetails = await getUserDetails();
+
+    if (userDetails.isNotEmpty) {
+      setState(() {
+        // Update the state with user details
+        userName = userDetails['nama'] ?? 'User';  // Set user name or default to 'User'
+        userProfileImage = 'assets/jawjoe.jpg';  // Update with the user's profile image
+      });
+    } else {
+      setState(() {
+        userName = 'Guest';  // Default to 'Guest' if no user details are found
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -38,41 +58,39 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: <Widget>[
-    const Text(
-      'Hafizul',
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfilePage(), // Replace with your ProfilePage widget
-          ),
-        );
-      },
-      child: const CircleAvatar(
-        radius: 30,
-        backgroundImage: AssetImage(
-          'assets/jawjoe.jpg',
-        ), // Profile image
-      ),
-    ),
-  ],
-),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      userName,  // Display the fetched user name
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProfilePage(), // Replace with your ProfilePage widget
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(userProfileImage), // Display the user's profile image
+                      ),
+                    ),
+                  ],
+                ),
                 Config.spaceMedium,
-                //lista de categorias
                 const Text(
                   'Category',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Config.spaceSmall,
-                //build category list
+                // Build category list
                 SizedBox(
                   height: Config.heightSize * 0.05,
                   child: ListView(
@@ -93,7 +111,6 @@ class _HomePageState extends State<HomePage> {
                                 medCat[index]['icon'],
                                 color: Colors.white,
                               ),
-
                               const SizedBox(width: 20),
                               Text(
                                 medCat[index]['category'],
@@ -115,16 +132,12 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Config.spaceSmall,
-                //display appointment card here
                 AppointmentCard(),
                 Config.spaceSmall,
                 Text(
                   'Kaunselor',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-
-                //list of top doctors
-                //doctor card here
                 Config.spaceSmall,
                 Column(
                   children: List.generate(1, (index) {
