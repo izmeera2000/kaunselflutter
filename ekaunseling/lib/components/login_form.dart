@@ -58,15 +58,20 @@ class _LoginFormState extends State<LoginForm> {
       if (response.statusCode == 200) {
         if (responseBody['status'] == 'success') {
           // Navigate to the main page/dashboard on successful login
-                _saveUserDetails(responseBody['user']);
+          _saveUserDetails(responseBody['user']);
 
-          Navigator.of(context).pushReplacementNamed('main');
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            'main', 
+            (Route<dynamic> route) => false, // Removes all the previous routes
+          );
         } else {
           // Show an error message if login failed, showing the response message
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(content: Text(responseBody['message'] ?? 'Unknown error')),
-          // );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(responseBody['message'] ?? 'Unknown error')),
+          );
           debugPrint(responseBody['message']);
+          Navigator.of(context).pop(); // Close the loading indicator
         }
       } else {
         // If the request failed, show the full response
@@ -83,8 +88,7 @@ class _LoginFormState extends State<LoginForm> {
         const SnackBar(
             content: Text('Error: Please check your internet connection')),
       );
-        debugPrint("Error: $e");
-
+      debugPrint("Error: $e");
     }
   }
 
@@ -103,8 +107,8 @@ class _LoginFormState extends State<LoginForm> {
               hintText: 'Email Address',
               labelText: 'Email',
               alignLabelWithHint: true,
-              prefixIcon: Icon(Icons.email_outlined),
               prefixIconColor: Config.primaryColor,
+              prefixIcon: Icon(Icons.email_outlined),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -165,6 +169,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
+
 Future<void> _saveUserDetails(Map<String, dynamic> userDetails) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -173,13 +178,16 @@ Future<void> _saveUserDetails(Map<String, dynamic> userDetails) async {
   prefs.setString('email', userDetails['email']);
   prefs.setString('ndp', userDetails['ndp']);
   prefs.setString('kp', userDetails['kp']);
-  prefs.setString('image_url', userDetails['image_url'] ?? ''); // Store profile image URL
-  prefs.setString('status_kahwin', userDetails['status_kahwin'] ?? ''); // Store marital status
+  prefs.setString(
+      'image_url', userDetails['image_url'] ?? ''); // Store profile image URL
+  prefs.setString('status_kahwin',
+      userDetails['status_kahwin'] ?? ''); // Store marital status
   prefs.setString('agama', userDetails['agama'] ?? ''); // Store religion
   prefs.setString('jantina', userDetails['jantina'] ?? ''); // Store gender
   prefs.setString('phone', userDetails['phone'] ?? ''); // Store phone number
   prefs.setString('nama', userDetails['nama'] ?? ''); // Store full name
-  prefs.setString('sem', userDetails['sem'] ?? ''); // Store semester or other info
+  prefs.setString(
+      'sem', userDetails['sem'] ?? ''); // Store semester or other info
   prefs.setString('bangsa', userDetails['bangsa'] ?? ''); // Store ethnicity
 
   // Optionally, you can add other fields if necessary

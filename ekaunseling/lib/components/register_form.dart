@@ -143,6 +143,8 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: const InputDecoration(
               hintText: 'NDP',
               labelText: 'NDP',
+                            alignLabelWithHint: true,
+               prefixIconColor: Config.primaryColor,
               prefixIcon: Icon(Icons.person),
             ),
             validator: (value) {
@@ -158,6 +160,8 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: const InputDecoration(
               hintText: 'Full Name',
               labelText: 'Full Name',
+                alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
               prefixIcon: Icon(Icons.person_outline),
             ),
             validator: (value) {
@@ -175,6 +179,8 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: const InputDecoration(
               hintText: 'Email Address',
               labelText: 'Email',
+                alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
               prefixIcon: Icon(Icons.email_outlined),
             ),
             validator: (value) {
@@ -193,6 +199,8 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: const InputDecoration(
               hintText: 'Phone Number',
               labelText: 'Phone',
+                alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
               prefixIcon: Icon(Icons.phone),
             ),
             validator: (value) {
@@ -209,6 +217,8 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: const InputDecoration(
               hintText: 'Sem',
               labelText: 'Semester',
+                alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
               prefixIcon: Icon(Icons.email_outlined),
             ),
             validator: (value) {
@@ -226,6 +236,8 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: const InputDecoration(
               hintText: 'Bangsa',
               labelText: 'Bangsa',
+                alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
               prefixIcon: Icon(Icons.email_outlined),
             ),
             validator: (value) {
@@ -245,6 +257,8 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: InputDecoration(
               hintText: 'Password',
               labelText: 'Password',
+                alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
               prefixIcon: const Icon(Icons.lock),
               suffixIcon: IconButton(
                 icon: obsecurePass
@@ -273,6 +287,8 @@ class _RegisterFormState extends State<RegisterForm> {
               hintText: 'Confirm Password',
               labelText: 'Confirm Password',
               prefixIcon: const Icon(Icons.lock),
+                alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
               suffixIcon: IconButton(
                 icon: obsecureConfirmPass
                     ? const Icon(Icons.visibility_off)

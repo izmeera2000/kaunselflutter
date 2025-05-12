@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:doctor_appointment_app/screens/login_page.dart';
 import 'package:doctor_appointment_app/screens/register_page.dart';
+import 'package:doctor_appointment_app/screens/intro_page.dart';
 import 'package:doctor_appointment_app/main_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,8 +55,8 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Config.primaryColor,
-          selectedItemColor: Colors.white,
+          backgroundColor: Colors.white,
+          selectedItemColor: Config.primaryColor,
           showSelectedLabels: true,
           showUnselectedLabels: false,
           unselectedItemColor: Colors.grey.shade700,
@@ -63,8 +64,9 @@ class MyApp extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
         ),
       ),
-      initialRoute: '/login',
+      initialRoute: '/intro',
       routes: {
+        '/intro': (context) =>   IntroScreen(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         'main': (context) => const MainLayout(),

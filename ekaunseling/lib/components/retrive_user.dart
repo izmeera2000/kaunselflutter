@@ -1,46 +1,49 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:doctor_appointment_app/components/user_model.dart';
 
-Future<Map<String, String>> getUserDetails() async {
+Future<UserModel> getUserDetails() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // Retrieve the saved user info
-  String? userId = prefs.getString('user_id');
-  String? email = prefs.getString('email');
-  String? ndp = prefs.getString('ndp');
-  String? kp = prefs.getString('kp');
-  String? imageUrl = prefs.getString('image_url');   // New field
-  String? statusKahwin = prefs.getString('status_kahwin');  // New field
-  String? agama = prefs.getString('agama');  // New field
-  String? jantina = prefs.getString('jantina');  // New field
-  String? phone = prefs.getString('phone');  // New field
-  String? nama = prefs.getString('nama');  // New field
-  String? sem = prefs.getString('sem');  // New field
-  String? bangsa = prefs.getString('bangsa');  // New field
+  try {
+    // Retrieve the saved user info
+    String? userId = prefs.getString('user_id');
+    String? email = prefs.getString('email');
+    String? ndp = prefs.getString('ndp');
+    String? kp = prefs.getString('kp');
+    String? imageUrl = prefs.getString('image_url');
+    String? statusKahwin = prefs.getString('status_kahwin');
+    String? agama = prefs.getString('agama');
+    String? jantina = prefs.getString('jantina');
+    String? phone = prefs.getString('phone');
+    String? nama = prefs.getString('nama');
+    String? sem = prefs.getString('sem');
+    String? bangsa = prefs.getString('bangsa');
 
-  // Check if any user details are missing
-  if (userId == null || email == null || ndp == null || kp == null || 
-      imageUrl == null || statusKahwin == null || agama == null || 
-      jantina == null || phone == null || nama == null || sem == null || 
-      bangsa == null) {
-    // Return a map indicating that some user details are not found
-    return {
-      'status': 'not_found',  // Status indicating details are not found
-    };
+    // Check if any user details are missing and return a status map indicating so
+    if (userId == null || email == null || ndp == null || kp == null ||
+        imageUrl == null || statusKahwin == null || agama == null ||
+        jantina == null || phone == null || nama == null || sem == null || 
+        bangsa == null) {
+      throw Exception("User details are missing.");
+    }
+
+    // Return user details as UserModel
+    return UserModel(
+      userId: userId,
+      email: email,
+      ndp: ndp,
+      kp: kp,
+      imageUrl: imageUrl,
+      statusKahwin: statusKahwin,
+      agama: agama,
+      jantina: jantina,
+      phone: phone,
+      nama: nama,
+      sem: sem,
+      bangsa: bangsa,
+    );
+  } catch (e) {
+    // Catch any potential exceptions and handle them
+    throw Exception("Error fetching user details: ${e.toString()}");
   }
-
-  // Return user details if all fields are available
-  return {
-    'user_id': userId,
-    'email': email,
-    'ndp': ndp,
-    'kp': kp,
-    'image_url': imageUrl,
-    'status_kahwin': statusKahwin,
-    'agama': agama,
-    'jantina': jantina,
-    'phone': phone,
-    'nama': nama,
-    'sem': sem,
-    'bangsa': bangsa,
-  };
 }

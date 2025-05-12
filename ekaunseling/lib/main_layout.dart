@@ -4,6 +4,7 @@ import 'package:doctor_appointment_app/screens/chatbot_page.dart';
 import 'package:doctor_appointment_app/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/screens/appointment_page.dart';
+import 'package:doctor_appointment_app/screens/profile_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainLayout extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MainLayoutState extends State<MainLayout> {
             currentPage = value;
           });
         }),
-        children: <Widget>[HomePage(), ChatbotPage(), AppointmentPage()],
+        children: <Widget>[HomePage(), ChatbotPage(), AppointmentPage(),ProfilePage()],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
@@ -36,8 +37,8 @@ class _MainLayoutState extends State<MainLayout> {
             currentPage = page;
             _page.animateToPage(
               page,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOutCirc,
             );
           });
         },
@@ -48,12 +49,16 @@ class _MainLayoutState extends State<MainLayout> {
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.message),
-            label: 'Chatbot',
+            label: 'Chat',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
             label: 'Appointments',
-          )
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.user),
+            label: 'Profile',
+          ),
         ],
       ),
     );

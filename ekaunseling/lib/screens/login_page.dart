@@ -14,26 +14,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-
-
-
-
-
-  
   @override
   Widget build(BuildContext context) {
     Config().init(context);
-    // print("AppText.enText: ${AppText.enText}");
-    // print("welcome_text: ${AppText.enText['welcome_text']}");
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+             
               Text(
                 AppText.enText['welcome_text']!,
                 style: const TextStyle(
@@ -41,7 +33,8 @@ class _LoginPageState extends State<LoginPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Config.spaceSmall,
+              // Config.spaceSmall,
+               const Spacer(),
               Text(
                 AppText.enText['signIn_text']!,
                 style: const TextStyle(
@@ -50,75 +43,34 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Config.spaceSmall,
+              // Center the LoginForm vertically with an Expanded widget
               const LoginForm(),
               Config.spaceSmall,
-              // Center(
-              //   child: TextButton(
-              //     onPressed: () {},
-              //     child: Text(
-              //       AppText.enText['forgot-password']!,
-              //       style: const TextStyle(
-              //         fontSize: 16,
-              //         fontWeight: FontWeight.bold,
-              //         color: Colors.black,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              //Add social buttons sign in
-              const Spacer(),
-              ElevatedButton(onPressed: () {
-                 Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const RegisterPage()),
-                );
-                
-              },
+              const Spacer(), // Space at the bottom
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegisterPage()),
+                  );
+                },
                 style: ButtonStyle(
-    elevation: MaterialStateProperty.all(0), // Remove elevation
-    backgroundColor: MaterialStateProperty.all(Colors.transparent), // Optional: remove background color
-    shadowColor: MaterialStateProperty.all(Colors.transparent), // Optional: remove shadow
-  ),
+                  elevation: WidgetStateProperty.all(0), // Remove elevation
+                  backgroundColor: WidgetStateProperty.all(
+                      Colors.transparent), // Remove background color
+                  shadowColor: WidgetStateProperty.all(
+                      Colors.transparent), // Remove shadow
+                ),
                 child: Center(
                   child: Text(
-                             //     AppText.enText['social-login']!,
-                             //     style: TextStyle(
-                             //       fontSize: 16,
-                //      fontWeight: FontWeight.normal,
-                //      color: Colors.grey.shade500,
-                            //      ),
-                            //    ),
-                //),
-                           //   Config.spaceSmall,
-                          //    Row(
-                           //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //      children: const <Widget>[
-                    //social button
-                 //   SocialButton(social: 'google'),
-                 //   SocialButton(social: 'facebook'),
-                             //   ],
-                            //  ),
-                            //  Config.spaceSmall,
-                            //  Row(
-                           //     mainAxisAlignment: MainAxisAlignment.center,
-                           //     children: <Widget>[
-                           //       Text(
-                           //         AppText.enText['signUp_text']!,
-                           //         style: TextStyle(
-                           //           fontSize: 16,
-                           //           fontWeight: FontWeight.normal,
-                           //           color: Colors.grey.shade500,
-                           //         ),
-                           //       ),
-                           //       const Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                    'Sign Up',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
-                           //     ],
+                  ),
                 ),
               ),
             ],

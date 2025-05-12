@@ -21,14 +21,14 @@ class _DoctorDetailsState extends State<DoctorDetails> {
         icon: const FaIcon(Icons.arrow_back_ios),
         actions: [
           //Favarite Button
-          IconButton(
-            //press this button to add/remove favorite doctor
-            onPressed: () {},
-            icon: FaIcon(
-              isFav ? Icons.favorite_rounded : Icons.favorite_outline,
-              color: Colors.red,
-            ),
-          ),
+          // IconButton(
+          //   //press this button to add/remove favorite doctor
+          //   onPressed: () {},
+          //   icon: FaIcon(
+          //     isFav ? Icons.favorite_rounded : Icons.favorite_outline,
+          //     color: Colors.red,
+          //   ),
+          // ),
         ],
       ),
       body: SafeArea(

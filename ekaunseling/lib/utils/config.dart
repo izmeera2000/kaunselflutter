@@ -32,12 +32,16 @@ class Config {
 
   static const focusBorder = OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(8)),
-    borderSide: BorderSide(color: Colors.greenAccent),
+    borderSide: BorderSide(color: Colors.red),
   );
   static const errorBorder = OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(8)),
     borderSide: BorderSide(color: Colors.red),
   );
 
-  static const primaryColor = Colors.greenAccent;
+  static const primaryColor = Colors.red;
+   static const Color successColor = Color(0xFF4CAF50); // Green (for success)
+  static const Color cancelColor = Color(0xFFB0BEC5); // Grey (for cancel)
+  static const Color whiteColor = Colors.white;
+  static const Color blackColor = Colors.black;
 }

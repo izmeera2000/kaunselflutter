@@ -9,56 +9,61 @@ class AppointmentPage extends StatefulWidget {
   State<AppointmentPage> createState() => _AppointmentPageState();
 }
 
-enum FilterStatus { upcoming, complete, cancel }
+enum FilterStatus { past, now, upcoming }
 
 class _AppointmentPageState extends State<AppointmentPage> {
-  FilterStatus status = FilterStatus.upcoming; //initial status
-  Alignment _alignment = Alignment.centerLeft;
+  FilterStatus status = FilterStatus.now; //initial status
+  Alignment _alignment = Alignment.center;
   List<dynamic> schedules = [
     {
       "doctor_name": "Puan Syaza",
       "doctor_profile": "assets/pickauselor.jpg",
       "category": "Kaunseling",
-      "status": FilterStatus.upcoming,
+      "status": FilterStatus.now,
     },
     {
-//"doctor_name": "Max Lim",
- //     "doctor_profile": "assets/doctor_3.jpg",
-   //   "category": "Cardiology",
-   //   "status": FilterStatus.complete,
+      "doctor_name": "Puan Syaza",
+      "doctor_profile": "assets/pickauselor.jpg",
+      "category": "Kaunseling",
+      "status": FilterStatus.now,
     },
     {
-   //   "doctor_name": "Jane Wong",
-   //   "doctor_profile": "assets/doctor_4.jpg",
-   //   "category": "Respiration",
-   //   "status": FilterStatus.complete,
+      "doctor_name": "Puan Syaza",
+      "doctor_profile": "assets/pickauselor.jpg",
+      "category": "Kaunseling",
+      "status": FilterStatus.now,
     },
     {
-   //   "doctor_name": "Jenny Song",
-    //  "doctor_profile": "assets/doctor_5.jpg",
-    //  "category": "General",
-   //   "status": FilterStatus.cancel,
+      "doctor_name": "Puan Syaza",
+      "doctor_profile": "assets/pickauselor.jpg",
+      "category": "Kaunseling",
+      "status": FilterStatus.now,
+    },
+    {
+      "doctor_name": "Puan Syaza",
+      "doctor_profile": "assets/pickauselor.jpg",
+      "category": "Kaunseling",
+      "status": FilterStatus.now,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     //return filtered appointment
-    List<dynamic> filteredSchedules =
-        schedules.where((var schedule) {
-          //switch (schedule['status']) {
-          //  case 'upcoming':
-          //    schedule['status'] = FilterStatus.upcoming;
-          //    break;
-          //  case 'complete':
-          //    schedule['status'] = FilterStatus.complete;
-          //    break;
-          //  case 'cancel':
-          //    schedule['status'] = FilterStatus.cancel;
-          //    break;
-          //}
-          return schedule['status'] == status;
-        }).toList();
+    List<dynamic> filteredSchedules = schedules.where((var schedule) {
+      //switch (schedule['status']) {
+      //  case 'upcoming':
+      //    schedule['status'] = FilterStatus.upcoming;
+      //    break;
+      //  case 'complete':
+      //    schedule['status'] = FilterStatus.complete;
+      //    break;
+      //  case 'cancel':
+      //    schedule['status'] = FilterStatus.cancel;
+      //    break;
+      //}
+      return schedule['status'] == status;
+    }).toList();
 
     return SafeArea(
       child: Padding(
@@ -90,16 +95,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
-                                if (filterStatus == FilterStatus.upcoming) {
-                                  status = FilterStatus.upcoming;
+                                if (filterStatus == FilterStatus.past) {
+                                  status = FilterStatus.past;
                                   _alignment = Alignment.centerLeft;
-                                } else if (filterStatus ==
-                                    FilterStatus.complete) {
-                                  status = FilterStatus.complete;
+                                } else if (filterStatus == FilterStatus.now) {
+                                  status = FilterStatus.now;
                                   _alignment = Alignment.center;
                                 } else if (filterStatus ==
-                                    FilterStatus.cancel) {
-                                  status = FilterStatus.cancel;
+                                    FilterStatus.upcoming) {
+                                  status = FilterStatus.upcoming;
                                   _alignment = Alignment.centerRight;
                                 }
                               });
@@ -145,10 +149,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       side: const BorderSide(color: Colors.grey),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    margin:
-                        !isLastElement
-                            ? const EdgeInsets.only(bottom: 20)
-                            : EdgeInsets.zero,
+                    margin: !isLastElement
+                        ? const EdgeInsets.only(bottom: 20)
+                        : EdgeInsets.zero,
                     child: Padding(
                       padding: const EdgeInsets.all(15),
                       child: Column(
@@ -205,18 +208,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 ),
                               ),
                               const SizedBox(width: 20),
-                              Expanded(
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: Config.primaryColor,
-                                  ),
-                                  onPressed: () {},
-                                  child: const Text(
-                                    'Reschedule',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
+                              // Expanded(
+                              //   child: OutlinedButton(
+                              //     style: OutlinedButton.styleFrom(
+                              //       backgroundColor: Config.primaryColor,
+                              //     ),
+                              //     onPressed: () {},
+                              //     child: const Text(
+                              //       'Reschedule',
+                              //       style: TextStyle(color: Colors.white),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],
