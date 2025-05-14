@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:doctor_appointment_app/components/custom_appbar.dart';
 
-class DoctorDetails extends StatefulWidget {
-  const DoctorDetails({super.key});
+class BookingDetails extends StatefulWidget {
+  const BookingDetails({super.key});
 
   @override
-  State<DoctorDetails> createState() => _DoctorDetailsState();
+  State<BookingDetails> createState() => _BookingDetailsState();
 }
 
-class _DoctorDetailsState extends State<DoctorDetails> {
+class _BookingDetailsState extends State<BookingDetails> {
   bool isFav = false;
   @override
   Widget build(BuildContext context) {

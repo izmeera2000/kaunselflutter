@@ -7,9 +7,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart'; // You need to import this for date formatting
 import 'dart:convert'; // For json encoding
 import 'package:http/http.dart' as http; // For making HTTP requests
-import 'package:doctor_appointment_app/components/retrive_user.dart';  // Ensure this import is correct
+import 'package:doctor_appointment_app/components/retrive_user.dart'; // Ensure this import is correct
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class BookingPage extends StatefulWidget {
   const BookingPage({super.key});
@@ -27,10 +26,6 @@ class _BookingPageState extends State<BookingPage> {
   bool _isWeekend = false;
   bool _dateSelected = false;
   bool _timeSelected = false;
-
-  
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +89,17 @@ class _BookingPageState extends State<BookingPage> {
       firstDay: DateTime.now(),
       lastDay: DateTime(2025, 12, 31),
       calendarFormat: _format,
+      enabledDayPredicate: (day) =>
+          day.weekday != DateTime.saturday && day.weekday != DateTime.sunday,
+      calendarBuilders: CalendarBuilders(
+        defaultBuilder: (context, day, focusedDay) {
+          if (day.weekday == DateTime.saturday ||
+              day.weekday == DateTime.sunday) {
+            return const SizedBox.shrink(); // Hide weekends
+          }
+          return null;
+        },
+      ),
       currentDay: _currentDay,
       rowHeight: 48,
       calendarStyle: const CalendarStyle(
@@ -152,114 +158,125 @@ class _BookingPageState extends State<BookingPage> {
     );
   }
 
- void _showConfirmationDialog() {
-  // Format the selected date to display it nicely
-  String formattedDate = DateFormat('yyyy-MM-dd').format(_currentDay);
+  void _showConfirmationDialog() {
+    // Format the selected date to display it nicely
+    String formattedDate = DateFormat('yyyy-MM-dd').format(_currentDay);
 
-  // TextEditingController to capture the user input
-  TextEditingController _controller = TextEditingController();
+    // TextEditingController to capture the user input
+    TextEditingController _controller = TextEditingController();
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Confirm Appointment'),
-        content: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              // Display the selected date
-              Text('You have selected:  ',
-                  style: TextStyle(
-                    fontSize: 16,
-                  )),
-              Text('$formattedDate',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 20), // Add some space between date and text input
-              Text('Masalah',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 20), // Add some space between date and text input
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Config.whiteColor,
+          title: const Text('Confirm Appointment'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                // Display the selected date
+                Text('You have selected:  ',
+                    style: TextStyle(
+                      fontSize: 16,
+                    )),
+                Text('$formattedDate',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(
+                    height: 20), // Add some space between date and text input
+                Text('Masalah',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                const SizedBox(
+                    height: 20), // Add some space between date and text input
 
-              // Input form for additional information (e.g., notes, special requests)
-              TextField(
-                controller: _controller,
-                decoration: const InputDecoration(
-                  labelText: 'Masalah',
-                  hintText: 'Nyatakan Masalah Anda',
-                  border: OutlineInputBorder(),
+                // Input form for additional information (e.g., notes, special requests)
+                TextField(
+                  controller: _controller,
+                  decoration: const InputDecoration(
+                    labelText: 'Masalah',
+                    hintText: 'Nyatakan Masalah Anda',
+                    border: OutlineInputBorder(),
+                  ),
+                  maxLines: 2,
                 ),
-                maxLines: 2,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        actions: <Widget>[
-          // Confirm Button
-          TextButton(
-            onPressed: () async {
-              // Capture user input and selected date
-              String userInput = _controller.text;
+          actions: <Widget>[
+            
+            // Confirm Button
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Capture user input and selected date
+                String userInput = _controller.text;
 
-              // Retrieve user ID from SharedPreferences
-              final SharedPreferences prefs = await SharedPreferences.getInstance();
-              String? userId = prefs.getString('user_id');
+                // Retrieve user ID from SharedPreferences
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                String? userId = prefs.getString('user_id');
 
-              if (userId != null) {
-                // Prepare the data to send to PHP
-                Map<String, String> appointmentData = {
-                  'calendaraddna[title]': userInput,
-                  'calendaraddna[start]': formattedDate,
-                  'calendaraddna[user_id]': userId, // Use actual user ID here
-                  'calendaraddna[type]': '1', // Example type
-                };
+                if (userId != null) {
+                  // Prepare the data to send to PHP
+                  Map<String, String> appointmentData = {
+                    'calendaraddna[title]': userInput,
+                    'calendaraddna[start]': formattedDate,
+                    'calendaraddna[user_id]': userId, // Use actual user ID here
+                    'calendaraddna[type]': '1', // Example type
+                  };
 
-                // Send data to the PHP server using a POST request
-                final response = await http.post(
-                  Uri.parse(
-                      'https://kaunselingadtectaiping.com.my/calendaraddna'), // Replace with your PHP script URL
-                  body: appointmentData,
-                );
+                  // Send data to the PHP server using a POST request
+                  final response = await http.post(
+                    Uri.parse(
+                        '${Config.base_url}/calendaraddna'), // Replace with your PHP script URL
+                    body: appointmentData,
+                  );
 
-                // Handle the response from the PHP server
-                if (response.statusCode == 200) {
-                  // Successfully sent data to server
-                  print('Appointment confirmed for $formattedDate with notes: $userInput');
-                  print('Response Body: ${response.body}');
+                  // Handle the response from the PHP server
+                  if (response.statusCode == 200) {
+                    // Successfully sent data to server
+                    print(
+                        'Appointment confirmed for $formattedDate with notes: $userInput');
+                    print('Response Body: ${response.body}');
 
-                  // Close the dialog and navigate to success screen
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed('success_booking'); // Navigate to success page
+                    // Close the dialog and navigate to success screen
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(
+                        'success_booking'); // Navigate to success page
+                  } else {
+                    // Handle server error or failure
+                    print(
+                        'Failed to make appointment. Server response: ${response.statusCode}');
+                    // You can show a Snackbar or a Toast message here
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Failed to make appointment. Please try again later.'),
+                      ),
+                    );
+                  }
                 } else {
-                  // Handle server error or failure
-                  print('Failed to make appointment. Server response: ${response.statusCode}');
-                  // You can show a Snackbar or a Toast message here
+                  // Handle the case where the user ID is not found in SharedPreferences
+                  print('User ID not found in SharedPreferences');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Failed to make appointment. Please try again later.'),
+                      content: Text('User ID not found. Please log in again.'),
                     ),
                   );
                 }
-              } else {
-                // Handle the case where the user ID is not found in SharedPreferences
-                print('User ID not found in SharedPreferences');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('User ID not found. Please log in again.'),
-                  ),
-                );
-              }
-            },
-            child: const Text('Confirm'),
-          ),
-          // Cancel Button
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: const Text('Cancel'),
-          ),
-        ],
-      );
-    },
-  );
+              },
+              child: const Text('Confirm'),
+            ),
+            // Cancel Button
+          ],
+        );
+      },
+    );
   }
 }

@@ -78,7 +78,7 @@ class _RegisterFormState extends State<RegisterForm> {
       // Send the POST request to the server
       final response = await http.post(
         Uri.parse(
-            'http://192.168.0.103/ADTEC-EKaunsel/register'), // Your registration PHP script URL
+            '${Config.base_url}/register'), // Your registration PHP script URL
         body: {
           'user_register': '1', // This is the key used in your PHP script
           'ndp': ndp,

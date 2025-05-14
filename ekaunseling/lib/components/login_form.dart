@@ -44,7 +44,7 @@ class _LoginFormState extends State<LoginForm> {
       // Send the POST request to the server
       final response = await http.post(
         Uri.parse(
-            'https://kaunselingadtectaiping.com.my/login'), // Replace with your PHP script URL
+            '${Config.base_url}login'), // Replace with your PHP script URL
         body: {
           'user_login_flutter': '1', // This is the key used in your PHP script
           'login': email,
@@ -58,13 +58,18 @@ class _LoginFormState extends State<LoginForm> {
       if (response.statusCode == 200) {
         if (responseBody['status'] == 'success') {
           // Navigate to the main page/dashboard on successful login
-          _saveUserDetails(responseBody['user']);
+          final user = responseBody['user'];
+          _saveUserDetails(user);
 
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            'main', 
-            (Route<dynamic> route) => false, // Removes all the previous routes
-          );
+          String role = user['role'];
+
+          if (role == '1') {
+            Navigator.pushNamedAndRemoveUntil(
+                context, 'main2', (route) => false);
+          }  else {
+            Navigator.pushNamedAndRemoveUntil(
+                context, 'main', (route) => false);
+          }
         } else {
           // Show an error message if login failed, showing the response message
           ScaffoldMessenger.of(context).showSnackBar(
@@ -178,6 +183,7 @@ Future<void> _saveUserDetails(Map<String, dynamic> userDetails) async {
   prefs.setString('email', userDetails['email']);
   prefs.setString('ndp', userDetails['ndp']);
   prefs.setString('kp', userDetails['kp']);
+  prefs.setString('role', userDetails['role']);
   prefs.setString(
       'image_url', userDetails['image_url'] ?? ''); // Store profile image URL
   prefs.setString('status_kahwin',

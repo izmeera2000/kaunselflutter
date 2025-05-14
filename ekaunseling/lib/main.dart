@@ -19,15 +19,19 @@ class MyApp extends StatelessWidget {
   //this is for push navigator
   static final navigatorKey = GlobalKey<NavigatorState>();
 
-   Future<void> checkLoginStatus(BuildContext context) async {
+  Future<void> checkLoginStatus(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    
-    // Retrieve the saved user ID (or other details)
-    String? userId = prefs.getString('user_id');
 
-    if (userId != null) {
-      // User is logged in, navigate to the main page
-      Navigator.of(context).pushReplacementNamed('main');
+    String? userId = prefs.getString('user_id');
+    String? userRole = prefs.getString('role');
+
+    if (userId != null && userRole != null) {
+      // User is logged in, navigate to the appropriate page based on their role
+      if (userRole == '1') {
+        Navigator.of(context).pushReplacementNamed('main2');
+      }  else {
+        Navigator.of(context).pushReplacementNamed('main');
+      }
     } else {
       // User is not logged in, stay on the login page
       Navigator.of(context).pushReplacementNamed('/login');
@@ -66,10 +70,11 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/intro',
       routes: {
-        '/intro': (context) =>   IntroScreen(),
+        '/intro': (context) => IntroScreen(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         'main': (context) => const MainLayout(),
+        'main2': (context) => const Main2Layout(),
         'doctor_details': (context) => const DoctorDetails(),
         'booking_page': (context) => BookingPage(),
         'success_booking': (context) => const AppointmentBooked(),

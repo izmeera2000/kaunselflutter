@@ -66,27 +66,27 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 ),
                 Config.spaceSmall,
                 //Action button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                        ),
-                        child: const Text(
-                          'Cancel',
-                          style: TextStyle(color: Config.cancelColor),
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: Text(""),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Expanded(
+                //       child: ElevatedButton(
+                //         style: ElevatedButton.styleFrom(
+                //           backgroundColor: Colors.white,
+                //         ),
+                //         child: const Text(
+                //           'Cancel',
+                //           style: TextStyle(color: Config.cancelColor),
+                //         ),
+                //         onPressed: () {},
+                //       ),
+                //     ),
+                //     const SizedBox(width: 20),
+                //     Expanded(
+                //       child: Text(""),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -95,6 +95,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
     );
   }
 }
+
 
 class ScheduleCard extends StatelessWidget {
   final String date;
@@ -131,7 +132,7 @@ class ScheduleCard extends StatelessWidget {
                 SizedBox(width: 5),
                 Text(
                   title,
-                  style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -145,12 +146,14 @@ class ScheduleCard extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                 ),
                 SizedBox(width: 20),
-                Icon(Icons.access_alarm, color: Colors.white, size: 17),
-                SizedBox(width: 5),
-                Flexible(
-                  child:
-                      Text(time, style: const TextStyle(color: Colors.white)),
-                ),
+                // Only show the time section if time is not empty or null
+                if (time.isNotEmpty) ...[
+                  Icon(Icons.access_alarm, color: Colors.white, size: 17),
+                  SizedBox(width: 5),
+                  Flexible(
+                    child: Text(time, style: const TextStyle(color: Colors.white)),
+                  ),
+                ],
               ],
             ),
             Row(

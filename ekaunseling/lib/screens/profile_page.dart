@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/screens/login_page.dart';
 import 'package:doctor_appointment_app/components/retrive_user.dart'; // Ensure this import is correct
+import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:doctor_appointment_app/components/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -21,37 +23,40 @@ class _ProfilePageState extends State<ProfilePage> {
     fetchUserDetails(); // Fetch user details when the page loads
   }
 
- Future<void> fetchUserDetails() async {
-  try {
-    // Fetch user details as a UserModel
-    UserModel user = await getUserDetails();
+  Future<void> fetchUserDetails() async {
+    try {
+      // Fetch user details as a UserModel
+      UserModel user = await getUserDetails();
 
-    setState(() {
-      // Safely check and update user details
-      userName = user.nama.isNotEmpty ? user.nama : 'User'; // Default to 'User' if no name found
-      userEmail = user.email.isNotEmpty ? user.email : 'User'; // Default to 'User' if no email found
+      setState(() {
+        // Safely check and update user details
+        userName = user.nama.isNotEmpty
+            ? user.nama
+            : 'User'; // Default to 'User' if no name found
+        userEmail = user.email.isNotEmpty
+            ? user.email
+            : 'User'; // Default to 'User' if no email found
 
-      // Safely construct the profile image URL
-      String userId = user.userId; // Ensure user_id exists
-      String imageUrl = user.imageUrl; // Ensure image_url exists
+        // Safely construct the profile image URL
+        String userId = user.userId; // Ensure user_id exists
+        String imageUrl = user.imageUrl; // Ensure image_url exists
 
-      if (userId.isNotEmpty && imageUrl.isNotEmpty) {
-        userProfileImageUrl =
-            'https://kaunselingadtectaiping.com.my/assets/img/user/$userId/$imageUrl';
-      } else {
+        if (userId.isNotEmpty && imageUrl.isNotEmpty) {
+          userProfileImageUrl =
+              '${Config.base_url}/assets/img/user/$userId/$imageUrl';
+        } else {
+          userProfileImageUrl = ''; // Fallback image URL or empty
+        }
+      });
+    } catch (e) {
+      // Handle errors and update UI to default state (e.g., 'Guest')
+      setState(() {
+        userName = 'Guest'; // Default to 'Guest' if no user details are found
         userProfileImageUrl = ''; // Fallback image URL or empty
-      }
-    });
-  } catch (e) {
-    // Handle errors and update UI to default state (e.g., 'Guest')
-    setState(() {
-      userName = 'Guest'; // Default to 'Guest' if no user details are found
-      userProfileImageUrl = ''; // Fallback image URL or empty
-    });
-    print("Error fetching user details: $e");
+      });
+      print("Error fetching user details: $e");
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +95,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               const SizedBox(height: 16),
-               Text(
+              Text(
                 userName,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-                Text(
+              Text(
                 userEmail,
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
@@ -118,10 +123,14 @@ class _ProfilePageState extends State<ProfilePage> {
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('Logout'),
-                onTap: () {
-                  Navigator.pushReplacement(
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.clear(); // clear saved session/token/etc.
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (Route<dynamic> route) =>
+                        false, // Remove all previous routes
                   );
                 },
               ),

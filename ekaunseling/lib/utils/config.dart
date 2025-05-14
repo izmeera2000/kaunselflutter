@@ -40,8 +40,11 @@ class Config {
   );
 
   static const primaryColor = Colors.red;
-   static const Color successColor = Color(0xFF4CAF50); // Green (for success)
+  static const Color successColor = Color(0xFF4CAF50); // Green (for success)
   static const Color cancelColor = Color(0xFFB0BEC5); // Grey (for cancel)
   static const Color whiteColor = Colors.white;
   static const Color blackColor = Colors.black;
+
+  static const base_url = 'https://kaunselingadtectaiping.com.my/';
+  // static const base_url = 'https://kaunselingadtectaiping.com.my/';
 }

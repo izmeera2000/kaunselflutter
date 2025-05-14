@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       String imageUrl = user.imageUrl; // Ensure imageUrl exists
 
       if (userId.isNotEmpty && imageUrl.isNotEmpty) {
-        userProfileImageUrl = 'https://kaunselingadtectaiping.com.my/assets/img/user/$userId/$imageUrl';
+        userProfileImageUrl = '${Config.base_url}assets/img/user/$userId/$imageUrl';
       } else {
         userProfileImageUrl = ''; // Default image or fallback can be assigned here
       }
