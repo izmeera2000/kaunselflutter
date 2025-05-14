@@ -21,9 +21,16 @@ class IntroScreen extends StatefulWidget {
 class _IntroScreenState extends State<IntroScreen> {
   int currentPage = 0;
   List<Map<String, String>> splashData = [
-    {"text": "Test1", "image": "assets/splash-1.png"},
-    {"text": "test2", "image": "assets/splash-2.png"},
-   ];
+    {
+      "text": "Welcome to e-Kaunselling Your Path to Mental Wellness",
+      "image": "assets/splash-1.png"
+    },
+    {
+      "text":
+          "Taking care of your mental health has never been easier. We connect you with experienced counselors for private, secure sessions, available at your convenience. Whether you're dealing with stress, anxiety, relationship issues, or just need someone to talk to, we're here to help",
+      "image": "assets/splash-2.png"
+    },
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +80,6 @@ class _IntroScreenState extends State<IntroScreen> {
                         ),
                       ),
                       const Spacer(flex: 3),
-           
                       Button(
                         width: double.infinity,
                         title: 'Continue',
