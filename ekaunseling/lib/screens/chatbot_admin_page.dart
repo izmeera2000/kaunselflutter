@@ -1,42 +1,49 @@
-import 'package:doctor_appointment_app/components/retrive_user.dart';
-import 'package:doctor_appointment_app/components/user_model.dart';
 import 'package:doctor_appointment_app/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ChatbotPage extends StatefulWidget {
-  const ChatbotPage({super.key});
+class ChatbotAdminPage extends StatefulWidget {
+  final String? studentName;
+  final String? studentImage;
+  final String? studentId;
+
+  const ChatbotAdminPage(
+      {Key? key, this.studentImage, this.studentId, this.studentName})
+      : super(key: key);
 
   @override
-  State<ChatbotPage> createState() => _ChatbotPageState();
+  State<ChatbotAdminPage> createState() => _ChatbotAdminPageState();
 }
 
-class _ChatbotPageState extends State<ChatbotPage> {
+class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
   TextEditingController _controller = TextEditingController();
-  List<Map<String, dynamic>> messages =
-      []; // List to hold messages with dynamic types
-  String? userId; // User ID, which needs to be fetched
+  List<Map<String, dynamic>> messages = []; // List to hold messages
+  String? studentId; // User ID for the student
   ScrollController _scrollController = ScrollController();
 
-  // Fetch the user details and set userId
-  Future<void> fetchUserDetails() async {
-    try {
-      // Fetch user details as a UserModel
-      UserModel user = await getUserDetails();
-      setState(() {
-        userId = user.userId; // Ensure user_id exists
+  @override
+  void initState() {
+    super.initState();
+    studentId = widget.studentId;
+
+    if (studentId != null) {
+      _fetchPreviousMessages().then((_) {
+        if (messages.isEmpty) {
+          setState(() {
+            messages.add({
+              'message': 'Hello, how can I help you?',
+              'sender': 'bot', // Bot's initial message
+            });
+          });
+        }
       });
-    } catch (e) {
-      // Handle errors (e.g., user not found)
-      print("Error fetching user details: $e");
     }
   }
 
   // Scroll to the bottom of the chat
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
-      // Delay scroll to allow the keyboard and layout to settle
       Future.delayed(Duration(milliseconds: 100), () {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
@@ -47,14 +54,14 @@ class _ChatbotPageState extends State<ChatbotPage> {
     }
   }
 
-  // Send message to the server and get the response
+  // Send a message to the server
   Future<void> _sendMessage() async {
-    if (_controller.text.isNotEmpty && userId != null) {
-      // Add the user message to the chat
+    if (_controller.text.isNotEmpty && studentId != null) {
+      // Add the student message to the chat
       setState(() {
         messages.add({
           'message': _controller.text,
-          'sender': 'student', // Sender is the student
+          'sender': 'admin', // Sender is the student
         });
         _scrollToBottom();
       });
@@ -62,83 +69,46 @@ class _ChatbotPageState extends State<ChatbotPage> {
       // Clear the input field after sending the message
       _controller.clear();
 
-      // Send the message to the server (replace with your actual URL)
       try {
         final response = await http.post(
-          Uri.parse(
-              '${Config.base_url}/send_chat'), // Replace with your endpoint
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
+          Uri.parse('${Config.base_url}/send_chat'),
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           body: {
-            'user_id': userId!,
+            'user_id': studentId!,
             'message': messages.last['message']!,
-            'sender': 'student', // Ensure sender is student
-
-            'chat_send': 'chat_send',
+            'sender': 'admin', // Ensure sender is student
+            'chat_send_admin': 'chat_send_admin',
           },
         );
-
-        if (response.statusCode == 200) {
-          // Parse the response
-          final data = json.decode(response.body);
-
-          // Check if the response has a bot reply
-          if (data['reply'] != null) {
-            // Add the bot's reply to the chat
-            setState(() {
-              messages.add({
-                'message': data['reply'], // Bot's reply
-                'sender': 'bot', // Ensure sender is student
-              });
-              _scrollToBottom();
-            });
-          } else if (data['error'] != null) {
-            // Handle errors if any
-            print('Error from server: ${data['error']}');
-          }
-        } else {
-          print(
-              'Failed to get response from server. Status code: ${response.statusCode}');
-        }
       } catch (error) {
         print('Error: $error');
       }
-    } else {
-      print('User ID is null or message is empty.');
+
+      _scrollToBottom();
     }
   }
 
-  // Fetch the last 10 messages from the server
+  // Fetch previous messages from the server
   Future<void> _fetchPreviousMessages() async {
-    if (userId == null) {
-      print('User ID is null.');
-      return;
-    }
-
     try {
       final response = await http.post(
-        Uri.parse('${Config.base_url}/get_chat'), // Replace with your endpoint
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        Uri.parse('${Config.base_url}/get_chat'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: {
-          'user_id': userId!,
-          'message': messages.isNotEmpty ? messages.last['message']! : '',
+          'user_id': studentId!,
           'get_chat_user': 'get_chat_user',
         },
       );
+
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        // Assuming the server returns a list of messages
         if (data['messages'] != null) {
           setState(() {
             messages.addAll(
               List<Map<String, dynamic>>.from(data['messages'].map((msg) {
                 return {
                   'message': msg['message'],
-                  'senderName': msg['sender'],
                   'sender':
                       msg['sender'], // Include sender (student, bot, counselor)
                 };
@@ -153,29 +123,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
     } catch (error) {
       print('Error fetching previous messages: $error');
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Fetch user details before anything else
-    fetchUserDetails().then((_) {
-      // Fetch previous messages once the user details are fetched
-      if (userId != null) {
-        _fetchPreviousMessages().then((_) {
-          // Add initial bot message only if no previous messages exist
-          if (messages.isEmpty) {
-            setState(() {
-              messages.add({
-                'message': 'Hello, how can I help you?',
-                'isSentByUser': 'false', // Receiver is the bot
-              });
-            });
-          }
-        });
-      }
-    });
-    _scrollToBottom(); // Scroll to bottom when default message is added
   }
 
   @override
@@ -215,13 +162,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
                   },
                 ),
               ),
-
-              // Input Area
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
+      bottomNavigationBar: // Input Area
+          Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
@@ -276,7 +222,7 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
       child: Column(
-        crossAxisAlignment: sender == 'student'
+        crossAxisAlignment: sender == 'admin'
             ? CrossAxisAlignment.end
             : CrossAxisAlignment.start,
         children: [
@@ -287,14 +233,13 @@ class MessageBubble extends StatelessWidget {
               senderName,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color:
-                    sender == 'student' ? Colors.blue[900] : Colors.green[900],
+                color: sender == 'admin' ? Colors.blue[900] : Colors.green[900],
               ),
             ),
           ),
           // Message Bubble
           Align(
-            alignment: sender == 'student'
+            alignment: sender == 'admin'
                 ? Alignment.centerRight
                 : Alignment.centerLeft,
             child: Container(

@@ -6,44 +6,44 @@ Future<UserModel> getUserDetails() async {
 
   try {
     // Retrieve the saved user info
-    String? userId = prefs.getString('user_id');
-    String? email = prefs.getString('email');
-    String? ndp = prefs.getString('ndp');
-    String? kp = prefs.getString('kp');
-    String? imageUrl = prefs.getString('image_url');
-    String? statusKahwin = prefs.getString('status_kahwin');
-    String? agama = prefs.getString('agama');
-    String? jantina = prefs.getString('jantina');
-    String? phone = prefs.getString('phone');
-    String? nama = prefs.getString('nama');
-    String? sem = prefs.getString('sem');
-    String? bangsa = prefs.getString('bangsa');
+    Map<String, String?> userDetails = {
+      'user_id': prefs.getString('user_id'),
+      'email': prefs.getString('email'),
+      'ndp': prefs.getString('ndp'),
+      'kp': prefs.getString('kp'),
+      'image_url': prefs.getString('image_url'),
+      'status_kahwin': prefs.getString('status_kahwin'),
+      'agama': prefs.getString('agama'),
+      'jantina': prefs.getString('jantina'),
+      'phone': prefs.getString('phone'),
+      'nama': prefs.getString('nama'),
+      'sem': prefs.getString('sem'),
+      'bangsa': prefs.getString('bangsa'),
+    };
 
-    // Check if any user details are missing and return a status map indicating so
-    if (userId == null || email == null || ndp == null || kp == null ||
-        imageUrl == null || statusKahwin == null || agama == null ||
-        jantina == null || phone == null || nama == null || sem == null || 
-        bangsa == null) {
-      throw Exception("User details are missing.");
+    // Check if any user details are missing
+    if (userDetails.values.any((detail) => detail == null)) {
+      throw Exception("Some user details are missing.");
     }
 
     // Return user details as UserModel
     return UserModel(
-      userId: userId,
-      email: email,
-      ndp: ndp,
-      kp: kp,
-      imageUrl: imageUrl,
-      statusKahwin: statusKahwin,
-      agama: agama,
-      jantina: jantina,
-      phone: phone,
-      nama: nama,
-      sem: sem,
-      bangsa: bangsa,
+      userId: userDetails['user_id']!,
+      email: userDetails['email']!,
+      ndp: userDetails['ndp']!,
+      kp: userDetails['kp']!,
+      imageUrl: userDetails['image_url']!,
+      statusKahwin: userDetails['status_kahwin']!,
+      agama: userDetails['agama']!,
+      jantina: userDetails['jantina']!,
+      phone: userDetails['phone']!,
+      nama: userDetails['nama']!,
+      sem: userDetails['sem']!,
+      bangsa: userDetails['bangsa']!,
     );
   } catch (e) {
-    // Catch any potential exceptions and handle them
+    // Handle errors gracefully
+    print('Error fetching user details: ${e.toString()}');
     throw Exception("Error fetching user details: ${e.toString()}");
   }
 }

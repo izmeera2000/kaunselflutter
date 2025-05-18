@@ -1,7 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:doctor_appointment_app/screens/chat_list_page.dart';
 import 'package:doctor_appointment_app/screens/chatbot_page.dart';
 import 'package:doctor_appointment_app/screens/home_page.dart';
+import 'package:doctor_appointment_app/screens/home2_page.dart';
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment_app/screens/appointment_page.dart';
 import 'package:doctor_appointment_app/screens/profile_page.dart';
@@ -22,7 +24,6 @@ class _MainLayoutState extends State<MainLayout> {
     return Scaffold(
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
-
         controller: _page,
         onPageChanged: ((value) {
           setState(() {
@@ -30,7 +31,12 @@ class _MainLayoutState extends State<MainLayout> {
             currentPage = value;
           });
         }),
-        children: <Widget>[HomePage(), ChatbotPage(), AppointmentPage(),ProfilePage()],
+        children: <Widget>[
+          HomePage(),
+          ChatbotPage(),
+          AppointmentPage(),
+          ProfilePage()
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
@@ -67,11 +73,6 @@ class _MainLayoutState extends State<MainLayout> {
   }
 }
 
-
-
-
-
-
 class Main2Layout extends StatefulWidget {
   const Main2Layout({super.key});
 
@@ -85,9 +86,10 @@ class _Main2LayoutState extends State<Main2Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
+
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
-
         controller: _page,
         onPageChanged: ((value) {
           setState(() {
@@ -95,7 +97,12 @@ class _Main2LayoutState extends State<Main2Layout> {
             currentPage = value;
           });
         }),
-        children: <Widget>[HomePage(), ChatbotPage(), AppointmentPage(),ProfilePage()],
+        children: <Widget>[
+          Home2Page(),
+          ChatListPage(),
+          AppointmentPage(),
+          ProfilePage()
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentPage,
