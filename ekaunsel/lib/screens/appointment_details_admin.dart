@@ -218,7 +218,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   }
 
   Future<void> startAppointment() async {
-    final url = Uri.parse('${Config.base_url2}temujanji_update_flutter');
+    final url = Uri.parse('${Config.base_url}temujanji_update_flutter');
     final UserModel user = await getUserDetails();
 
     final response = await http.post(url, body: {
