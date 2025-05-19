@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // To decode the JSON response
@@ -40,6 +41,7 @@ class _LoginFormState extends State<LoginForm> {
           return const Center(child: CircularProgressIndicator());
         },
       );
+      final fcmToken = await FirebaseMessaging.instance.getToken();
 
       // Send the POST request to the server
       final response = await http.post(
@@ -49,6 +51,7 @@ class _LoginFormState extends State<LoginForm> {
           'user_login_flutter': '1', // This is the key used in your PHP script
           'login': email,
           'password': password,
+          'fcm_token': fcmToken ?? '',
         },
       );
 
@@ -66,7 +69,7 @@ class _LoginFormState extends State<LoginForm> {
           if (role == '1') {
             Navigator.pushNamedAndRemoveUntil(
                 context, 'main2', (route) => false);
-          }  else {
+          } else {
             Navigator.pushNamedAndRemoveUntil(
                 context, 'main', (route) => false);
           }

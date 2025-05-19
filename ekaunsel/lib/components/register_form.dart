@@ -106,7 +106,7 @@ class _RegisterFormState extends State<RegisterForm> {
             SnackBar(content: Text(responseBody['message'])),
           );
           // Navigate to the main page/dashboard on successful registration
-          // Navigator.of(context).pushReplacementNamed('main');
+          Navigator.of(context).pushReplacementNamed('main');
         } else {
           // Show an error message if registration failed
           ScaffoldMessenger.of(context).showSnackBar(

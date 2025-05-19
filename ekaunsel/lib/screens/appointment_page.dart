@@ -29,12 +29,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
       false; // Static variable to track fetch across all instances
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isDataFetched) {
-      fetchAndSetSchedules();
-      _isDataFetched = true; // Prevent further fetches after the first call
-    }
+  void initState() {
+    super.initState();
+    fetchAndSetSchedules();
   }
 
   Future<List<dynamic>> fetchAppointments({
@@ -46,8 +43,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     required String user_id, // Add this to accept user_id
   }) async {
     final UserModel user = await getUserDetails();
-    final url =
-        Uri.parse('${Config.base_url}senaraitemujanji');
+    final url = Uri.parse('${Config.base_url}senaraitemujanji');
 
     String formattedStart = DateFormat('yyyy-MM-dd').format(start);
     String formattedEnd = DateFormat('yyyy-MM-dd').format(end);
@@ -189,6 +185,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
       isLoading = false;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

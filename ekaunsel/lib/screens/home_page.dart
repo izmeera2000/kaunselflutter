@@ -1,6 +1,7 @@
 import 'package:ekaunsel/components/appointment_card.dart';
 import 'package:ekaunsel/components/doctor_card.dart';
 import 'package:ekaunsel/utils/config.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ekaunsel/screens/profile_page.dart';
@@ -27,38 +28,43 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchUserDetails(); // Fetch user details when the page loads
+    FirebaseMessaging.instance.subscribeToTopic('semangat');
+
   }
 
   // Fetch user details from SharedPreferences
   Future<void> fetchUserDetails() async {
-  try {
-    // Fetch the user details as a UserModel instance
-    UserModel user = await getUserDetails();
-    
-    setState(() {
-      // Safely check and update user details
-      userName = user.nama!.isNotEmpty ? user.nama! : 'User'; // Default to 'User' if no name found
+    try {
+      // Fetch the user details as a UserModel instance
+      UserModel user = await getUserDetails();
 
-      // Safely construct the profile image URL
-      String userId = user.userId!; // Ensure userId exists
-      String imageUrl = user.imageUrl!; // Ensure imageUrl exists
+      setState(() {
+        // Safely check and update user details
+        userName = user.nama!.isNotEmpty
+            ? user.nama!
+            : 'User'; // Default to 'User' if no name found
 
-      if (userId.isNotEmpty && imageUrl.isNotEmpty) {
-        userProfileImageUrl = '${Config.base_url}assets/img/user/$userId/$imageUrl';
-      } else {
-        userProfileImageUrl = ''; // Default image or fallback can be assigned here
-      }
-    });
-  } catch (e) {
-    // Handle errors, possibly update UI for error state
-    setState(() {
-      userName = 'Guest'; // Default to 'Guest' if there's an error
-      userProfileImageUrl = ''; // Fallback image URL
-    });
-    print("Error fetching user details: $e");
+        // Safely construct the profile image URL
+        String userId = user.userId!; // Ensure userId exists
+        String imageUrl = user.imageUrl!; // Ensure imageUrl exists
+
+        if (userId.isNotEmpty && imageUrl.isNotEmpty) {
+          userProfileImageUrl =
+              '${Config.base_url}assets/img/user/$userId/$imageUrl';
+        } else {
+          userProfileImageUrl =
+              ''; // Default image or fallback can be assigned here
+        }
+      });
+    } catch (e) {
+      // Handle errors, possibly update UI for error state
+      setState(() {
+        userName = 'Guest'; // Default to 'Guest' if there's an error
+        userProfileImageUrl = ''; // Fallback image URL
+      });
+      print("Error fetching user details: $e");
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,17 +113,15 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundColor: Colors
-                              .grey, // Optional: default background color
+                          backgroundColor:
+                              Colors.grey, // Optional: default background color
                           child: ClipOval(
                             // Clip the child into a circular shape
                             child: Image.network(
                               userProfileImageUrl,
                               fit: BoxFit.cover,
-                              height:
-                                  100, // Ensure the size matches the radius
-                              width:
-                                  100, // Ensure the size matches the radius
+                              height: 100, // Ensure the size matches the radius
+                              width: 100, // Ensure the size matches the radius
                               errorBuilder: (context, error, stackTrace) {
                                 // Fallback to asset image in case of error
                                 return Image.asset(

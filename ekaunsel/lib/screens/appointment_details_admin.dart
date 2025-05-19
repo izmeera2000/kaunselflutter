@@ -349,6 +349,17 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                         onPressed: _showRejectDialog, // Reject Appointment
                         child: Text("Reject"),
                       ),
+                    ],
+                    if (isStatusTwo) ...[
+                      const SizedBox(
+                          height: 20), // Add space between text and buttons
+
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: startAppointment, // Approve Appointment
+                        child: Text("Start"),
+                      ),
+                     
                     ]
                   ],
                 ),

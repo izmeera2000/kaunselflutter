@@ -17,8 +17,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Add this line
   // Initialize Firebase
@@ -26,8 +24,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-    await dotenv.load(fileName: ".env");
- await initializeFirebaseAppCheck();
+  await dotenv.load(fileName: ".env");
+  await initializeFirebaseAppCheck();
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const android = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -167,7 +165,6 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-
 Future<void> _showNotification(
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
   RemoteNotification notification,
@@ -205,6 +202,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint("Handling a background message: ${message.messageId}");
   // Add your custom logic here
 }
+
 Future<void> initializeFirebaseAppCheck() async {
   try {
     // Check if the App Check token exists, and fetch a new one if necessary
