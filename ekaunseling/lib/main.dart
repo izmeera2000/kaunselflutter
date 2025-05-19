@@ -8,8 +8,15 @@ import 'package:doctor_appointment_app/screens/register_page.dart';
 import 'package:doctor_appointment_app/screens/intro_page.dart';
 import 'package:doctor_appointment_app/main_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pusher_beams/pusher_beams.dart';
 
-void main() {
+void main()  async{
+    WidgetsFlutterBinding.ensureInitialized(); // Add this line
+
+  await PusherBeams.instance.start('8e113151-2924-4f76-a7ed-e0f61a69afe8');
+await PusherBeams.instance.addDeviceInterest('hello');
+
+
   runApp(const MyApp());
 }
 

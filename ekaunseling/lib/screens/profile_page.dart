@@ -30,16 +30,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
       setState(() {
         // Safely check and update user details
-        userName = user.nama.isNotEmpty
-            ? user.nama
+        userName = user.nama!.isNotEmpty
+            ? user.nama!
             : 'User'; // Default to 'User' if no name found
-        userEmail = user.email.isNotEmpty
-            ? user.email
+        userEmail = user.email!.isNotEmpty
+            ? user.email!
             : 'User'; // Default to 'User' if no email found
 
         // Safely construct the profile image URL
-        String userId = user.userId; // Ensure user_id exists
-        String imageUrl = user.imageUrl; // Ensure image_url exists
+        String userId = user.userId!; // Ensure user_id exists
+        String imageUrl = user.imageUrl!; // Ensure image_url exists
 
         if (userId.isNotEmpty && imageUrl.isNotEmpty) {
           userProfileImageUrl =
@@ -106,20 +106,20 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 16),
               const Divider(),
-              ListTile(
-                leading: const Icon(Icons.edit),
-                title: const Text('Edit Profile'),
-                onTap: () {
-                  // Navigate to edit profile page
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.lock),
-                title: const Text('Change Password'),
-                onTap: () {
-                  // Navigate to change password page
-                },
-              ),
+              // ListTile(
+              //   leading: const Icon(Icons.edit),
+              //   title: const Text('Edit Profile'),
+              //   onTap: () {
+              //     // Navigate to edit profile page
+              //   },
+              // ),
+              // ListTile(
+              //   leading: const Icon(Icons.lock),
+              //   title: const Text('Change Password'),
+              //   onTap: () {
+              //     // Navigate to change password page
+              //   },
+              // ),
               ListTile(
                 leading: const Icon(Icons.logout),
                 title: const Text('Logout'),

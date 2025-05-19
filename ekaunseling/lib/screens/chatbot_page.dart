@@ -195,7 +195,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
               const SizedBox(height: 10),
 
               // Chat History
-              Flexible(
+              Expanded(
                 child: ListView.builder(
                   controller: _scrollController,
                   shrinkWrap: true,
@@ -215,13 +215,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
                   },
                 ),
               ),
-
-              // Input Area
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
+Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
@@ -243,7 +237,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
           ],
         ),
       ),
-    );
+              // Input Area
+            ],
+          ),
+        ),
+      ),
+     );
   }
 }
 

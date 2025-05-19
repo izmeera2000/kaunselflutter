@@ -38,6 +38,8 @@ dependencies:
   image_picker: ^1.1.2
   flutter_launcher_icons: ^0.14.3
   rename_app: ^1.6.3
+  shared_preferences: ^2.5.3
+  pusher_beams: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -47,7 +49,6 @@ dev_dependencies:
   lottie: ^2.6.0
   dio: ^5.3.3
   rating_dialog: ^2.0.4
-  shared_preferences: ^2.2.2
   provider: ^6.1.1
   introduction_screen: ^3.1.17
 
@@ -81,7 +82,8 @@ flutter_launcher_icons:
   ios: false
   image_path: "assets/splash-1.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
- 
+  adaptive_icon_background: "#ffffff"    # or use background_image
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

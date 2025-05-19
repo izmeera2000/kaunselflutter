@@ -5,7 +5,7 @@ Future<UserModel> getUserDetails() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
   try {
-    // Retrieve the saved user info
+    // Retrieve the saved user info with nullable types
     Map<String, String?> userDetails = {
       'user_id': prefs.getString('user_id'),
       'email': prefs.getString('email'),
@@ -21,25 +21,20 @@ Future<UserModel> getUserDetails() async {
       'bangsa': prefs.getString('bangsa'),
     };
 
-    // Check if any user details are missing
-    if (userDetails.values.any((detail) => detail == null)) {
-      throw Exception("Some user details are missing.");
-    }
-
-    // Return user details as UserModel
+    // Return user details as UserModel with nullable fields
     return UserModel(
-      userId: userDetails['user_id']!,
-      email: userDetails['email']!,
-      ndp: userDetails['ndp']!,
-      kp: userDetails['kp']!,
-      imageUrl: userDetails['image_url']!,
-      statusKahwin: userDetails['status_kahwin']!,
-      agama: userDetails['agama']!,
-      jantina: userDetails['jantina']!,
-      phone: userDetails['phone']!,
-      nama: userDetails['nama']!,
-      sem: userDetails['sem']!,
-      bangsa: userDetails['bangsa']!,
+      userId: userDetails['user_id'],   // Nullable
+      email: userDetails['email'],      // Nullable
+      ndp: userDetails['ndp'],          // Nullable
+      kp: userDetails['kp'],            // Nullable
+      imageUrl: userDetails['image_url'],  // Nullable
+      statusKahwin: userDetails['status_kahwin'], // Nullable
+      agama: userDetails['agama'],      // Nullable
+      jantina: userDetails['jantina'],  // Nullable
+      phone: userDetails['phone'],      // Nullable
+      nama: userDetails['nama'],        // Nullable
+      sem: userDetails['sem'],          // Nullable
+      bangsa: userDetails['bangsa'],    // Nullable
     );
   } catch (e) {
     // Handle errors gracefully

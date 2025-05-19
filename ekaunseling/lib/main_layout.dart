@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:doctor_appointment_app/screens/appointment_admin_page.dart';
 import 'package:doctor_appointment_app/screens/chat_list_page.dart';
 import 'package:doctor_appointment_app/screens/chatbot_page.dart';
 import 'package:doctor_appointment_app/screens/home_page.dart';
@@ -100,7 +101,7 @@ class _Main2LayoutState extends State<Main2Layout> {
         children: <Widget>[
           Home2Page(),
           ChatListPage(),
-          AppointmentPage(),
+          AppointmentAdminPage(),
           ProfilePage()
         ],
       ),
@@ -119,19 +120,19 @@ class _Main2LayoutState extends State<Main2Layout> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.houseChimneyMedical),
-            label: 'Home2',
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.message),
-            label: 'Chat2',
+            label: 'Chats',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
-            label: 'Schedule2',
+            label: 'Schedule',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.user),
-            label: 'Profile2',
+            label: 'Profile',
           ),
         ],
       ),

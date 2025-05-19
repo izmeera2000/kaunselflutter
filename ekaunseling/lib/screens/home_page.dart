@@ -37,11 +37,11 @@ class _HomePageState extends State<HomePage> {
     
     setState(() {
       // Safely check and update user details
-      userName = user.nama.isNotEmpty ? user.nama : 'User'; // Default to 'User' if no name found
+      userName = user.nama!.isNotEmpty ? user.nama! : 'User'; // Default to 'User' if no name found
 
       // Safely construct the profile image URL
-      String userId = user.userId; // Ensure userId exists
-      String imageUrl = user.imageUrl; // Ensure imageUrl exists
+      String userId = user.userId!; // Ensure userId exists
+      String imageUrl = user.imageUrl!; // Ensure imageUrl exists
 
       if (userId.isNotEmpty && imageUrl.isNotEmpty) {
         userProfileImageUrl = '${Config.base_url}assets/img/user/$userId/$imageUrl';

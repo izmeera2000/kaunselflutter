@@ -108,7 +108,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
           status2: status2,
           limit: limit,
           offset: offset,
-          user_id: user.userId,
+          user_id: user.userId!,
         );
 
         // Inject the current status into each item
