@@ -162,7 +162,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     final UserModel user = await getUserDetails();
 
     final url = Uri.parse(
-        '${Config.base_url2}kaunselor_reject_flutter'); // Your backend URL
+        '${Config.base_url}kaunselor_reject_flutter'); // Your backend URL
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -181,7 +181,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   }
 
   Future<void> _approveAppointment() async {
-    final url = Uri.parse('${Config.base_url2}kaunselor_approve_flutter');
+    final url = Uri.parse('${Config.base_url}kaunselor_approve_flutter');
     final mula = _startTime.format(context); // e.g., 10:30 AM
     final tamat = _endTime.format(context); // e.g., 11:30 AM
     final UserModel user = await getUserDetails();
@@ -359,7 +359,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                         onPressed: startAppointment, // Approve Appointment
                         child: Text("Start"),
                       ),
-                     
                     ]
                   ],
                 ),
