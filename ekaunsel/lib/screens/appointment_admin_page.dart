@@ -93,7 +93,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
     DateTime now = DateTime.now();
     DateTime end = now.add(Duration(days: 365));
 
-    int limit = 10;
+    int limit = 30;
     int offset = 0;
 
     final UserModel user = await getUserDetails();
