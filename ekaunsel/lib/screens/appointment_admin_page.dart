@@ -174,7 +174,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   'local_date': formattedDatelocal,
                   'time':
                       formattedTime, // Time will be "00:00" if not available
-                  'status': item['jenis'] == '1' ? 'Online' : 'Offline',
+                  'status': item['status2']  ,
                 },
               };
             } catch (e) {

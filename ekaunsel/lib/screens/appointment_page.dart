@@ -366,7 +366,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 title: schedule['schedule']['title'],
                                 date: schedule['schedule']['local_date'],
                                 time: schedule['schedule']['time'],
-                                status: schedule['schedule']['status'],
+                                status: schedule['schedule']['event_status'],
                                 onTap: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
