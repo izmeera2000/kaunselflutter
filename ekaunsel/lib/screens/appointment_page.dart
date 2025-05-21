@@ -87,7 +87,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   Future<void> fetchAndSetSchedules() async {
     DateTime now = DateTime.now();
-    DateTime end = now.add(Duration(days: 30));
+    DateTime end = now.add(Duration(days: 365));
 
     int limit = 10;
     int offset = 0;
