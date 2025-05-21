@@ -241,10 +241,11 @@ class _Home2PageState extends State<Home2Page> {
                                       children: [
                                         CircleAvatar(
                                           backgroundColor: Colors.grey[200],
-                                          backgroundImage: profileImageUrl
-                                                  .isNotEmpty
+                                          backgroundImage: (profileImageUrl
+                                                      ?.isNotEmpty ??
+                                                  false)
                                               ? NetworkImage(profileImageUrl)
-                                              : AssetImage(
+                                              : const AssetImage(
                                                       'assets/default_profile.png')
                                                   as ImageProvider,
                                           radius: 25,
@@ -263,13 +264,17 @@ class _Home2PageState extends State<Home2Page> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                               ),
                                               const SizedBox(height: 4),
                                               Text(
                                                 appointment['masalah'] ??
-                                                    'No problem description',
+                                                    'No category',
                                                 style: const TextStyle(
                                                     color: Colors.black54),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                               ),
                                             ],
                                           ),
@@ -277,14 +282,13 @@ class _Home2PageState extends State<Home2Page> {
                                       ],
                                     ),
                                     const SizedBox(height: 10),
-                                    // Date and time
                                     Row(
                                       children: [
                                         Icon(Icons.calendar_today,
                                             size: 16, color: Colors.grey[600]),
                                         const SizedBox(width: 5),
                                         Text(
-                                          appointment['tarikh'] ?? 'No Date',
+                                         appointment['tarikh'] ?? 'No Date',
                                           style: const TextStyle(
                                               color: Colors.black54),
                                         ),
@@ -304,7 +308,6 @@ class _Home2PageState extends State<Home2Page> {
                                       ],
                                     ),
                                     const SizedBox(height: 10),
-                                    // Status
                                     Text(
                                       'Status: ${_mapStatus(appointment['status'])}',
                                       style: const TextStyle(

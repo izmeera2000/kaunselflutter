@@ -11,6 +11,7 @@ class UserModel {
   final String? nama; // Nullable
   final String? sem; // Nullable
   final String? bangsa; // Nullable
+  final String? role; // Nullable
 
   // Constructor
   UserModel({
@@ -25,7 +26,8 @@ class UserModel {
     this.phone,  // Nullable
     this.nama,   // Nullable
     this.sem,    // Nullable
-    this.bangsa, // Nullable
+    this.bangsa, 
+    this.role, 
   });
 
   // Factory method to create a UserModel from a Map<String, String>
@@ -43,6 +45,7 @@ class UserModel {
       nama: map['nama'],             // Nullable
       sem: map['sem'],               // Nullable
       bangsa: map['bangsa'],         // Nullable
+      role: map['role'],         // Nullable
     );
   }
 
@@ -61,6 +64,7 @@ class UserModel {
       'nama': nama ?? '',    // Default to empty string if null
       'sem': sem ?? '',      // Default to empty string if null
       'bangsa': bangsa ?? '', // Default to empty string if null
+      'role': role ?? '', // Default to empty string if null
     };
   }
 }

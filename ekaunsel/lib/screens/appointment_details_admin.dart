@@ -220,10 +220,11 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Future<void> startAppointment() async {
     final url = Uri.parse('${Config.base_url}temujanji_update_flutter');
     final UserModel user = await getUserDetails();
-
+TimeOfDay time = TimeOfDay(hour: 14, minute: 30);
+String formattedTime = '${time.hour}:${time.minute}';
     final response = await http.post(url, body: {
       'temujanji_update_flutter[meeting_id]': widget.id,
-      'temujanji_update_flutter[start]': TimeOfDay.now(),
+      'temujanji_update_flutter[start]': formattedTime,
       'temujanji_update_flutter[user_id]': user.userId,
     });
 

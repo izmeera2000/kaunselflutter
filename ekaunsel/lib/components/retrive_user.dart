@@ -19,6 +19,7 @@ Future<UserModel> getUserDetails() async {
       'nama': prefs.getString('nama'),
       'sem': prefs.getString('sem'),
       'bangsa': prefs.getString('bangsa'),
+      'role': prefs.getString('role'),
     };
 
     // Return user details as UserModel with nullable fields
@@ -35,6 +36,7 @@ Future<UserModel> getUserDetails() async {
       nama: userDetails['nama'],        // Nullable
       sem: userDetails['sem'],          // Nullable
       bangsa: userDetails['bangsa'],    // Nullable
+      role: userDetails['role'],    // Nullable
     );
   } catch (e) {
     // Handle errors gracefully

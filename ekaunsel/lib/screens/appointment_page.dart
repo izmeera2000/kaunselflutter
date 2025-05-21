@@ -25,8 +25,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   List<dynamic> schedules = [];
   bool isLoading = true;
-  static bool _isDataFetched =
-      false; // Static variable to track fetch across all instances
+ 
 
   @override
   void initState() {
@@ -41,6 +40,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     required int limit,
     required int offset,
     required String user_id, // Add this to accept user_id
+    required String role, // Add this to accept user_id
   }) async {
     final UserModel user = await getUserDetails();
     final url = Uri.parse('${Config.base_url}senaraitemujanji');
@@ -54,6 +54,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
       'senaraitemujanji_flutter[end]': formattedEnd,
       'senaraitemujanji_flutter[user_id]': user_id, // Send user_id here
       'senaraitemujanji_flutter[status2]': status2, // Send status2
+      'senaraitemujanji_flutter[role]': role, // Send status2
       'senaraitemujanji_flutter[limit]': limit.toString(),
       'senaraitemujanji_flutter[offset]': offset.toString(),
     };
@@ -85,6 +86,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     }
   }
 
+
   Future<void> fetchAndSetSchedules() async {
     DateTime now = DateTime.now();
     DateTime end = now.add(Duration(days: 30));
@@ -105,6 +107,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
           limit: limit,
           offset: offset,
           user_id: user.userId!,
+          role: user.userId!,
         );
 
         // Inject the current status into each item

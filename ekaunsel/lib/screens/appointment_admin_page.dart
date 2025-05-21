@@ -32,10 +32,8 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_isDataFetched) {
-      fetchAndSetSchedules();
-      _isDataFetched = true; // Prevent further fetches after the first call
-    }
+       fetchAndSetSchedules();
+   
   }
 
   Future<List<dynamic>> fetchAppointments({
@@ -159,11 +157,11 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
               String formattedDatelocal =
                   "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-
+ 
               return {
                 'id': item['id'],
                 'doctor_name': item['nama'],
-                'doctor_profile': 'assets/pickauselor.jpg',
+                'doctor_profile': "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
                 'category': 'Kaunseling',
                 'status': item['status'] == 'upcoming'
                     ? FilterStatus.upcoming
@@ -332,34 +330,43 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                           padding: const EdgeInsets.all(20),
                           child: Column(
                             children: <Widget>[
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                      schedule['doctor_profile'],
+                              Container(
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        schedule['doctor_profile'],
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        schedule['doctor_name'],
-                                        style: const TextStyle(
-                                          color: Config.blackColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        schedule['category'],
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                    const SizedBox(width: 10),
+                                   Expanded(
+                                     child: Column(
+                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                       children: [
+                                         Text(
+                                           schedule['doctor_name'],
+                                           style: const TextStyle(
+                                             color: Config.blackColor,
+                                             fontWeight: FontWeight.bold,
+                                           ),
+                                           overflow: TextOverflow.ellipsis,
+                                           maxLines: 1,
+                                           softWrap: false,
+                                         ),
+                                         const SizedBox(height: 2),
+                                         Text(
+                                           schedule['category'],
+                                           style: const TextStyle(color: Colors.black),
+                                           overflow: TextOverflow.ellipsis,
+                                           maxLines: 1,
+                                           softWrap: false,
+                                         ),
+                                       ],
+                                     ),
+                                   ),
+
+                                  ],
+                                ),
                               ),
                               Config.spaceSmall,
                               // ScheduleCard
@@ -383,6 +390,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                                 },
                               ),
                               Config.spaceSmall,
+                              
                               // Action buttons
                               // Row(
                               //   mainAxisAlignment:
