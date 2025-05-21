@@ -109,11 +109,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
           user_id: user.userId!,
           role: user.userId!,
         );
-
-        // Inject the current status into each item
-        for (var item in data) {
-          item['status'] = status2;
-        }
+ 
 
         combinedData.addAll(data);
       } catch (e) {
@@ -158,14 +154,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
               String formattedDatelocal =
                   "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
-
+ 
               return {
                 'doctor_name': item['nama'],
-                'doctor_profile': 'assets/pickauselor.jpg',
+                'doctor_profile': "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
                 'category': 'Kaunseling',
-                'status': item['status'] == 'upcoming'
+                'status': item['status2'] == 'upcoming'
                     ? FilterStatus.upcoming
-                    : item['status'] == 'completed'
+                    : item['status2'] == 'completed'
                         ? FilterStatus.completed
                         : FilterStatus.cancelled,
                 'schedule': {
@@ -174,7 +170,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   'local_date': formattedDatelocal,
                   'time':
                       formattedTime, // Time will be "00:00" if not available
-                  'status': item['jenis'] == '1' ? 'Online' : 'Offline',
+                  'status': item['status']  ,
                 },
               };
             } catch (e) {
@@ -333,23 +329,26 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             children: <Widget>[
                               Row(
                                 children: [
-                                  CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                      schedule['doctor_profile'],
+                                 CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        schedule['doctor_profile'],
+                                      ),
                                     ),
-                                  ),
                                   const SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        schedule['doctor_name'],
-                                        style: const TextStyle(
-                                          color: Config.blackColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                       Text(
+                                           schedule['doctor_name'],
+                                           style: const TextStyle(
+                                             color: Config.blackColor,
+                                             fontWeight: FontWeight.bold,
+                                           ),
+                                           overflow: TextOverflow.ellipsis,
+                                           maxLines: 1,
+                                           softWrap: false,
+                                         ),
                                       const SizedBox(height: 2),
                                       Text(
                                         schedule['category'],
@@ -366,7 +365,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 title: schedule['schedule']['title'],
                                 date: schedule['schedule']['local_date'],
                                 time: schedule['schedule']['time'],
-                                status: schedule['schedule']['event_status'],
+                                status: schedule['schedule']['status'],
                                 onTap: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

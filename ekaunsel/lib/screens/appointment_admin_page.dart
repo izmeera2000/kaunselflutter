@@ -111,7 +111,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
 
         // Inject the current status into each item
         for (var item in data) {
-          item['status'] = status2;
+          item['status2'] = status2;
         }
 
         combinedData.addAll(data);
@@ -163,9 +163,9 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                 'doctor_name': item['nama'],
                 'doctor_profile': "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
                 'category': 'Kaunseling',
-                'status': item['status'] == 'upcoming'
+                'status': item['status2'] == 'upcoming'
                     ? FilterStatus.upcoming
-                    : item['status'] == 'completed'
+                    : item['status2'] == 'completed'
                         ? FilterStatus.completed
                         : FilterStatus.cancelled,
                 'schedule': {
@@ -174,7 +174,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   'local_date': formattedDatelocal,
                   'time':
                       formattedTime, // Time will be "00:00" if not available
-                  'status': item['status2']  ,
+                  'status': item['status']  ,
                 },
               };
             } catch (e) {
