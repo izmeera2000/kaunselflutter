@@ -365,7 +365,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 title: schedule['schedule']['title'],
                                 date: schedule['schedule']['local_date'],
                                 time: schedule['schedule']['time'],
-                                status: schedule['schedule']['status'],
+                                status: "${_mapStatus(schedule['schedule']['status'])}",
                                 onTap: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -416,5 +416,19 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ),
       ),
     );
+  }
+}
+String _mapStatus(dynamic status) {
+  switch (status?.toString()) {
+    case '1':
+      return 'Pending';
+    case '2':
+      return 'Confirmed';
+    case '3':
+      return 'Ongoing';
+    case '4':
+      return 'Ended';
+    default:
+      return 'Rejected';
   }
 }
