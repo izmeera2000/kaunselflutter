@@ -4,6 +4,7 @@ import 'package:ekaunsel/components/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../utils/config.dart'; // Update import as needed
+import 'package:intl/intl.dart';
 
 class AppointmentDetailsPage extends StatefulWidget {
   final String id;
@@ -110,10 +111,17 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                   child: Text('Cancel'),
                 ),
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Call function with selected times
-                    _approveAppointment();
+                    await _approveAppointment();
                     Navigator.pop(context);
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              AppointmentDetailsPage(id: widget.id)),
+                    );
                   },
                   child: Text('Approve'),
                 ),
@@ -220,8 +228,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   Future<void> startAppointment() async {
     final url = Uri.parse('${Config.base_url}temujanji_update_flutter');
     final UserModel user = await getUserDetails();
-TimeOfDay time = TimeOfDay(hour: 14, minute: 30);
-String formattedTime = '${time.hour}:${time.minute}';
+    TimeOfDay time = TimeOfDay(hour: 14, minute: 30);
+    String formattedTime = '${time.hour}:${time.minute}';
     final response = await http.post(url, body: {
       'temujanji_update_flutter[meeting_id]': widget.id,
       'temujanji_update_flutter[start]': formattedTime,
@@ -233,6 +241,10 @@ String formattedTime = '${time.hour}:${time.minute}';
     } else {
       print('Failed to start appointment: ${response.body}');
     }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => AppointmentDetailsPage(id: widget.id)),
+    );
   }
 
   void _showErrorDialog(String message) {
@@ -251,6 +263,246 @@ String formattedTime = '${time.hour}:${time.minute}';
     );
   }
 
+  // Function to show rejection reason dialog
+  Future<void> _showRejectDialaog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Rejection Reason'),
+          content: TextField(
+            controller: _rejectReasonController,
+            decoration: InputDecoration(hintText: "Enter reason for rejection"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Send reject request to backend here
+                await _rejectAppointment();
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => AppointmentDetailsPage(id: widget.id)),
+                );
+              },
+              child: Text('Reject'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> endAppointment(String meetingId) async {
+    final url = Uri.parse('${Config.base_url}temujanji_end_flutter');
+
+    try {
+      final response = await http.post(
+        url,
+        body: {
+          'temujanji_end_flutter': '1', // Needed for `isset()` to work
+          'temujanji_end_flutter[meeting_id]': meetingId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Appointment ended successfully');
+        // Optionally, refresh the page or show confirmation
+           Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    AppointmentDetailsPage(id: widget.id)),
+                          );
+      } else {
+        print('Failed to end appointment: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error ending appointment: $e');
+    }
+  }
+
+  Future<void> showFinalizeDialog(
+    BuildContext context, {
+    required String meetingId,
+    required String userId,
+  }) async {
+    TimeOfDay? startTime;
+    TimeOfDay? endTime;
+    DateTime? selectedDate;
+    TextEditingController masalahController = TextEditingController();
+
+    final user = await getUserDetails(); // fetch kaunselor info
+    final String? kaunselorId = user.userId; // get the kaunselor_id
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Finalize Appointment"),
+        content: StatefulBuilder(
+          builder: (context, setState) => SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(selectedDate == null
+                      ? 'Select Date'
+                      : 'Date: ${DateFormat('yyyy-MM-dd').format(selectedDate!)}'),
+                  onTap: () async {
+                    final pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now().subtract(Duration(days: 1)),
+                      lastDate: DateTime.now().add(Duration(days: 365)),
+                    );
+                    if (pickedDate != null) {
+                      setState(() => selectedDate = pickedDate);
+                    }
+                  },
+                ),
+                ListTile(
+                  title: Text(startTime == null
+                      ? 'Select Start Time'
+                      : 'Start: ${startTime?.format(context)}'),
+                  onTap: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (picked != null) {
+                      setState(() => startTime = picked);
+                    }
+                  },
+                ),
+                ListTile(
+                  title: Text(endTime == null
+                      ? 'Select End Time'
+                      : 'End: ${endTime?.format(context)}'),
+                  onTap: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    if (picked != null) {
+                      setState(() => endTime = picked);
+                    }
+                  },
+                ),
+                TextField(
+                  controller: masalahController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    labelText: 'Enter your issue',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (selectedDate != null &&
+                  startTime != null &&
+                  endTime != null &&
+                  masalahController.text.trim().isNotEmpty) {
+                final timeFormatter = DateFormat('HH:mm');
+                final dateFormatter = DateFormat('yyyy-MM-dd');
+
+                final String formattedStart = timeFormatter.format(
+                  DateTime(0, 0, 0, startTime!.hour, startTime!.minute),
+                );
+                final String formattedEnd = timeFormatter.format(
+                  DateTime(0, 0, 0, endTime!.hour, endTime!.minute),
+                );
+                final String formattedDate =
+                    dateFormatter.format(selectedDate!);
+
+                finalizeFlutterAppointment(
+                  meetingId: meetingId,
+                  userId: userId,
+                  kaunselorId: kaunselorId,
+                  time1: formattedStart,
+                  time2: formattedEnd,
+                  tarikh1: formattedDate,
+                  masalah1: masalahController.text.trim(),
+                );
+
+                Navigator.pop(context);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Please fill all fields")),
+                );
+              }
+            },
+            child: Text("Confirm"),
+          ),
+        ],
+      ),
+    );
+  }
+Future<void> finalizeFlutterAppointment({
+  required String meetingId,
+  required String userId,
+  required String? kaunselorId,
+  required String time1,
+  required String time2,
+  required String tarikh1,
+  required String masalah1,
+}) async {
+  final url = Uri.parse('${Config.base_url}temujanji_final_flutterx');
+
+  try {
+    final response = await http.post(
+      url,
+      body: {
+        'temujanji_final_flutter': '1',
+        'meeting_id': meetingId,
+        'user_id': userId,
+        'kaunselor_id': kaunselorId,
+        'time1': time1,
+        'time2': time2,
+        'tarikh1': tarikh1,
+        'masalah1': masalah1,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+
+      if (jsonResponse['status'] == 'success') {
+        final newMeetingId = jsonResponse['meeting_id'];
+
+        print("Appointment finalized with new meeting ID: $newMeetingId");
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => AppointmentDetailsPage(id: newMeetingId.toString()),
+          ),
+        );
+      } else {
+        print("Error from server: ${jsonResponse['message']}");
+      }
+    } else {
+      print("Failed: ${response.statusCode}");
+    }
+  } catch (e) {
+    print("Error: $e");
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -291,19 +543,21 @@ String formattedTime = '${time.hour}:${time.minute}';
                               "${Config.base_url}/assets/img/user/${details['user_id']}/${details['image_url']!}"), // Load image from URL
                         ),
                         SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${details['nama']}',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '${details['ndp']}',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${details['nama']}',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '${details['ndp']}',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -357,10 +611,52 @@ String formattedTime = '${time.hour}:${time.minute}';
 
                       SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: startAppointment, // Approve Appointment
+                        onPressed: () async {
+                          print("start startAppointment");
+                          await startAppointment();
+                        }, // Approve Appointment
                         child: Text("Start"),
                       ),
-                    ]
+                    ],
+                    if (isStatusThree) ...[
+                      const SizedBox(
+                          height: 20), // Add space between text and buttons
+
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          endAppointment(widget.id); // Pass actual meeting ID
+
+                          // Optionally re-render or refresh current screen
+                       
+                        },
+                        child: Text("End"),
+                      ),
+                    ],
+                    if (isStatusFour) ...[
+                      const SizedBox(
+                          height: 20), // Add space between text and buttons
+
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          // await endAppointment(widget.id); // Pass actual meeting ID
+                          showFinalizeDialog(
+                            context,
+                            meetingId: widget.id,
+                            userId: details['user_id'],
+                          );
+                          // Optionally re-render or refresh current screen
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    AppointmentDetailsPage(id: widget.id)),
+                          );
+                        },
+                        child: Text("Repeat"),
+                      ),
+                    ],
                   ],
                 ),
               );
