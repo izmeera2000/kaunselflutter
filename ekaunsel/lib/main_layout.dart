@@ -5,9 +5,11 @@ import 'package:ekaunsel/screens/chat_list_page.dart';
 import 'package:ekaunsel/screens/chatbot_page.dart';
 import 'package:ekaunsel/screens/home_page.dart';
 import 'package:ekaunsel/screens/home2_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ekaunsel/screens/appointment_page.dart';
 import 'package:ekaunsel/screens/profile_page.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainLayout extends StatefulWidget {
@@ -20,23 +22,64 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int currentPage = 0;
   final PageController _page = PageController();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    initNotifications();
+  }
+
+  void initNotifications() async {
+    const AndroidInitializationSettings androidInitSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initSettings =
+        InitializationSettings(android: androidInitSettings);
+
+    await flutterLocalNotificationsPlugin.initialize(initSettings);
+    await FirebaseMessaging.instance.requestPermission();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'channel_id',
+              'channel_name',
+              importance: Importance.max,
+              priority: Priority.high,
+            ),
+          ),
+        );
+      }
+    });
+
+    await FirebaseMessaging.instance.subscribeToTopic('katasemangat');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
         controller: _page,
-        onPageChanged: ((value) {
+        onPageChanged: (value) {
           setState(() {
-            //Actualiza pagina del index cuando el tab es presionado
             currentPage = value;
           });
-        }),
-        children: <Widget>[
+        },
+        children: const <Widget>[
           HomePage(),
           ChatbotPage(),
           AppointmentPage(),
-          ProfilePage()
+          ProfilePage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -74,6 +117,9 @@ class _MainLayoutState extends State<MainLayout> {
   }
 }
 
+
+
+
 class Main2Layout extends StatefulWidget {
   const Main2Layout({super.key});
 
@@ -87,8 +133,7 @@ class _Main2LayoutState extends State<Main2Layout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-
+      resizeToAvoidBottomInset: true,
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
         controller: _page,

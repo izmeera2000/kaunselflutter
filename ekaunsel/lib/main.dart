@@ -26,29 +26,8 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
   await initializeFirebaseAppCheck();
-
-  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-  final settings = InitializationSettings(android: android);
-  await flutterLocalNotificationsPlugin.initialize(settings);
-// Handle background messages
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  // Foreground message listener
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    debugPrint(
-        "Received a message while app is in the foreground: ${message.messageId}");
-    if (message.notification != null) {
-      debugPrint('Notification Title: ${message.notification!.title}');
-      debugPrint('Notification Body: ${message.notification!.body}');
-
-      // Show local notification when a message is received in the foreground
-      _showNotification(
-        flutterLocalNotificationsPlugin,
-        message.notification!,
-      );
-    }
-  });
+ 
+ 
   runApp(const MyApp());
 }
 
@@ -68,37 +47,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _fcm = FirebaseMessaging.instance;
+ 
 
-    // Request permission (iOS & Android 13+)
-    _fcm.requestPermission(alert: true, badge: true, sound: true);
+ 
+ 
 
-    // Get the token each time the app launches
-    _fcm.getToken().then((token) {
-      print('FCM Token: $token');
-      // TODO: send this token to your backend and associate with the user
-    });
 
-    // Handle messages while the app is in foreground
-    FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
-      if (msg.notification != null) {
-        // You can show a local in-app dialog/snackbar or update UI
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text(msg.notification!.title ?? ''),
-            content: Text(msg.notification!.body ?? ''),
-          ),
-        );
-      }
-    });
-
-    // Handle when user taps a notification
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage msg) {
-      final chatId = msg.data['chatId'];
-      // Navigate to the chat screen:
-      Navigator.pushNamed(context, '/chat', arguments: chatId);
-    });
   }
 
   Future<void> checkLoginStatus(BuildContext context) async {
@@ -165,43 +119,9 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-Future<void> _showNotification(
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
-  RemoteNotification notification,
-) async {
-  try {
-    const androidDetails = AndroidNotificationDetails(
-      'chat', // This is your custom channel ID (must be unique)
-      'High Importance Notifications', // This is the name of your channel
-      channelDescription:
-          'This channel is used for important notifications.', // Description of the channel
-      importance:
-          Importance.max, // Maximum importance for high-priority notifications
-      priority: Priority.high, // High priority for the notification
-    );
+ 
 
-    const platformDetails = NotificationDetails(android: androidDetails);
 
-    // Show the notification
-    await flutterLocalNotificationsPlugin.show(
-      0, // notification id
-      notification.title, // title
-      notification.body, // body
-      platformDetails, // notification details
-    );
-
-    debugPrint('Notification shown successfully.');
-  } catch (e) {
-    // If an error occurs, log it
-    debugPrint('Error showing notification: $e');
-  }
-}
-
-// Background message handler
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint("Handling a background message: ${message.messageId}");
-  // Add your custom logic here
-}
 
 Future<void> initializeFirebaseAppCheck() async {
   try {

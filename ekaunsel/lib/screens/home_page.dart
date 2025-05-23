@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ekaunsel/components/appointment_card.dart';
 import 'package:ekaunsel/components/doctor_card.dart';
+import 'package:ekaunsel/components/notification.dart';
 import 'package:ekaunsel/screens/appointment_details_admin.dart';
 import 'package:ekaunsel/utils/config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -34,7 +36,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     fetchUserDetails().then((_) => fetchTodaysAppointments());
     FirebaseMessaging.instance.subscribeToTopic('semangat');
-    
   }
 
   // Fetch user details from SharedPreferences
@@ -72,7 +73,10 @@ class _HomePageState extends State<HomePage> {
   }
 
 
- Future<List<dynamic>> fetchAppointmentsToday(String userId, String role) async {
+
+
+  Future<List<dynamic>> fetchAppointmentsToday(
+      String userId, String role) async {
     final DateTime now = DateTime.now();
     final String formattedDate = DateFormat('yyyy-MM-dd').format(now);
 
@@ -86,14 +90,14 @@ class _HomePageState extends State<HomePage> {
       'senaraitemujanji_flutter[status2]': 'upcoming',
       'senaraitemujanji_flutter[limit]': '10',
       'senaraitemujanji_flutter[offset]': '0',
-      'senaraitemujanji_flutter[role]':  role,
+      'senaraitemujanji_flutter[role]': role,
     };
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: requestBody,
     );
-      print(requestBody);
+    print(requestBody);
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -256,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Config.spaceSmall,
-      // Appointment list or loader
+                // Appointment list or loader
                 if (todaysAppointments.isEmpty)
                   Text('No appointments today.')
                 else
@@ -393,6 +397,11 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Config.spaceSmall,
+                ElevatedButton(
+                    onPressed: () async {
+                      await sendNotificationTopic("katasemangat", "kata-kata hari ini", "dh makan ke belum");
+                    },
+                    child: Text("adsada")),
                 Column(
                   children: List.generate(1, (index) {
                     return const DoctorCard(route: 'doctor_details');

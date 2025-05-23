@@ -34,6 +34,8 @@ class _LoginFormState extends State<LoginForm> {
 
     try {
       // Show loading indicator while the request is being sent
+  print("${Config.base_url}");
+
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -42,7 +44,6 @@ class _LoginFormState extends State<LoginForm> {
         },
       );
       final fcmToken = await FirebaseMessaging.instance.getToken();
-
       // Send the POST request to the server
       final response = await http.post(
         Uri.parse(

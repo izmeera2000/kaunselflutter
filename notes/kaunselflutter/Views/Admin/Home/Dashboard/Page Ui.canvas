@@ -1,0 +1,147 @@
+{
+  "edges": [
+  ],
+  "metadata": {
+    "frontmatter": {
+    },
+    "startNode": "f02ad9db6eb880c5",
+    "version": "1.0-1.0"
+  },
+  "nodes": [
+    {
+      "height": 1720,
+      "id": "d3fbd8261f14b89d",
+      "label": "UI Dashboard",
+      "type": "group",
+      "width": 920,
+      "x": -700,
+      "y": -1220
+    },
+    {
+      "height": 620,
+      "id": "45f9d6d8c1688dda",
+      "label": "Appoitnemtn Today",
+      "type": "group",
+      "width": 855,
+      "x": -667,
+      "y": -600
+    },
+    {
+      "height": 420,
+      "id": "6ab4e1bf1454263b",
+      "label": "Card",
+      "type": "group",
+      "width": 740,
+      "x": -627,
+      "y": -500
+    },
+    {
+      "height": 340,
+      "id": "035558614fa4563c",
+      "label": "Notification  Kata2 semangat",
+      "type": "group",
+      "width": 845,
+      "x": -667,
+      "y": 100
+    },
+    {
+      "height": 349,
+      "id": "6dd62a668c79611f",
+      "styleAttributes": {
+      },
+      "text": "Hi, \ndo you want to ",
+      "type": "text",
+      "width": 880,
+      "x": -680,
+      "y": -1040
+    },
+    {
+      "height": 100,
+      "id": "8e7f2837f3ba880d",
+      "styleAttributes": {
+      },
+      "text": "Picutre\nRadius 20",
+      "type": "text",
+      "width": 155,
+      "x": -592,
+      "y": -460
+    },
+    {
+      "height": 100,
+      "id": "8c1bb17c7f50901c",
+      "styleAttributes": {
+      },
+      "text": "Name\nNDP",
+      "type": "text",
+      "width": 482,
+      "x": -409,
+      "y": -460
+    },
+    {
+      "height": 60,
+      "id": "ce2623d54852499d",
+      "styleAttributes": {
+      },
+      "text": "Tajuk\n",
+      "type": "text",
+      "width": 665,
+      "x": -592,
+      "y": -340
+    },
+    {
+      "height": 200,
+      "id": "247fdb712f10796a",
+      "styleAttributes": {
+      },
+      "text": "Button , show alert\n",
+      "type": "text",
+      "width": 717,
+      "x": -592,
+      "y": 160
+    },
+    {
+      "height": 60,
+      "id": "7c5f6ff059820f25",
+      "styleAttributes": {
+      },
+      "text": "Date",
+      "type": "text",
+      "width": 260,
+      "x": -592,
+      "y": -260
+    },
+    {
+      "height": 60,
+      "id": "063bebf8eccdf4e3",
+      "styleAttributes": {
+      },
+      "text": "Time",
+      "type": "text",
+      "width": 260,
+      "x": -233,
+      "y": -260
+    },
+    {
+      "height": 60,
+      "id": "ef5ab5c908e11279",
+      "styleAttributes": {
+      },
+      "text": "Status",
+      "type": "text",
+      "width": 260,
+      "x": -592,
+      "y": -180
+    },
+    {
+      "height": 60,
+      "id": "8a36d870ce7a3f6b",
+      "styleAttributes": {
+      },
+      "text": "Type (online,Offline)",
+      "type": "text",
+      "width": 260,
+      "x": -240,
+      "y": -180
+    }
+  ]
+}

@@ -1,0 +1,256 @@
+{
+  "edges": [
+    {
+      "fromNode": "9fe920bdba5c2d69",
+      "fromSide": "bottom",
+      "id": "e0aff47eb32433f7",
+      "styleAttributes": {
+      },
+      "toNode": "0687b6ed7897640e",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "2be38cbc8edfb52b",
+      "fromSide": "bottom",
+      "id": "31a0d40ff36f0013",
+      "styleAttributes": {
+      },
+      "toNode": "21823b0e15ca7ec5",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "08f64ea96fdecc80",
+      "fromSide": "bottom",
+      "id": "b37d0282b4499914",
+      "styleAttributes": {
+      },
+      "toNode": "78a2d9e6fe8c46e7",
+      "toSide": "top"
+    },
+    {
+      "fromNode": "cc17ffd4ccc92306",
+      "fromSide": "bottom",
+      "id": "422f8259c9110ccb",
+      "styleAttributes": {
+      },
+      "toNode": "e1af7151de70b05c",
+      "toSide": "top"
+    }
+  ],
+  "metadata": {
+    "frontmatter": {
+    },
+    "version": "1.0-1.0"
+  },
+  "nodes": [
+    {
+      "height": 700,
+      "id": "3e4f9d6e6e414e4f",
+      "label": "Admin",
+      "styleAttributes": {
+      },
+      "type": "group",
+      "width": 1360,
+      "x": -20,
+      "y": -220
+    },
+    {
+      "height": 450,
+      "id": "5478dc04a8b1e1f8",
+      "label": "Student",
+      "styleAttributes": {
+      },
+      "type": "group",
+      "width": 660,
+      "x": -820,
+      "y": -220
+    },
+    {
+      "height": 60,
+      "id": "96872fecf4e39057",
+      "styleAttributes": {
+      },
+      "text": "Ekaunsel \n",
+      "type": "text",
+      "width": 260,
+      "x": -60,
+      "y": -400
+    },
+    {
+      "height": 60,
+      "id": "9ad2f0725c255800",
+      "styleAttributes": {
+      },
+      "text": "Student\n",
+      "type": "text",
+      "width": 260,
+      "x": -580,
+      "y": -200
+    },
+    {
+      "height": 60,
+      "id": "bd2a53ebb77816f5",
+      "styleAttributes": {
+      },
+      "text": "Home\n",
+      "type": "text",
+      "width": 140,
+      "x": -800,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "5a20f0ebb08d5111",
+      "styleAttributes": {
+      },
+      "text": "Chat\n",
+      "type": "text",
+      "width": 100,
+      "x": -620,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "5d6c30004a60ca18",
+      "styleAttributes": {
+      },
+      "text": "Schedule\n",
+      "type": "text",
+      "width": 140,
+      "x": -480,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "9619dd13db8e9f96",
+      "styleAttributes": {
+      },
+      "text": "Profile",
+      "type": "text",
+      "width": 120,
+      "x": -300,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "66f3696885b7f09a",
+      "styleAttributes": {
+      },
+      "text": "Ujian Psikologi",
+      "type": "text",
+      "width": 260,
+      "x": -780,
+      "y": 100
+    },
+    {
+      "height": 60,
+      "id": "c234988ac8eac886",
+      "styleAttributes": {
+      },
+      "text": "Admin\n",
+      "type": "text",
+      "width": 260,
+      "x": 130,
+      "y": -200
+    },
+    {
+      "height": 60,
+      "id": "237e8badb1c59568",
+      "styleAttributes": {
+      },
+      "text": "Home\n",
+      "type": "text",
+      "width": 260,
+      "x": 0,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "2be38cbc8edfb52b",
+      "styleAttributes": {
+      },
+      "text": "Schedule List",
+      "type": "text",
+      "width": 140,
+      "x": 660,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "9fe920bdba5c2d69",
+      "styleAttributes": {
+      },
+      "text": "Chat List\n",
+      "type": "text",
+      "width": 260,
+      "x": 320,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "0687b6ed7897640e",
+      "styleAttributes": {
+      },
+      "text": "Chat Details",
+      "type": "text",
+      "width": 260,
+      "x": 320,
+      "y": 200
+    },
+    {
+      "height": 60,
+      "id": "21823b0e15ca7ec5",
+      "styleAttributes": {
+      },
+      "text": "Schedule Details",
+      "type": "text",
+      "width": 260,
+      "x": 620,
+      "y": 200
+    },
+    {
+      "height": 60,
+      "id": "08f64ea96fdecc80",
+      "styleAttributes": {
+      },
+      "text": "Profile\n",
+      "type": "text",
+      "width": 120,
+      "x": 1030,
+      "y": -40
+    },
+    {
+      "height": 60,
+      "id": "78a2d9e6fe8c46e7",
+      "styleAttributes": {
+      },
+      "text": "Edit Profile",
+      "type": "text",
+      "width": 260,
+      "x": 1080,
+      "y": 80
+    },
+    {
+      "height": 60,
+      "id": "cc17ffd4ccc92306",
+      "styleAttributes": {
+      },
+      "text": "Student List",
+      "type": "text",
+      "width": 150,
+      "x": 830,
+      "y": -40
+    },
+    {
+      "file": "Views/Admin/Student/Details/Student Details.md",
+      "height": 60,
+      "id": "e1af7151de70b05c",
+      "styleAttributes": {
+      },
+      "type": "file",
+      "width": 260,
+      "x": 920,
+      "y": 180
+    }
+  ]
+}

@@ -11,34 +11,17 @@
             "id": "1d04badebc42c5cb",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "Improvement.md",
-                "mode": "source",
-                "source": false
+                "file": "Views/Admin/Home/Dashboard/Page Ui.canvas",
+                "viewState": {
+                  "x": -220.95097132284923,
+                  "y": -133.62816716225018,
+                  "zoom": -0.6666830297648956
+                }
               },
-              "icon": "lucide-file",
-              "title": "Improvement"
-            }
-          }
-        ]
-      },
-      {
-        "id": "dc057d45f37edc21",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "46e349096e8ffa89",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "TEst.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "TEst"
+              "icon": "lucide-layout-dashboard",
+              "title": "Page Ui"
             }
           }
         ]
@@ -182,14 +165,32 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "foldercanvas:Folder Canvas": false,
+      "obsidian-kanban:Create new board": false
     }
   },
-  "active": "46e349096e8ffa89",
+  "active": "1d04badebc42c5cb",
   "lastOpenFiles": [
-    "Flow.md",
-    "Improvement.md",
+    "Views/Admin/Student/List/Page Ui.canvas",
+    "Views/Admin/Home/Dashboard/Page Ui.canvas",
+    "Views/Admin/Student/Details/Page Ui.canvas",
+    "Views/Admin/Student/Details/Student Details.md",
+    "Task.md",
+    "Flow.canvas",
+    "Views/Admin/Home/Button Send Kata2",
+    "Views/Admin/Home/Dashboard",
+    "Views/Admin/Home",
+    "Views/Admin/Student/List",
+    "Views/Admin/Student/Details",
+    "Views/Admin/Student",
+    "Views/Admin",
+    "Views/Canvas-1747929360942.canvas",
+    "Views/Canvas-1747929360942 1.canvas",
+    "Welcome.md",
     "TEst.md",
-    "Welcome.md"
+    "Improvement.md",
+    "Flow.md",
+    "Views"
   ]
 }

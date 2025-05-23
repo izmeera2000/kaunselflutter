@@ -1,0 +1,114 @@
+{
+  "edges": [
+  ],
+  "metadata": {
+    "frontmatter": {
+    },
+    "startNode": "f02ad9db6eb880c5",
+    "version": "1.0-1.0"
+  },
+  "nodes": [
+    {
+      "height": 1560,
+      "id": "d3fbd8261f14b89d",
+      "label": "UI Student List",
+      "type": "group",
+      "width": 920,
+      "x": -700,
+      "y": -1220
+    },
+    {
+      "height": 820,
+      "id": "56e40db063fdba35",
+      "label": "Appoitnemtn Today",
+      "type": "group",
+      "width": 855,
+      "x": -680,
+      "y": -940
+    },
+    {
+      "height": 300,
+      "id": "23352c071e4a4f0d",
+      "label": "Card",
+      "type": "group",
+      "width": 740,
+      "x": -640,
+      "y": -840
+    },
+    {
+      "height": 120,
+      "id": "03864dc038f7a0a0",
+      "label": "AppBar",
+      "type": "group",
+      "width": 880,
+      "x": -680,
+      "y": -1180
+    },
+    {
+      "height": 60,
+      "id": "5a53a93d08bab8ab",
+      "styleAttributes": {
+      },
+      "text": "Back",
+      "type": "text",
+      "width": 110,
+      "x": -660,
+      "y": -1160
+    },
+    {
+      "height": 60,
+      "id": "3d802ccd77ccdd30",
+      "styleAttributes": {
+      },
+      "text": "Student List",
+      "type": "text",
+      "width": 425,
+      "x": -505,
+      "y": -1160
+    },
+    {
+      "height": 60,
+      "id": "854fd874fa7ce9bf",
+      "styleAttributes": {
+      },
+      "text": "Search Bar",
+      "type": "text",
+      "width": 415,
+      "x": -240,
+      "y": -1160
+    },
+    {
+      "height": 220,
+      "id": "f229bb2cbf24d5a5",
+      "styleAttributes": {
+      },
+      "text": "Picutre\nRadius 20",
+      "type": "text",
+      "width": 155,
+      "x": -605,
+      "y": -800
+    },
+    {
+      "height": 140,
+      "id": "e09288c77c3dfa4a",
+      "styleAttributes": {
+      },
+      "text": "Name",
+      "type": "text",
+      "width": 482,
+      "x": -422,
+      "y": -800
+    },
+    {
+      "height": 60,
+      "id": "e3ba0b26346e8eae",
+      "styleAttributes": {
+      },
+      "text": "email",
+      "type": "text",
+      "width": 482,
+      "x": -422,
+      "y": -640
+    }
+  ]
+}

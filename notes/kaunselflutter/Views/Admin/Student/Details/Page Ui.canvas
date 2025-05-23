@@ -1,0 +1,160 @@
+{
+  "edges": [
+  ],
+  "metadata": {
+    "frontmatter": {
+    },
+    "startNode": "f02ad9db6eb880c5",
+    "version": "1.0-1.0"
+  },
+  "nodes": [
+    {
+      "height": 1560,
+      "id": "d3fbd8261f14b89d",
+      "label": "UI Student List",
+      "type": "group",
+      "width": 920,
+      "x": -700,
+      "y": -1220
+    },
+    {
+      "height": 140,
+      "id": "12ae7a25aaf1dda6",
+      "label": "Footer/ bottom",
+      "type": "group",
+      "width": 880,
+      "x": -680,
+      "y": 180
+    },
+    {
+      "height": 120,
+      "id": "03864dc038f7a0a0",
+      "label": "AppBar",
+      "type": "group",
+      "width": 880,
+      "x": -680,
+      "y": -1180
+    },
+    {
+      "height": 60,
+      "id": "0279bf4708ae8aae",
+      "styleAttributes": {
+      },
+      "text": "Appoitment Total\n",
+      "type": "text",
+      "width": 260,
+      "x": -680,
+      "y": -440
+    },
+    {
+      "height": 60,
+      "id": "6ad675de6bef64ce",
+      "styleAttributes": {
+      },
+      "text": "Uian Psikologi\nTotal",
+      "type": "text",
+      "width": 260,
+      "x": -360,
+      "y": -440
+    },
+    {
+      "height": 60,
+      "id": "8ec6411213181a58",
+      "styleAttributes": {
+      },
+      "text": "Total Expressed In Chat",
+      "type": "text",
+      "width": 260,
+      "x": -60,
+      "y": -440
+    },
+    {
+      "height": 349,
+      "id": "6dd62a668c79611f",
+      "styleAttributes": {
+      },
+      "text": "Picture\n",
+      "type": "text",
+      "width": 880,
+      "x": -680,
+      "y": -1040
+    },
+    {
+      "height": 127,
+      "id": "c51c2b80e4bc1105",
+      "styleAttributes": {
+      },
+      "text": "Nama\n(email)",
+      "type": "text",
+      "width": 880,
+      "x": -680,
+      "y": -627
+    },
+    {
+      "height": 220,
+      "id": "2b85cd09bd673b6a",
+      "styleAttributes": {
+      },
+      "text": "Keputsan Ujian DASS",
+      "type": "text",
+      "width": 880,
+      "x": -680,
+      "y": -340
+    },
+    {
+      "height": 60,
+      "id": "5a53a93d08bab8ab",
+      "styleAttributes": {
+      },
+      "text": "Back",
+      "type": "text",
+      "width": 110,
+      "x": -660,
+      "y": -1140
+    },
+    {
+      "height": 60,
+      "id": "abce6be5880e980f",
+      "styleAttributes": {
+      },
+      "text": "Student Details\n",
+      "type": "text",
+      "width": 630,
+      "x": -490,
+      "y": -1140
+    },
+    {
+      "height": 200,
+      "id": "1f10708ec862f563",
+      "styleAttributes": {
+      },
+      "text": "List Bookings(vertical\n)",
+      "type": "text",
+      "width": 880,
+      "x": -680,
+      "y": -60
+    },
+    {
+      "height": 100,
+      "id": "367013ba8dcd2136",
+      "styleAttributes": {
+      },
+      "text": "Chat ",
+      "type": "text",
+      "width": 410,
+      "x": -230,
+      "y": 200
+    },
+    {
+      "height": 100,
+      "id": "de779fdebb83ec43",
+      "styleAttributes": {
+      },
+      "text": "Set Appointment",
+      "type": "text",
+      "width": 420,
+      "x": -660,
+      "y": 200
+    }
+  ]
+}
