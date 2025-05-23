@@ -19,6 +19,7 @@ kanban-plugin: board
 - [ ] Rember Login
 - [ ] Create Cards for chat
 	appoitment
+- [ ] Chat Notification
 
 
 

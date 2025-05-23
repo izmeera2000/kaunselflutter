@@ -23,8 +23,29 @@
               "icon": "lucide-layout-dashboard",
               "title": "Page Ui"
             }
+          },
+          {
+            "id": "aa51aa9c72411a7c",
+            "type": "leaf",
+            "state": {
+              "type": "kanban",
+              "state": {
+                "file": "Task.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false
+                  ]
+                }
+              },
+              "icon": "lucide-trello",
+              "title": "Task"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -170,14 +191,15 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "1d04badebc42c5cb",
+  "active": "aa51aa9c72411a7c",
   "lastOpenFiles": [
-    "Views/Admin/Student/List/Page Ui.canvas",
+    "Flow.canvas",
+    "Task.md",
     "Views/Admin/Home/Dashboard/Page Ui.canvas",
+    "Views/Admin/Home/Dashboard/Button Notification.md",
+    "Views/Admin/Student/List/Page Ui.canvas",
     "Views/Admin/Student/Details/Page Ui.canvas",
     "Views/Admin/Student/Details/Student Details.md",
-    "Task.md",
-    "Flow.canvas",
     "Views/Admin/Home/Button Send Kata2",
     "Views/Admin/Home/Dashboard",
     "Views/Admin/Home",

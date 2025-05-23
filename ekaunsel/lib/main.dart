@@ -26,8 +26,7 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
   await initializeFirebaseAppCheck();
- 
- 
+
   runApp(const MyApp());
 }
 
@@ -44,34 +43,44 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final FirebaseMessaging _fcm;
 
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  void initNotifications() async {
+    const AndroidInitializationSettings androidInitSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initSettings =
+        InitializationSettings(android: androidInitSettings);
+
+    await flutterLocalNotificationsPlugin.initialize(initSettings);
+    await FirebaseMessaging.instance.requestPermission();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'channel_id',
+              'channel_name',
+              importance: Importance.max,
+              priority: Priority.high,
+            ),
+          ),
+        );
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
- 
-
- 
- 
-
-
-  }
-
-  Future<void> checkLoginStatus(BuildContext context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? userId = prefs.getString('user_id');
-    String? userRole = prefs.getString('role');
-
-    if (userId != null && userRole != null) {
-      // User is logged in, navigate to the appropriate page based on their role
-      if (userRole == '1') {
-        Navigator.of(context).pushReplacementNamed('main2');
-      } else {
-        Navigator.of(context).pushReplacementNamed('main');
-      }
-    } else {
-      // User is not logged in, stay on the login page
-      Navigator.of(context).pushReplacementNamed('/login');
-    }
+    initNotifications();
   }
 
   // This widget is the root of your application.
@@ -118,10 +127,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
- 
-
-
 
 Future<void> initializeFirebaseAppCheck() async {
   try {

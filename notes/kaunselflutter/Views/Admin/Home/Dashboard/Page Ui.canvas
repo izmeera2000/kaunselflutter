@@ -67,17 +67,6 @@
       "y": -460
     },
     {
-      "height": 100,
-      "id": "8c1bb17c7f50901c",
-      "styleAttributes": {
-      },
-      "text": "Name\nNDP",
-      "type": "text",
-      "width": 482,
-      "x": -409,
-      "y": -460
-    },
-    {
       "height": 60,
       "id": "ce2623d54852499d",
       "styleAttributes": {
@@ -87,39 +76,6 @@
       "width": 665,
       "x": -592,
       "y": -340
-    },
-    {
-      "height": 200,
-      "id": "247fdb712f10796a",
-      "styleAttributes": {
-      },
-      "text": "Button , show alert\n",
-      "type": "text",
-      "width": 717,
-      "x": -592,
-      "y": 160
-    },
-    {
-      "height": 60,
-      "id": "7c5f6ff059820f25",
-      "styleAttributes": {
-      },
-      "text": "Date",
-      "type": "text",
-      "width": 260,
-      "x": -592,
-      "y": -260
-    },
-    {
-      "height": 60,
-      "id": "063bebf8eccdf4e3",
-      "styleAttributes": {
-      },
-      "text": "Time",
-      "type": "text",
-      "width": 260,
-      "x": -233,
-      "y": -260
     },
     {
       "height": 60,
@@ -142,6 +98,48 @@
       "width": 260,
       "x": -240,
       "y": -180
+    },
+    {
+      "file": "Views/Admin/Home/Dashboard/Button Notification.md",
+      "height": 200,
+      "id": "9b6eb58cccdf426c",
+      "type": "file",
+      "width": 717,
+      "x": -600,
+      "y": 160
+    },
+    {
+      "height": 100,
+      "id": "8c1bb17c7f50901c",
+      "styleAttributes": {
+      },
+      "text": "Name\nNDP",
+      "type": "text",
+      "width": 482,
+      "x": -409,
+      "y": -460
+    },
+    {
+      "height": 60,
+      "id": "7c5f6ff059820f25",
+      "styleAttributes": {
+      },
+      "text": "Date",
+      "type": "text",
+      "width": 260,
+      "x": -592,
+      "y": -260
+    },
+    {
+      "height": 60,
+      "id": "063bebf8eccdf4e3",
+      "styleAttributes": {
+      },
+      "text": "Time",
+      "type": "text",
+      "width": 260,
+      "x": -233,
+      "y": -260
     }
   ]
 }

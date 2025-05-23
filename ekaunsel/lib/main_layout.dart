@@ -28,40 +28,14 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
     super.initState();
-    initNotifications();
+    subkata();
   }
 
-  void initNotifications() async {
-    const AndroidInitializationSettings androidInitSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initSettings =
-        InitializationSettings(android: androidInitSettings);
-
-    await flutterLocalNotificationsPlugin.initialize(initSettings);
-    await FirebaseMessaging.instance.requestPermission();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'channel_id',
-              'channel_name',
-              importance: Importance.max,
-              priority: Priority.high,
-            ),
-          ),
-        );
-      }
-    });
-
+  void subkata() async {
+    
     await FirebaseMessaging.instance.subscribeToTopic('katasemangat');
+
+
   }
 
   @override

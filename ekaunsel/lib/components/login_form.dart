@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert'; // To decode the JSON response
 import 'package:ekaunsel/utils/config.dart';
 import 'package:ekaunsel/components/button.dart';
+import 'package:ekaunsel/components/save_user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
@@ -18,6 +19,14 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passController = TextEditingController();
   bool obsecurePass = true;
+  bool rememberMe = false;
+
+@override
+void initState() {
+  super.initState();
+}
+
+
 
   // Function to handle login logic
   Future<void> _login() async {
@@ -34,7 +43,6 @@ class _LoginFormState extends State<LoginForm> {
 
     try {
       // Show loading indicator while the request is being sent
-  print("${Config.base_url}");
 
       showDialog(
         context: context,
@@ -63,9 +71,10 @@ class _LoginFormState extends State<LoginForm> {
         if (responseBody['status'] == 'success') {
           // Navigate to the main page/dashboard on successful login
           final user = responseBody['user'];
-          _saveUserDetails(user);
 
           String role = user['role'];
+
+          saveUserDetails(user, email, password, rememberMe);
 
           if (role == '1') {
             Navigator.pushNamedAndRemoveUntil(
@@ -163,6 +172,18 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           Config.spaceSmall,
+          CheckboxListTile(
+            title: const Text("Remember Me"),
+            value: rememberMe,
+            onChanged: (bool? value) {
+              setState(() {
+                rememberMe = value ?? false;
+              });
+            },
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+          ),
+          Config.spaceSmall,
           Button(
             width: double.infinity,
             title: 'Sign In',
@@ -177,28 +198,4 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
-}
-
-Future<void> _saveUserDetails(Map<String, dynamic> userDetails) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  // Save user info in SharedPreferences for future use
-  prefs.setString('user_id', userDetails['id'].toString());
-  prefs.setString('email', userDetails['email']);
-  prefs.setString('ndp', userDetails['ndp']);
-  prefs.setString('kp', userDetails['kp']);
-  prefs.setString('role', userDetails['role']);
-  prefs.setString(
-      'image_url', userDetails['image_url'] ?? ''); // Store profile image URL
-  prefs.setString('status_kahwin',
-      userDetails['status_kahwin'] ?? ''); // Store marital status
-  prefs.setString('agama', userDetails['agama'] ?? ''); // Store religion
-  prefs.setString('jantina', userDetails['jantina'] ?? ''); // Store gender
-  prefs.setString('phone', userDetails['phone'] ?? ''); // Store phone number
-  prefs.setString('nama', userDetails['nama'] ?? ''); // Store full name
-  prefs.setString(
-      'sem', userDetails['sem'] ?? ''); // Store semester or other info
-  prefs.setString('bangsa', userDetails['bangsa'] ?? ''); // Store ethnicity
-
-  // Optionally, you can add other fields if necessary
 }

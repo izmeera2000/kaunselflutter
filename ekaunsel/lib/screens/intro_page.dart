@@ -8,6 +8,7 @@ import 'package:ekaunsel/components/login_form.dart';
 import 'package:ekaunsel/components/intro_content.dart';
 import 'package:ekaunsel/utils/config.dart';
 import 'package:ekaunsel/components/button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroScreen extends StatefulWidget {
   static String routeName = "/intro";
@@ -31,6 +32,38 @@ class _IntroScreenState extends State<IntroScreen> {
       "image": "assets/splash-2.png"
     },
   ];
+
+
+  @override
+  void initState() {
+    super.initState();
+ loadSavedCredentials();
+
+ 
+ 
+
+
+  }
+
+Future<void> loadSavedCredentials() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final savedEmail = prefs.getString('saved_email');
+  final isRemembered = prefs.getBool('remember_me') ?? false;
+
+  String? userRole = prefs.getString('role');
+
+  if (isRemembered && savedEmail != null) {
+       if (userRole == '1') {
+        Navigator.of(context).pushReplacementNamed('main2');
+      } else {
+        Navigator.of(context).pushReplacementNamed('main');
+      }
+   }
+}
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
