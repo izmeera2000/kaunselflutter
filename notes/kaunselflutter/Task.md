@@ -20,6 +20,11 @@ kanban-plugin: board
 - [ ] Create Cards for chat
 	appoitment
 - [ ] Chat Notification
+- [ ] Ujian Dass
+- [ ] Register
+- [ ] Student Details
+- [ ] Student List
+- [ ] Edit Profile
 
 
 

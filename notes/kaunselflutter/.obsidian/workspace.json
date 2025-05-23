@@ -28,20 +28,17 @@
             "id": "aa51aa9c72411a7c",
             "type": "leaf",
             "state": {
-              "type": "kanban",
+              "type": "canvas",
               "state": {
-                "file": "Task.md",
-                "kanbanViewState": {
-                  "kanban-plugin": "board",
-                  "list-collapse": [
-                    false,
-                    false,
-                    false
-                  ]
+                "file": "Flow.canvas",
+                "viewState": {
+                  "x": 260,
+                  "y": 40,
+                  "zoom": -0.5922673013443895
                 }
               },
-              "icon": "lucide-trello",
-              "title": "Task"
+              "icon": "lucide-layout-dashboard",
+              "title": "Flow"
             }
           }
         ],
@@ -193,11 +190,11 @@
   },
   "active": "aa51aa9c72411a7c",
   "lastOpenFiles": [
+    "Task.md",
     "Flow.canvas",
+    "Views/Admin/Student/List/Page Ui.canvas",
     "Views/Admin/Student/Details/Page Ui.canvas",
     "Views/Admin/Student/Details/Student Details.md",
-    "Views/Admin/Student/List/Page Ui.canvas",
-    "Task.md",
     "Views/Admin/Home/Dashboard/Page Ui.canvas",
     "Views/Admin/Home/Dashboard/Button Notification.md",
     "Views/Admin/Home/Button Send Kata2",
