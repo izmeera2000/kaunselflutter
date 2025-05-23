@@ -10,6 +10,7 @@ import 'package:ekaunsel/components/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 
 class AppointmentAdminPage extends StatefulWidget {
   const AppointmentAdminPage({super.key});
@@ -23,6 +24,7 @@ enum FilterStatus { upcoming, completed, cancelled }
 class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
   FilterStatus status = FilterStatus.upcoming; //initial status
   Alignment _alignment = Alignment.centerLeft;
+  DateTime _selectedDate = DateTime.now(); // Add this to your State
 
   List<dynamic> schedules = [];
   bool isLoading = true;
@@ -32,8 +34,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-       fetchAndSetSchedules();
-   
+    fetchAndSetSchedules();
   }
 
   Future<List<dynamic>> fetchAppointments({
@@ -157,11 +158,12 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
               String formattedDatelocal =
                   "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
- 
+
               return {
                 'id': item['id'],
                 'doctor_name': item['nama'],
-                'doctor_profile': "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
+                'doctor_profile':
+                    "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
                 'category': 'Kaunseling',
                 'status': item['status2'] == 'upcoming'
                     ? FilterStatus.upcoming
@@ -174,7 +176,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   'local_date': formattedDatelocal,
                   'time':
                       formattedTime, // Time will be "00:00" if not available
-                  'status': item['status']  ,
+                  'status': item['status'],
                 },
               };
             } catch (e) {
@@ -233,6 +235,23 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   child: FaIcon(FontAwesomeIcons.rotate),
                 ),
               ],
+            ),
+            EasyDateTimeLinePicker(
+              focusedDate: _selectedDate,
+              firstDate: DateTime(2024, 3, 18),
+              lastDate: DateTime(2030, 3, 18),
+              onDateChange: (date) {
+                // Handle the selected date.
+                print(date);
+              },
+              monthYearPickerOptions: MonthYearPickerOptions(
+                initialCalendarMode: EasyDatePickerMode.month, // default
+                cancelText: 'Cancel',
+                confirmText: 'Confirm',
+              ),
+              timelineOptions: TimelineOptions(
+                height: 70, // the height of the timeline
+              ),
             ),
             Config.spaceSmall,
             Stack(
@@ -314,114 +333,24 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   // print( schedule['id']);
                   bool isLastElement = index == filteredSchedules.length - 1;
 
-                  return Card(
-                    margin: !isLastElement
-                        ? const EdgeInsets.only(bottom: 10)
-                        : EdgeInsets.zero,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        schedule['doctor_profile'],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                   Expanded(
-                                     child: Column(
-                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                       children: [
-                                         Text(
-                                           schedule['doctor_name'],
-                                           style: const TextStyle(
-                                             color: Config.blackColor,
-                                             fontWeight: FontWeight.bold,
-                                           ),
-                                           overflow: TextOverflow.ellipsis,
-                                           maxLines: 1,
-                                           softWrap: false,
-                                         ),
-                                         const SizedBox(height: 2),
-                                         Text(
-                                           schedule['category'],
-                                           style: const TextStyle(color: Colors.black),
-                                           overflow: TextOverflow.ellipsis,
-                                           maxLines: 1,
-                                           softWrap: false,
-                                         ),
-                                       ],
-                                     ),
-                                   ),
-
-                                  ],
-                                ),
-                              ),
-                              Config.spaceSmall,
-                              // ScheduleCard
-                              ScheduleCard(
-                                title: schedule['schedule']['title'],
-                                date: schedule['schedule']['local_date'],
-                                time: schedule['schedule']['time'],
-                                status: "${_mapStatus(schedule['schedule']['status'])}",
-                                onTap: () {
-                                  final String scheduleId = schedule['schedule']
-                                          ['id']
-                                      .toString(); // ensure it's a String
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AppointmentDetailsPage(
-                                          id: schedule['id']
-                                              .toString()), // Ensure `id` is passed here
-                                    ),
-                                  );
-                                },
-                              ),
-                              Config.spaceSmall,
-                              
-                              // Action buttons
-                              // Row(
-                              //   mainAxisAlignment:
-                              //       MainAxisAlignment.spaceBetween,
-                              //   children: [
-                              //     Expanded(
-                              //       child: ElevatedButton(
-                              //         style: ElevatedButton.styleFrom(
-                              //           backgroundColor: Colors.white,
-                              //         ),
-                              //         child: const Text(
-                              //           'Cancel',
-                              //           style: TextStyle(
-                              //               color: Config.cancelColor),
-                              //         ),
-                              //         onPressed: () {
-                              //           // cancel logic here
-                              //         },
-                              //       ),
-                              //     ),
-                              //     const SizedBox(width: 20),
-                              //     const Expanded(
-                              //       child: Text(""),
-                              //     ),
-                              //   ],
-                              // ),
-                            ],
-                          ),
+                  return ScheduleCard(
+                    imageUrl: schedule['doctor_profile'] ?? '',
+                    name: schedule['doctor_name'] ?? 'Unknown',
+                    category: schedule['category'] ?? 'Kaunselor',
+                    title: schedule['schedule']['title'] ?? 'No Title',
+                    date: schedule['schedule']['local_date'] ?? '',
+                    time: schedule['schedule']['time'] ?? '',
+                    status: _mapStatus(schedule['schedule']['status']),
+                    onTap: () {
+                      final String scheduleId = schedule['id'].toString();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AppointmentDetailsPage(id: scheduleId),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               ),
@@ -432,6 +361,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
     );
   }
 }
+
 String _mapStatus(dynamic status) {
   switch (status?.toString()) {
     case '1':

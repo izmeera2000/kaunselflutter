@@ -72,9 +72,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-
-
-
   Future<List<dynamic>> fetchAppointmentsToday(
       String userId, String role) async {
     final DateTime now = DateTime.now();
@@ -92,6 +89,7 @@ class _HomePageState extends State<HomePage> {
       'senaraitemujanji_flutter[offset]': '0',
       'senaraitemujanji_flutter[role]': role,
     };
+
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -399,7 +397,8 @@ class _HomePageState extends State<HomePage> {
                 Config.spaceSmall,
                 ElevatedButton(
                     onPressed: () async {
-                      await sendNotificationTopic("katasemangat", "kata-kata hari ini", "dh makan ke belum");
+                      await sendNotificationTopic("katasemangat",
+                          "kata-kata hari ini", "dh makan ke belum");
                     },
                     child: Text("adsada")),
                 Column(

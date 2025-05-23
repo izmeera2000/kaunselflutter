@@ -311,104 +311,24 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   var schedule = filteredSchedules[index];
                   bool isLastElement = index == filteredSchedules.length - 1;
 
-                  return Card(
-                    margin: !isLastElement
-                        ? const EdgeInsets.only(bottom: 10)
-                        : EdgeInsets.zero,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                 CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        schedule['doctor_profile'],
-                                      ),
-                                    ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                       Text(
-                                           schedule['doctor_name'],
-                                           style: const TextStyle(
-                                             color: Config.blackColor,
-                                             fontWeight: FontWeight.bold,
-                                           ),
-                                           overflow: TextOverflow.ellipsis,
-                                           maxLines: 1,
-                                           softWrap: false,
-                                         ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        schedule['category'],
-                                        style: const TextStyle(
-                                            color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Config.spaceSmall,
-                              // ScheduleCard
-                              ScheduleCard(
-                                title: schedule['schedule']['title'],
-                                date: schedule['schedule']['local_date'],
-                                time: schedule['schedule']['time'],
-                                status: "${_mapStatus(schedule['schedule']['status'])}",
-                                onTap: () {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Tapped on ${schedule['schedule']['date']} schedule!',
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              Config.spaceSmall,
-                              // Action buttons
-                              // Row(
-                              //   mainAxisAlignment:
-                              //       MainAxisAlignment.spaceBetween,
-                              //   children: [
-                              //     Expanded(
-                              //       child: ElevatedButton(
-                              //         style: ElevatedButton.styleFrom(
-                              //           backgroundColor: Colors.white,
-                              //         ),
-                              //         child: const Text(
-                              //           'Cancel',
-                              //           style: TextStyle(
-                              //               color: Config.cancelColor),
-                              //         ),
-                              //         onPressed: () {
-                              //           // cancel logic here
-                              //         },
-                              //       ),
-                              //     ),
-                              //     const SizedBox(width: 20),
-                              //     const Expanded(
-                              //       child: Text(""),
-                              //     ),
-                              //   ],
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                  return ScheduleCard(
+  imageUrl: schedule['doctor_profile'] ?? '',
+  name: schedule['doctor_name'] ?? 'Unknown',
+  category: schedule['category'] ?? 'Kaunselor',
+  title: schedule['schedule']['title'] ?? 'No Title',
+  date: schedule['schedule']['local_date'] ?? '',
+  time: schedule['schedule']['time'] ?? '',
+  status: _mapStatus(schedule['schedule']['status']),
+  onTap: () {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Tapped on ${schedule['schedule']['date']} schedule!',
+        ),
+      ),
+    );
+  },
+);
                 },
               ),
             ),
