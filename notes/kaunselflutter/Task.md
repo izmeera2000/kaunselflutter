@@ -11,12 +11,12 @@ kanban-plugin: board
 ## Done
 
 - [ ] Rember Login
+- [ ] Back To Exit APp
 
 
 ## Todo
 
 - [ ] Notification
-- [ ] Back To Exit APp
 - [ ] Create Cards for chat
 	appoitment
 - [ ] Chat Notification
