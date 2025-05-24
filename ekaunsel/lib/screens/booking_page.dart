@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart'; // You need to import this for date formatting
-import 'dart:convert'; // For json encoding
+// For json encoding
 import 'package:http/http.dart' as http; // For making HTTP requests
-import 'package:ekaunsel/components/retrive_user.dart'; // Ensure this import is correct
+// Ensure this import is correct
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BookingPage extends StatefulWidget {
@@ -22,10 +22,8 @@ class _BookingPageState extends State<BookingPage> {
   CalendarFormat _format = CalendarFormat.month;
   DateTime _focusDay = DateTime.now();
   DateTime _currentDay = DateTime.now();
-  int? _currentIndex;
   bool _isWeekend = false;
   bool _dateSelected = false;
-  bool _timeSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +121,6 @@ class _BookingPageState extends State<BookingPage> {
           //check if weekend is selected
           if (selectedDay.weekday == 6 || selectedDay.weekday == 7) {
             _isWeekend = true;
-            _timeSelected = false;
-            _currentIndex = null;
 
             // Show the dialog when a weekend is selected
             _showWeekendDialog();
@@ -241,9 +237,9 @@ class _BookingPageState extends State<BookingPage> {
                   // Handle the response from the PHP server
                   if (response.statusCode == 200) {
                     // Successfully sent data to server
-                    print(
+                    debugPrint(
                         'Appointment confirmed for $formattedDate with notes: $userInput');
-                    print('Response Body: ${response.body}');
+                    debugPrint('Response Body: ${response.body}');
 
                     // Close the dialog and navigate to success screen
                     Navigator.of(context).pop();
@@ -251,9 +247,11 @@ class _BookingPageState extends State<BookingPage> {
                         'success_booking'); // Navigate to success page
                   } else {
                     // Handle server error or failure
-                    print(
+                    debugPrint(
                         'Failed to make appointment. Server response: ${response.statusCode}');
                     // You can show a Snackbar or a Toast message here
+                    if (!context.mounted) return;
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -263,7 +261,7 @@ class _BookingPageState extends State<BookingPage> {
                   }
                 } else {
                   // Handle the case where the user ID is not found in SharedPreferences
-                  print('User ID not found in SharedPreferences');
+                  debugPrint('User ID not found in SharedPreferences');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('User ID not found. Please log in again.'),

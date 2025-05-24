@@ -1,3 +1,4 @@
+import 'package:ekaunsel/utils/config.dart';
 import 'package:flutter/material.dart';
 
  
@@ -18,7 +19,7 @@ class _SplashContentState extends State<SplashContent> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const Spacer(),
+        Config.spaceSmall,
         const Text(
           "EKaunseling",
           style: TextStyle(
@@ -28,16 +29,20 @@ class _SplashContentState extends State<SplashContent> {
           ),
         ),
 
-        const Spacer(flex: 2),
+        Config.spaceSmall,
         Image.asset(
           widget.image!,
           height: 265,
           width: 235,
         ),
-                Text(
-          widget.text!,
-          textAlign: TextAlign.center,
-        ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                            widget.text!,
+                            textAlign: TextAlign.center,
+                          ),
+                ),
+                
       ],
     );
   }

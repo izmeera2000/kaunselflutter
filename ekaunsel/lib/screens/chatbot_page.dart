@@ -13,11 +13,11 @@ class ChatbotPage extends StatefulWidget {
 }
 
 class _ChatbotPageState extends State<ChatbotPage> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   List<Map<String, dynamic>> messages =
       []; // List to hold messages with dynamic types
   String? userId; // User ID, which needs to be fetched
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   // Fetch the user details and set userId
   Future<void> fetchUserDetails() async {
@@ -29,7 +29,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       });
     } catch (e) {
       // Handle errors (e.g., user not found)
-      print("Error fetching user details: $e");
+      debugPrint("Error fetching user details: $e");
     }
   }
 
@@ -95,24 +95,24 @@ class _ChatbotPageState extends State<ChatbotPage> {
             });
           } else if (data['error'] != null) {
             // Handle errors if any
-            print('Error from server: ${data['error']}');
+            debugPrint('Error from server: ${data['error']}');
           }
         } else {
-          print(
+          debugPrint(
               'Failed to get response from server. Status code: ${response.statusCode}');
         }
       } catch (error) {
-        print('Error: $error');
+        debugPrint('Error: $error');
       }
     } else {
-      print('User ID is null or message is empty.');
+      debugPrint('User ID is null or message is empty.');
     }
   }
 
   // Fetch the last 10 messages from the server
   Future<void> _fetchPreviousMessages() async {
     if (userId == null) {
-      print('User ID is null.');
+      debugPrint('User ID is null.');
       return;
     }
 
@@ -147,11 +147,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
           });
         }
       } else {
-        print(
+        debugPrint(
             'Failed to load previous messages. Status code: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error fetching previous messages: $error');
+      debugPrint('Error fetching previous messages: $error');
     }
   }
 
@@ -252,7 +252,7 @@ class MessageBubble extends StatelessWidget {
   final String sender;
   final String senderName;
 
-  MessageBubble(
+  const MessageBubble(
       {required this.message, required this.sender, required this.senderName});
 
   @override

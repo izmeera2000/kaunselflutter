@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../utils/config.dart'; // Update import as needed
 import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppointmentDetailsPage extends StatefulWidget {
   final String id;
@@ -19,12 +20,10 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   // Time pickers for start and end times
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
-  TextEditingController _rejectReasonController =
+  final TextEditingController _rejectReasonController =
       TextEditingController(); // Controller for rejection reason
-  TextEditingController _startTimeController =
-      TextEditingController(); // Controller for rejection reason
-  TextEditingController _endTimeController =
-      TextEditingController(); // Controller for rejection reason
+// Controller for rejection reason
+// Controller for rejection reason
 
   Future<Map<String, dynamic>?> fetchDetail() async {
     final url = Uri.parse('${Config.base_url}senaraitemujanji');
@@ -44,23 +43,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
       return data.isNotEmpty ? data[0] : null;
     } else {
       throw Exception('Failed to load details');
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context, bool isStartTime) async {
-    TimeOfDay? selectedTime = await showTimePicker(
-      context: context,
-      initialTime: isStartTime ? _startTime : _endTime,
-    );
-
-    if (selectedTime != null) {
-      setState(() {
-        if (isStartTime) {
-          _startTime = selectedTime;
-        } else {
-          _endTime = selectedTime;
-        }
-      });
     }
   }
 
@@ -107,18 +89,23 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
               ),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    if (!mounted) return;
+                    Navigator.pop(context);
+                  },
                   child: Text('Cancel'),
                 ),
                 TextButton(
                   onPressed: () async {
                     // Call function with selected times
                     await _approveAppointment();
-                    Navigator.pop(context);
+                    if (!context.mounted) return;
 
+                    Navigator.pop(context);
+                    if (!mounted) return;
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                           builder: (_) =>
                               AppointmentDetailsPage(id: widget.id)),
                     );
@@ -182,9 +169,9 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     );
 
     if (response.statusCode == 200) {
-      print("Appointment rejected successfully");
+      debugPrint("Appointment rejected successfully");
     } else {
-      print("Failed to reject appointment");
+      debugPrint("Failed to reject appointment");
     }
   }
 
@@ -207,20 +194,22 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
       );
 
       if (response.statusCode == 200) {
-        print("✅ Appointment approved successfully");
+        debugPrint("✅ Appointment approved successfully");
         // Optionally show a dialog/snackbar:
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Appointment approved.')),
         );
+        if (!mounted) return;
         Navigator.pop(context); // Close the screen/dialog
       } else {
-        print(
+        debugPrint(
             "❌ Failed to approve appointment. Status: ${response.statusCode}");
-        print("Response body: ${response.body}");
+        debugPrint("Response body: ${response.body}");
         _showErrorDialog("Failed to approve appointment.");
       }
     } catch (e) {
-      print("❌ Error: $e");
+      debugPrint("❌ Error: $e");
       _showErrorDialog("Something went wrong. Please try again.");
     }
   }
@@ -237,13 +226,13 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     });
 
     if (response.statusCode == 200) {
-      print('Appointment started successfully');
+      debugPrint('Appointment started successfully');
     } else {
-      print('Failed to start appointment: ${response.body}');
+      debugPrint('Failed to start appointment: ${response.body}');
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => AppointmentDetailsPage(id: widget.id)),
+      CupertinoPageRoute(builder: (_) => AppointmentDetailsPage(id: widget.id)),
     );
   }
 
@@ -264,41 +253,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
   }
 
   // Function to show rejection reason dialog
-  Future<void> _showRejectDialaog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter Rejection Reason'),
-          content: TextField(
-            controller: _rejectReasonController,
-            decoration: InputDecoration(hintText: "Enter reason for rejection"),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                // Send reject request to backend here
-                await _rejectAppointment();
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => AppointmentDetailsPage(id: widget.id)),
-                );
-              },
-              child: Text('Reject'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   Future<void> endAppointment(String meetingId) async {
     final url = Uri.parse('${Config.base_url}temujanji_end_flutter');
@@ -313,19 +267,18 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
       );
 
       if (response.statusCode == 200) {
-        print('Appointment ended successfully');
+        debugPrint('Appointment ended successfully');
         // Optionally, refresh the page or show confirmation
-           Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) =>
-                                    AppointmentDetailsPage(id: widget.id)),
-                          );
+        Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(
+              builder: (_) => AppointmentDetailsPage(id: widget.id)),
+        );
       } else {
-        print('Failed to end appointment: ${response.statusCode}');
+        debugPrint('Failed to end appointment: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error ending appointment: $e');
+      debugPrint('Error ending appointment: $e');
     }
   }
 
@@ -453,56 +406,59 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
       ),
     );
   }
-Future<void> finalizeFlutterAppointment({
-  required String meetingId,
-  required String userId,
-  required String? kaunselorId,
-  required String time1,
-  required String time2,
-  required String tarikh1,
-  required String masalah1,
-}) async {
-  final url = Uri.parse('${Config.base_url}temujanji_final_flutterx');
 
-  try {
-    final response = await http.post(
-      url,
-      body: {
-        'temujanji_final_flutter': '1',
-        'meeting_id': meetingId,
-        'user_id': userId,
-        'kaunselor_id': kaunselorId,
-        'time1': time1,
-        'time2': time2,
-        'tarikh1': tarikh1,
-        'masalah1': masalah1,
-      },
-    );
+  Future<void> finalizeFlutterAppointment({
+    required String meetingId,
+    required String userId,
+    required String? kaunselorId,
+    required String time1,
+    required String time2,
+    required String tarikh1,
+    required String masalah1,
+  }) async {
+    final url = Uri.parse('${Config.base_url}temujanji_final_flutterx');
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+    try {
+      final response = await http.post(
+        url,
+        body: {
+          'temujanji_final_flutter': '1',
+          'meeting_id': meetingId,
+          'user_id': userId,
+          'kaunselor_id': kaunselorId,
+          'time1': time1,
+          'time2': time2,
+          'tarikh1': tarikh1,
+          'masalah1': masalah1,
+        },
+      );
 
-      if (jsonResponse['status'] == 'success') {
-        final newMeetingId = jsonResponse['meeting_id'];
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
 
-        print("Appointment finalized with new meeting ID: $newMeetingId");
+        if (jsonResponse['status'] == 'success') {
+          final newMeetingId = jsonResponse['meeting_id'];
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => AppointmentDetailsPage(id: newMeetingId.toString()),
-          ),
-        );
+          debugPrint("Appointment finalized with new meeting ID: $newMeetingId");
+
+          Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(
+              builder: (_) =>
+                  AppointmentDetailsPage(id: newMeetingId.toString()),
+            ),
+          );
+        } else {
+          debugPrint("Error from server: ${jsonResponse['message']}");
+        }
       } else {
-        print("Error from server: ${jsonResponse['message']}");
+        debugPrint("Failed: ${response.statusCode}");
       }
-    } else {
-      print("Failed: ${response.statusCode}");
+    } catch (e) {
+      debugPrint("Error: $e");
     }
-  } catch (e) {
-    print("Error: $e");
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -524,7 +480,7 @@ Future<void> finalizeFlutterAppointment({
               final details = snapshot.data!;
               int status = int.tryParse(details['status'] ?? '0') ?? 0;
 
-              bool isStatusZero = status == 0; // Pending / Not processed
+// Pending / Not processed
               bool isStatusOne = status == 1; // Awaiting Approval
               bool isStatusTwo = status == 2; // Approved or Rejected
               bool isStatusThree = status == 3; // Approved or Rejected
@@ -612,7 +568,7 @@ Future<void> finalizeFlutterAppointment({
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () async {
-                          print("start startAppointment");
+                          debugPrint("start startAppointment");
                           await startAppointment();
                         }, // Approve Appointment
                         child: Text("Start"),
@@ -628,7 +584,6 @@ Future<void> finalizeFlutterAppointment({
                           endAppointment(widget.id); // Pass actual meeting ID
 
                           // Optionally re-render or refresh current screen
-                       
                         },
                         child: Text("End"),
                       ),
@@ -649,7 +604,7 @@ Future<void> finalizeFlutterAppointment({
                           // Optionally re-render or refresh current screen
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
+                            CupertinoPageRoute(
                                 builder: (_) =>
                                     AppointmentDetailsPage(id: widget.id)),
                           );

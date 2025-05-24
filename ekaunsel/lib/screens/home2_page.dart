@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:ekaunsel/components/retrive_user.dart'; // For getUserDetails()
 import 'package:ekaunsel/utils/config.dart';
+import 'package:flutter/cupertino.dart';
 
 class Home2Page extends StatefulWidget {
   const Home2Page({super.key});
@@ -59,7 +60,7 @@ class _Home2PageState extends State<Home2Page> {
         userName = 'Guest'; // Default to 'Guest' if there's an error
         userProfileImageUrl = ''; // Fallback image URL
       });
-      print("Error fetching user details: $e");
+      debugPrint("Error fetching user details: $e");
     }
   }
 
@@ -83,12 +84,12 @@ class _Home2PageState extends State<Home2Page> {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: requestBody,
     );
-    print(formattedDate);
+    debugPrint(formattedDate);
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // print(data);
-      print("Appointments API data: $data");
+      // debugPrint(data);
+      debugPrint("Appointments API data: $data");
 
       return data;
     } else {
@@ -115,7 +116,7 @@ class _Home2PageState extends State<Home2Page> {
         isLoadingToday = false;
       });
     } catch (e) {
-      print('Error fetching today\'s appointments: $e');
+      debugPrint('Error fetching today\'s appointments: $e');
       setState(() {
         isLoadingToday = false;
       });
@@ -138,10 +139,10 @@ class _Home2PageState extends State<Home2Page> {
                   children: [
                     Text(
                       'Hi, $userName',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     Column(
                       children: [
@@ -187,8 +188,10 @@ class _Home2PageState extends State<Home2Page> {
                 // Appointment Today Title
                 Text(
                   'Appointment Today',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
+     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),                ),
                 SizedBox(height: 10),
 
                 // Appointment list or loader
@@ -235,7 +238,7 @@ class _Home2PageState extends State<Home2Page> {
                                     appointment['id'].toString();
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                     builder: (context) =>
                                         AppointmentDetailsPage(id: scheduleId),
                                   ),

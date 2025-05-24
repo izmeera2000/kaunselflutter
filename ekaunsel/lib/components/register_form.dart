@@ -120,7 +120,7 @@ class _RegisterFormState extends State<RegisterForm> {
       // Send request
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
-
+      if (!mounted) return;
       Navigator.of(context).pop(); // Close loading
 
       final jsonResp = json.decode(responseBody);
@@ -153,261 +153,260 @@ class _RegisterFormState extends State<RegisterForm> {
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Form(
-    key: _formKey,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        TextFormField(
-          controller: _ndpController,
-          decoration: const InputDecoration(
-            hintText: 'NDP',
-            labelText: 'NDP',
-            alignLabelWithHint: true,
-            prefixIconColor: Config.primaryColor,
-            prefixIcon: Icon(Icons.person),
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            controller: _ndpController,
+            decoration: const InputDecoration(
+              hintText: 'NDP',
+              labelText: 'NDP',
+              alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
+              prefixIcon: Icon(Icons.person),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your NDP';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your NDP';
-            }
-            return null;
-          },
-        ),
-        Config.spaceSmall,
-        TextFormField(
-          controller: _fullnameController,
-          decoration: const InputDecoration(
-            hintText: 'Full Name',
-            labelText: 'Full Name',
-            alignLabelWithHint: true,
-            prefixIconColor: Config.primaryColor,
-            prefixIcon: Icon(Icons.person_outline),
+          Config.spaceSmall,
+          TextFormField(
+            controller: _fullnameController,
+            decoration: const InputDecoration(
+              hintText: 'Full Name',
+              labelText: 'Full Name',
+              alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
+              prefixIcon: Icon(Icons.person_outline),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your full name';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your full name';
-            }
-            return null;
-          },
-        ),
-        Config.spaceSmall,
-        TextFormField(
-          controller: _emailController,
-          keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
-            hintText: 'Email Address',
-            labelText: 'Email',
-            alignLabelWithHint: true,
-            prefixIconColor: Config.primaryColor,
-            prefixIcon: Icon(Icons.email_outlined),
+          Config.spaceSmall,
+          TextFormField(
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(
+              hintText: 'Email Address',
+              labelText: 'Email',
+              alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
+              prefixIcon: Icon(Icons.email_outlined),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your email';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your email';
-            }
-            return null;
-          },
-        ),
-        Config.spaceSmall,
-        TextFormField(
-          controller: _phoneController,
-          keyboardType: TextInputType.phone,
-          decoration: const InputDecoration(
-            hintText: 'Phone Number',
-            labelText: 'Phone',
-            alignLabelWithHint: true,
-            prefixIconColor: Config.primaryColor,
-            prefixIcon: Icon(Icons.phone),
+          Config.spaceSmall,
+          TextFormField(
+            controller: _phoneController,
+            keyboardType: TextInputType.phone,
+            decoration: const InputDecoration(
+              hintText: 'Phone Number',
+              labelText: 'Phone',
+              alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
+              prefixIcon: Icon(Icons.phone),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your phone number';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your phone number';
-            }
-            return null;
-          },
-        ),
-        Config.spaceSmall,
-        TextFormField(
-          controller: _semController,
-          keyboardType: TextInputType.text,
-          decoration: const InputDecoration(
-            hintText: 'Semester',
-            labelText: 'Semester',
-            alignLabelWithHint: true,
-            prefixIconColor: Config.primaryColor,
-            prefixIcon: Icon(Icons.school),
+          Config.spaceSmall,
+          TextFormField(
+            controller: _semController,
+            keyboardType: TextInputType.text,
+            decoration: const InputDecoration(
+              hintText: 'Semester',
+              labelText: 'Semester',
+              alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
+              prefixIcon: Icon(Icons.school),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your semester';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your semester';
-            }
-            return null;
-          },
-        ),
 
-        // Jantina as text input
-        Config.spaceSmall,
-        TextFormField(
-          controller: _jantinaController,
-          decoration: const InputDecoration(
-            labelText: 'Jantina',
-            prefixIcon: Icon(Icons.person),
-            prefixIconColor: Config.primaryColor,
+          // Jantina as text input
+          Config.spaceSmall,
+          TextFormField(
+            controller: _jantinaController,
+            decoration: const InputDecoration(
+              labelText: 'Jantina',
+              prefixIcon: Icon(Icons.person),
+              prefixIconColor: Config.primaryColor,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Sila isi jantina';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Sila isi jantina';
-            }
-            return null;
-          },
-        ),
 
-        // Agama as text input
-        Config.spaceSmall,
-        TextFormField(
-          controller: _agamaController,
-          decoration: const InputDecoration(
-            labelText: 'Agama',
-            prefixIcon: Icon(Icons.account_balance),
-            prefixIconColor: Config.primaryColor,
+          // Agama as text input
+          Config.spaceSmall,
+          TextFormField(
+            controller: _agamaController,
+            decoration: const InputDecoration(
+              labelText: 'Agama',
+              prefixIcon: Icon(Icons.account_balance),
+              prefixIconColor: Config.primaryColor,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Sila isi agama';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Sila isi agama';
-            }
-            return null;
-          },
-        ),
 
-        // Status Kahwin as text input
-        Config.spaceSmall,
-        TextFormField(
-          controller: _statuskahwinController,
-          decoration: const InputDecoration(
-            labelText: 'Status Perkahwinan',
-            prefixIcon: Icon(Icons.family_restroom),
-            prefixIconColor: Config.primaryColor,
+          // Status Kahwin as text input
+          Config.spaceSmall,
+          TextFormField(
+            controller: _statuskahwinController,
+            decoration: const InputDecoration(
+              labelText: 'Status Perkahwinan',
+              prefixIcon: Icon(Icons.family_restroom),
+              prefixIconColor: Config.primaryColor,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Sila isi status kahwin';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Sila isi status kahwin';
-            }
-            return null;
-          },
-        ),
 
-        // Bangsa as text input (add this since you check it)
-        Config.spaceSmall,
-        TextFormField(
-          controller: _bangsaController,
-          decoration: const InputDecoration(
-            labelText: 'Bangsa',
-            prefixIcon: Icon(Icons.group),
-            prefixIconColor: Config.primaryColor,
+          // Bangsa as text input (add this since you check it)
+          Config.spaceSmall,
+          TextFormField(
+            controller: _bangsaController,
+            decoration: const InputDecoration(
+              labelText: 'Bangsa',
+              prefixIcon: Icon(Icons.group),
+              prefixIconColor: Config.primaryColor,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Sila isi bangsa';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Sila isi bangsa';
-            }
-            return null;
-          },
-        ),
 
-        // Image picker UI
-        Config.spaceSmall,
-        if (_pickedImage == null)
-          TextButton.icon(
-            icon: const Icon(Icons.image),
-            label: const Text('Pick Profile Image'),
-            onPressed: pickImage,
-          )
-        else
-          Column(
-            children: [
-              Image.file(File(_pickedImage!.path),
-                  height: 120, width: 120, fit: BoxFit.cover),
-              TextButton.icon(
-                icon: const Icon(Icons.image),
-                label: const Text('Change Image'),
-                onPressed: pickImage,
+          // Image picker UI
+          Config.spaceSmall,
+          if (_pickedImage == null)
+            TextButton.icon(
+              icon: const Icon(Icons.image),
+              label: const Text('Pick Profile Image'),
+              onPressed: pickImage,
+            )
+          else
+            Column(
+              children: [
+                Image.file(File(_pickedImage!.path),
+                    height: 120, width: 120, fit: BoxFit.cover),
+                TextButton.icon(
+                  icon: const Icon(Icons.image),
+                  label: const Text('Change Image'),
+                  onPressed: pickImage,
+                ),
+              ],
+            ),
+
+          Config.spaceSmall,
+
+          TextFormField(
+            controller: _passController,
+            obscureText: obsecurePass,
+            decoration: InputDecoration(
+              hintText: 'Password',
+              labelText: 'Password',
+              alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
+              prefixIcon: const Icon(Icons.lock),
+              suffixIcon: IconButton(
+                icon: obsecurePass
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility),
+                onPressed: () {
+                  setState(() {
+                    obsecurePass = !obsecurePass;
+                  });
+                },
               ),
-            ],
-          ),
-
-        Config.spaceSmall,
-
-        TextFormField(
-          controller: _passController,
-          obscureText: obsecurePass,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            labelText: 'Password',
-            alignLabelWithHint: true,
-            prefixIconColor: Config.primaryColor,
-            prefixIcon: const Icon(Icons.lock),
-            suffixIcon: IconButton(
-              icon: obsecurePass
-                  ? const Icon(Icons.visibility_off)
-                  : const Icon(Icons.visibility),
-              onPressed: () {
-                setState(() {
-                  obsecurePass = !obsecurePass;
-                });
-              },
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your password';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter your password';
-            }
-            return null;
-          },
-        ),
-        Config.spaceSmall,
-        TextFormField(
-          controller: _confirmPassController,
-          obscureText: obsecureConfirmPass,
-          decoration: InputDecoration(
-            hintText: 'Confirm Password',
-            labelText: 'Confirm Password',
-            prefixIcon: const Icon(Icons.lock),
-            alignLabelWithHint: true,
-            prefixIconColor: Config.primaryColor,
-            suffixIcon: IconButton(
-              icon: obsecureConfirmPass
-                  ? const Icon(Icons.visibility_off)
-                  : const Icon(Icons.visibility),
-              onPressed: () {
-                setState(() {
-                  obsecureConfirmPass = !obsecureConfirmPass;
-                });
-              },
+          Config.spaceSmall,
+          TextFormField(
+            controller: _confirmPassController,
+            obscureText: obsecureConfirmPass,
+            decoration: InputDecoration(
+              hintText: 'Confirm Password',
+              labelText: 'Confirm Password',
+              prefixIcon: const Icon(Icons.lock),
+              alignLabelWithHint: true,
+              prefixIconColor: Config.primaryColor,
+              suffixIcon: IconButton(
+                icon: obsecureConfirmPass
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility),
+                onPressed: () {
+                  setState(() {
+                    obsecureConfirmPass = !obsecureConfirmPass;
+                  });
+                },
+              ),
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please confirm your password';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please confirm your password';
-            }
-            return null;
-          },
-        ),
-        Config.spaceSmall,
-        Button(
-          width: double.infinity,
-          title: 'Register',
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              _register();
-            }
-          },
-          disable: false,
-        ),
-      ],
-    ),
-  );
-}
-
+          Config.spaceSmall,
+          Button(
+            width: double.infinity,
+            title: 'Register',
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                _register();
+              }
+            },
+            disable: false,
+          ),
+        ],
+      ),
+    );
+  }
 }

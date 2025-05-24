@@ -5,11 +5,11 @@ import 'package:ekaunsel/screens/chat_list_page.dart';
 import 'package:ekaunsel/screens/chatbot_page.dart';
 import 'package:ekaunsel/screens/home_page.dart';
 import 'package:ekaunsel/screens/home2_page.dart';
+import 'package:ekaunsel/screens/student_list.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ekaunsel/screens/appointment_page.dart';
 import 'package:ekaunsel/screens/profile_page.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainLayout extends StatefulWidget {
@@ -22,17 +22,16 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
   int currentPage = 0;
   final PageController _page = PageController();
- 
+
   DateTime? _lastPressedAt;
 
   @override
   void initState() {
     super.initState();
-    subkata(
-
-    );
+    subkata();
   }
-  Future<bool> _onWillPop() async {
+
+  Future<bool> _onWillPop(test, result) async {
     final now = DateTime.now();
     if (_lastPressedAt == null ||
         now.difference(_lastPressedAt!) > const Duration(seconds: 2)) {
@@ -45,25 +44,25 @@ class _MainLayoutState extends State<MainLayout> {
     }
     return Future.value(true); // Allow exit after second back press
   }
-
   void subkata() async {
-    
     await FirebaseMessaging.instance.subscribeToTopic('katasemangat');
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-       onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvokedWithResult: _onWillPop,
+            canPop: false,
       child: Scaffold(
         body: PageView(
           physics: NeverScrollableScrollPhysics(),
           controller: _page,
           onPageChanged: (value) {
+            print(value);
+
             setState(() {
               currentPage = value;
+
             });
           },
           children: const <Widget>[
@@ -111,7 +110,6 @@ class _MainLayoutState extends State<MainLayout> {
 
 
 
-
 class Main2Layout extends StatefulWidget {
   const Main2Layout({super.key});
 
@@ -119,16 +117,13 @@ class Main2Layout extends StatefulWidget {
   State<Main2Layout> createState() => _Main2LayoutState();
 }
 
-
-
 class _Main2LayoutState extends State<Main2Layout> {
   int currentPage = 0;
   final PageController _page = PageController();
 
   DateTime? _lastPressedAt;
 
-
-  Future<bool> _onWillPop() async {
+  Future<bool> _onWillPop(test, result) async {
     final now = DateTime.now();
     if (_lastPressedAt == null ||
         now.difference(_lastPressedAt!) > const Duration(seconds: 2)) {
@@ -141,18 +136,15 @@ class _Main2LayoutState extends State<Main2Layout> {
     }
     return Future.value(true); // Allow exit after second back press
   }
-
   void subkata() async {
-    
     await FirebaseMessaging.instance.subscribeToTopic('katasemangat');
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-          onWillPop: _onWillPop,
+    return PopScope(
+      onPopInvokedWithResult: _onWillPop,
+            canPop: false,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: PageView(
@@ -168,6 +160,7 @@ class _Main2LayoutState extends State<Main2Layout> {
             Home2Page(),
             ChatListPage(),
             AppointmentAdminPage(),
+            StudentListPage(),
             ProfilePage()
           ],
         ),
@@ -195,6 +188,10 @@ class _Main2LayoutState extends State<Main2Layout> {
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
               label: 'Schedule',
+            ),
+                     BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.users),
+              label: 'Students',
             ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.user),

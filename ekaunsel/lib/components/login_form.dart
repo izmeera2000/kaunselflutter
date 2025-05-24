@@ -5,7 +5,6 @@ import 'dart:convert'; // To decode the JSON response
 import 'package:ekaunsel/utils/config.dart';
 import 'package:ekaunsel/components/button.dart';
 import 'package:ekaunsel/components/save_user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -77,6 +76,7 @@ void initState() {
           saveUserDetails(user, email, password, rememberMe);
 
           if (role == '1') {
+            
             Navigator.pushNamedAndRemoveUntil(
                 context, 'main2', (route) => false);
           } else {
@@ -84,6 +84,8 @@ void initState() {
                 context, 'main', (route) => false);
           }
         } else {
+          if (!context.mounted) return;
+
           // Show an error message if login failed, showing the response message
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(responseBody['message'] ?? 'Unknown error')),
@@ -171,8 +173,7 @@ void initState() {
               return null;
             },
           ),
-          Config.spaceSmall,
-          CheckboxListTile(
+           CheckboxListTile(
             title: const Text("Remember Me"),
             value: rememberMe,
             onChanged: (bool? value) {
@@ -183,8 +184,8 @@ void initState() {
             controlAffinity: ListTileControlAffinity.leading,
             contentPadding: EdgeInsets.zero,
           ),
-          Config.spaceSmall,
-          Button(
+          
+           Button(
             width: double.infinity,
             title: 'Sign In',
             onPressed: () {

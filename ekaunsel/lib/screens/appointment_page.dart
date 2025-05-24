@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:ekaunsel/utils/config.dart';
 import 'package:flutter/material.dart';
-import 'package:ekaunsel/main.dart';
-import 'package:ekaunsel/components/appointment_card.dart';
+ import 'package:ekaunsel/components/appointment_card.dart';
 import 'package:ekaunsel/components/retrive_user.dart';
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +41,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
     required String user_id, // Add this to accept user_id
     required String role, // Add this to accept user_id
   }) async {
-    final UserModel user = await getUserDetails();
     final url = Uri.parse('${Config.base_url}senaraitemujanji');
 
     String formattedStart = DateFormat('yyyy-MM-dd').format(start);
@@ -66,18 +64,18 @@ class _AppointmentPageState extends State<AppointmentPage> {
       },
       body: requestBody,
     );
-    print('Request Body: $requestBody');
+    debugPrint('Request Body: $requestBody');
 
-    print('Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
+    debugPrint('Status Code: ${response.statusCode}');
+    debugPrint('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
       try {
         final data = json.decode(response.body);
-        print('Decoded JSON: $data');
+        debugPrint('Decoded JSON: $data');
         return data;
       } catch (e) {
-        print('JSON Decode Error: $e');
+        debugPrint('JSON Decode Error: $e');
         throw Exception('Invalid JSON format');
       }
     } else {
@@ -113,7 +111,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
         combinedData.addAll(data);
       } catch (e) {
-        print('Error fetching $status2 appointments: $e');
+        debugPrint('Error fetching $status2 appointments: $e');
       }
     }
 
@@ -126,8 +124,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   "00:00"; // Default time is set to "00:00" (midnight)
 
               // Diagnostic log to check values of masa_mula and tarikh
-              print('masa_mula: ${item['masa_mula']}');
-              print('tarikh: ${item['tarikh']}');
+              debugPrint('masa_mula: ${item['masa_mula']}');
+              debugPrint('tarikh: ${item['tarikh']}');
 
               // First, check if masa_mula exists and is not empty
               if (item['masa_mula'] != null && item['masa_mula'].isNotEmpty) {
@@ -145,7 +143,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     ""; // Default to midnight if no time is provided
               } else {
                 // Both masa_mula and tarikh are missing, log the error and throw the exception
-                print('Both masa_mula and tarikh are null or empty');
+                debugPrint('Both masa_mula and tarikh are null or empty');
                 throw Exception("Both masa_mula and tarikh are null or empty");
               }
 
@@ -174,7 +172,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 },
               };
             } catch (e) {
-              print('Error parsing masa_mula or tarikh: $e');
+              debugPrint('Error parsing masa_mula or tarikh: $e');
               return null;
             }
           })
@@ -309,7 +307,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 itemCount: filteredSchedules.length,
                 itemBuilder: (context, index) {
                   var schedule = filteredSchedules[index];
-                  bool isLastElement = index == filteredSchedules.length - 1;
 
                   return ScheduleCard(
   imageUrl: schedule['doctor_profile'] ?? '',

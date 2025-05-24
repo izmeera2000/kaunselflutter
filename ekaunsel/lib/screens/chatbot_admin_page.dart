@@ -9,18 +9,17 @@ class ChatbotAdminPage extends StatefulWidget {
   final String? studentId;
 
   const ChatbotAdminPage(
-      {Key? key, this.studentImage, this.studentId, this.studentName})
-      : super(key: key);
+      {super.key, this.studentImage, this.studentId, this.studentName});
 
   @override
   State<ChatbotAdminPage> createState() => _ChatbotAdminPageState();
 }
 
 class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   List<Map<String, dynamic>> messages = []; // List to hold messages
   String? studentId; // User ID for the student
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -81,7 +80,7 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
           },
         );
       } catch (error) {
-        print('Error: $error');
+        debugPrint('Error: $error');
       }
 
       _scrollToBottom();
@@ -117,11 +116,11 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
           });
         }
       } else {
-        print(
+        debugPrint(
             'Failed to load previous messages. Status code: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error fetching previous messages: $error');
+      debugPrint('Error fetching previous messages: $error');
     }
   }
 
@@ -199,8 +198,8 @@ class MessageBubble extends StatelessWidget {
   final String sender;
   final String senderName;
 
-  MessageBubble(
-      {required this.message, required this.sender, required this.senderName});
+  const MessageBubble(
+      {super.key, required this.message, required this.sender, required this.senderName});
 
   @override
   Widget build(BuildContext context) {

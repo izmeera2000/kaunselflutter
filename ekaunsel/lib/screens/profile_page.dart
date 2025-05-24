@@ -4,6 +4,7 @@ import 'package:ekaunsel/components/retrive_user.dart'; // Ensure this import is
 import 'package:ekaunsel/utils/config.dart';
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/cupertino.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -54,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
         userName = 'Guest'; // Default to 'Guest' if no user details are found
         userProfileImageUrl = ''; // Fallback image URL or empty
       });
-      print("Error fetching user details: $e");
+      debugPrint("Error fetching user details: $e");
     }
   }
 
@@ -126,9 +127,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.clear(); // clear saved session/token/etc.
+                  if (!context.mounted) return;
+
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    CupertinoPageRoute(builder: (context) => const LoginPage()),
                     (Route<dynamic> route) =>
                         false, // Remove all previous routes
                   );

@@ -4,8 +4,11 @@ import 'package:ekaunsel/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 
 class ChatListPage extends StatefulWidget {
+  const ChatListPage({super.key});
+
   @override
   _ChatListPageState createState() => _ChatListPageState();
 }
@@ -43,13 +46,13 @@ class _ChatListPageState extends State<ChatListPage> {
           });
         } else {
           // Handle case where no chat users are found
-          print('No chat users found.');
+          debugPrint('No chat users found.');
         }
       } else {
-        print('Failed to load chat list');
+        debugPrint('Failed to load chat list');
       }
     } catch (error) {
-      print('Error fetching chat list: $error');
+      debugPrint('Error fetching chat list: $error');
     }
   }
 
@@ -88,7 +91,7 @@ class _ChatListPageState extends State<ChatListPage> {
                     // Navigate to chat screen with selected user
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      CupertinoPageRoute(
                         builder: (_) => ChatbotAdminPage(
                           studentId: chat['user_id'],
                         ),

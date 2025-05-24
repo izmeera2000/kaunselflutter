@@ -1,6 +1,5 @@
  
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ekaunsel/utils/config.dart';
  
@@ -18,12 +17,12 @@ import 'package:ekaunsel/utils/config.dart';
         'body': body,
       },
     );
-    print('Response body: ${response.body}');
+    debugPrint('Response body: ${response.body}');
 
     if (response.statusCode == 200) {
-      print('Notification request sent successfully.');
+      debugPrint('Notification request sent successfully.');
     } else {
-      print('Failed to send notification. Status: ${response.statusCode}');
+      debugPrint('Failed to send notification. Status: ${response.statusCode}');
     }
   }
 
@@ -41,13 +40,16 @@ Future<void> sendNotificationToFCM(String token, String title, String body) asyn
     },
   );
 
-  print('Response body: ${response.body}');
+  debugPrint('Response body: ${response.body}');
 
   if (response.statusCode == 200) {
-    print('Notification sent successfully.');
+    debugPrint('Notification sent successfully.');
   } else {
-    print('Failed to send notification. Status: ${response.statusCode}');
+    debugPrint('Failed to send notification. Status: ${response.statusCode}');
   }
 }
+
+
+
 
 

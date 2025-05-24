@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ekaunsel/components/user_model.dart';
 
@@ -40,7 +41,7 @@ Future<UserModel> getUserDetails() async {
     );
   } catch (e) {
     // Handle errors gracefully
-    print('Error fetching user details: ${e.toString()}');
+    debugPrint('Error fetching user details: ${e.toString()}');
     throw Exception("Error fetching user details: ${e.toString()}");
   }
 }

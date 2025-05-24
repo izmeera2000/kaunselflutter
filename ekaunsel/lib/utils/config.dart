@@ -45,6 +45,7 @@ class Config {
   static const Color whiteColor = Colors.white;
   static const Color blackColor = Colors.black;
 
+  // ignore: constant_identifier_names
   static const base_url = 'https://kaunselingadtectaiping.com.my/';
   // static const base_url = 'http://192.168.0.106/ADTEC-EKaunsel/';
  }

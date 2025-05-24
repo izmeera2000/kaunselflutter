@@ -1,6 +1,9 @@
 import 'package:ekaunsel/screens/booking_page.dart';
+import 'package:ekaunsel/screens/chat_list_page.dart';
+import 'package:ekaunsel/screens/chatbot_admin_page.dart';
+import 'package:ekaunsel/screens/chatbot_page.dart';
 import 'package:ekaunsel/screens/doctor_details.dart';
-import 'package:ekaunsel/screens/succes_booked.dart';
+import 'package:ekaunsel/utils/theme.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,9 +16,8 @@ import 'package:ekaunsel/main_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Add this line
@@ -41,40 +43,88 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late final FirebaseMessaging _fcm;
-
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   void initNotifications() async {
-    const AndroidInitializationSettings androidInitSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initSettings =
-        InitializationSettings(android: androidInitSettings);
+    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initSettings = InitializationSettings(android: androidInit);
 
     await flutterLocalNotificationsPlugin.initialize(initSettings);
     await FirebaseMessaging.instance.requestPermission();
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
+      final notification = message.notification;
+      final android = message.notification?.android;
+      final type = message.data['type']; // 'chat', 'kata', 'general'
+      final currentContext = MyApp.navigatorKey.currentContext;
+
+      final currentRoute = ModalRoute.of(currentContext!)?.settings.name;
 
       if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'channel_id',
-              'channel_name',
-              importance: Importance.max,
-              priority: Priority.high,
-            ),
-          ),
-        );
+        if (type == 'chat') {
+          if (currentRoute != '/chat_user' &&
+              currentRoute != '/chat_list' &&
+              currentRoute != '/chat_admin') {
+            showChatNotification(notification);
+          } else {
+            debugPrint('Chat notification suppressed on chat page.');
+          }
+        } else if (type == 'kata') {
+          showKataSemangatNotification(notification);
+        } else {
+          showGeneralNotification(notification);
+        }
       }
     });
+  }
+
+  void showChatNotification(RemoteNotification notification) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      'New Message',
+      notification.body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'chat_channel',
+          'Chat Messages',
+          importance: Importance.defaultImportance,
+          priority: Priority.high,
+        ),
+      ),
+    );
+  }
+
+  void showKataSemangatNotification(RemoteNotification notification) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      'Kata Semangat',
+      notification.body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'kata_channel',
+          'Kata Semangat',
+          importance: Importance.max,
+          priority: Priority.high,
+        ),
+      ),
+    );
+  }
+
+  void showGeneralNotification(RemoteNotification notification) {
+    flutterLocalNotificationsPlugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'general_channel',
+          'General Notifications',
+          importance: Importance.defaultImportance,
+          priority: Priority.low,
+        ),
+      ),
+    );
   }
 
   @override
@@ -91,28 +141,8 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: MyApp.navigatorKey,
       title: 'Flutter e-Kaunseling App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        //pre-define input decoration
-        inputDecorationTheme: const InputDecorationTheme(
-          focusColor: Config.primaryColor,
-          border: Config.outlinedBorder,
-          focusedBorder: Config.focusBorder,
-          errorBorder: Config.errorBorder,
-          enabledBorder: Config.outlinedBorder,
-          floatingLabelStyle: TextStyle(color: Config.primaryColor),
-          prefixIconColor: Colors.black38,
-        ),
-        scaffoldBackgroundColor: Colors.white,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.white,
-          selectedItemColor: Config.primaryColor,
-          showSelectedLabels: true,
-          showUnselectedLabels: false,
-          unselectedItemColor: Colors.grey.shade700,
-          elevation: 10,
-          type: BottomNavigationBarType.fixed,
-        ),
-      ),
+      theme: AppTheme.mainTheme,
+
       initialRoute: '/intro',
       routes: {
         '/intro': (context) => IntroScreen(),
@@ -122,7 +152,9 @@ class _MyAppState extends State<MyApp> {
         'main2': (context) => const Main2Layout(),
         'doctor_details': (context) => const DoctorDetails(),
         'booking_page': (context) => BookingPage(),
-        'success_booking': (context) => const AppointmentBooked(),
+        '/chat_list': (context) => ChatListPage(),
+        '/chat_user': (context) => ChatbotPage(),
+        '/chat_admin': (context) => ChatbotAdminPage(),
       },
     );
   }

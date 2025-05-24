@@ -3,17 +3,15 @@ import 'dart:convert';
 import 'package:ekaunsel/components/appointment_card.dart';
 import 'package:ekaunsel/components/doctor_card.dart';
 import 'package:ekaunsel/components/notification.dart';
-import 'package:ekaunsel/screens/appointment_details_admin.dart';
 import 'package:ekaunsel/utils/config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ekaunsel/screens/profile_page.dart';
 import 'package:ekaunsel/components/retrive_user.dart'; // Ensure this import is correct
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -68,7 +66,7 @@ class _HomePageState extends State<HomePage> {
         userName = 'Guest'; // Default to 'Guest' if there's an error
         userProfileImageUrl = ''; // Fallback image URL
       });
-      print("Error fetching user details: $e");
+      debugPrint("Error fetching user details: $e");
     }
   }
 
@@ -95,12 +93,11 @@ class _HomePageState extends State<HomePage> {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: requestBody,
     );
-    print(requestBody);
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // print(data);
-      print("Appointments API data: $data");
+      // debugPrint(data);
+      debugPrint("Appointments API data: $data");
 
       return data;
     } else {
@@ -127,7 +124,7 @@ class _HomePageState extends State<HomePage> {
         isLoadingToday = false;
       });
     } catch (e) {
-      print('Error fetching today\'s appointments: $e');
+      debugPrint('Error fetching today\'s appointments: $e');
       setState(() {
         isLoadingToday = false;
       });
@@ -156,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                         Row(
                           children: [
                             Text(
-                              "Hi, ${userName}", // Display the fetched user name
+                              "Hi, $userName", // Display the fetched user name
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -262,133 +259,61 @@ class _HomePageState extends State<HomePage> {
                 if (todaysAppointments.isEmpty)
                   Text('No appointments today.')
                 else
-                  Column(
-                    children: todaysAppointments.asMap().entries.map((entry) {
-                      int idx = entry.key;
-                      var appointment = entry.value;
-                      bool isLastElement = idx == todaysAppointments.length - 1;
+                  Container(
+                    height:
+                        250, // Adjust height as needed for your ScheduleCard
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: todaysAppointments.map((appointment) {
+                          // Build the profile image URL
+                          String profileImageUrl = '';
+                          if (appointment['user_id'] != null &&
+                              appointment['image_url'] != null) {
+                            profileImageUrl =
+                                '${Config.base_url}assets/img/user/${appointment['user_id']}/${appointment['image_url']}';
+                          }
 
-                      // Build the profile image URL
-                      String profileImageUrl = '';
-                      if (appointment['user_id'] != null &&
-                          appointment['image_url'] != null) {
-                        profileImageUrl =
-                            '${Config.base_url}assets/img/user/${appointment['user_id']}/${appointment['image_url']}';
-                      }
+                          String name = appointment['nama'] ?? 'No Name';
+                          String category =
+                              appointment['masalah'] ?? 'No category';
+                          String date = appointment['tarikh'] ?? 'No Date';
+                          String time = appointment['masa_mula'] != null
+                              ? appointment['masa_mula']
+                                  .toString()
+                                  .substring(11, 16)
+                              : '';
+                          String status = _mapStatus(appointment['status']);
 
-                      return GestureDetector(
-                        onTap: () {
-                          final String scheduleId = appointment['id']
-                              .toString(); // ensure it's a String
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => AppointmentDetailsPage(
-                          //         id: scheduleId), // Ensure `id` is passed here
-                          //   ),
-                          // );
-                        },
-                        child: Card(
-                          margin: !isLastElement
-                              ? const EdgeInsets.only(bottom: 10)
-                              : EdgeInsets.zero,
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: ScheduleCard(
+                              imageUrl: profileImageUrl,
+                              name: name,
+                              category: category,
+                              title: category,
+                              date: date,
+                              time: time,
+                              status: status,
+                              onTap: () {
+                                final String scheduleId =
+                                    appointment['id'].toString();
+                                // Navigator.push(
+                                //   context,
+                                //   CupertinoPageRoute(
+                                //     builder: (context) =>
+                                //         AppointmentDetailsPage(id: scheduleId),
+                                //   ),
+                                // );
+                              },
                             ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Row(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: Colors.grey[200],
-                                          backgroundImage: profileImageUrl
-                                                  .isNotEmpty
-                                              ? NetworkImage(profileImageUrl)
-                                              : AssetImage(
-                                                      'assets/default_profile.png')
-                                                  as ImageProvider,
-                                          radius: 25,
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                appointment['nama'] ??
-                                                    'No Name',
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 4),
-                                              Text(
-                                                appointment['masalah'] ??
-                                                    'No problem description',
-                                                style: const TextStyle(
-                                                    color: Colors.black54),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    // Date and time
-                                    Row(
-                                      children: [
-                                        Icon(Icons.calendar_today,
-                                            size: 16, color: Colors.grey[600]),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          appointment['tarikh'] ?? 'No Date',
-                                          style: const TextStyle(
-                                              color: Colors.black54),
-                                        ),
-                                        const SizedBox(width: 20),
-                                        Icon(Icons.access_time,
-                                            size: 16, color: Colors.grey[600]),
-                                        const SizedBox(width: 5),
-                                        Text(
-                                          appointment['masa_mula'] != null
-                                              ? appointment['masa_mula']
-                                                  .toString()
-                                                  .substring(11, 16) // HH:mm
-                                              : 'No Time',
-                                          style: const TextStyle(
-                                              color: Colors.black54),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    // Status
-                                    Text(
-                                      'Status: ${_mapStatus(appointment['status'])}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blueGrey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ),
+
                 Config.spaceSmall,
                 Text(
                   'Kaunselor',
