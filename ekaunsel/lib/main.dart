@@ -131,6 +131,34 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initNotifications();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkLoginStatus(context);
+    });
+  }
+
+  Future<void> checkLoginStatus(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("check");
+    String? userId = prefs.getString('user_id');
+     String? userRole = prefs.getString('role');
+    print(userId);
+    print(userRole);
+
+    if (userId != null && userRole != null) {
+      // User is logged in, navigate to the appropriate page based on their role
+      if (userRole == '1') {
+        Navigator.of(context).pushReplacementNamed('main2');
+        print("admin");
+      } else {
+        print("user");
+
+        Navigator.of(context).pushReplacementNamed('main');
+      }
+    } else {
+      // User is not logged in, stay on the login page
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
   }
 
   // This widget is the root of your application.
@@ -142,7 +170,6 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter e-Kaunseling App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.mainTheme,
-
       initialRoute: '/intro',
       routes: {
         '/intro': (context) => IntroScreen(),

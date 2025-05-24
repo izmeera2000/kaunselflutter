@@ -320,17 +320,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Config.spaceSmall,
-                ElevatedButton(
-                    onPressed: () async {
-                      await sendNotificationTopic("katasemangat",
-                          "kata-kata hari ini", "dh makan ke belum");
-                    },
-                    child: Text("adsada")),
-                Column(
-                  children: List.generate(1, (index) {
-                    return const DoctorCard(route: 'doctor_details');
-                  }),
-                ),
+            
               ],
             ),
           ),

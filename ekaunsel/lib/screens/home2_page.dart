@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ekaunsel/components/appointment_card.dart';
+import 'package:ekaunsel/components/notification.dart';
 import 'package:ekaunsel/screens/appointment_details_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,7 @@ import 'package:ekaunsel/components/user_model.dart';
 import 'package:ekaunsel/components/retrive_user.dart'; // For getUserDetails()
 import 'package:ekaunsel/utils/config.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Home2Page extends StatefulWidget {
   const Home2Page({super.key});
@@ -20,6 +22,7 @@ class Home2Page extends StatefulWidget {
 class _Home2PageState extends State<Home2Page> {
   List<dynamic> todaysAppointments = [];
   bool isLoadingToday = true;
+  String userInput = '';
 
   String userName = 'Loading...';
   String userProfileImageUrl = '';
@@ -28,6 +31,27 @@ class _Home2PageState extends State<Home2Page> {
   void initState() {
     super.initState();
     fetchUserDetails().then((_) => fetchTodaysAppointments());
+    checkLoginStatus(context);
+  }
+
+  Future<void> checkLoginStatus(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("check");
+    String? userId = prefs.getString('user_id');
+    String? userRole = prefs.getString('role');
+    print(userId);
+    print(userRole);
+
+    if (userId != null && userRole != null) {
+      // User is logged in, navigate to the appropriate page based on their role
+      if (userRole == '1') {
+        print("admin");
+      } else {
+        print("user");
+      }
+    } else {
+      // User is not logged in, stay on the login page
+    }
   }
 
   // Fetch user details from SharedPreferences
@@ -123,6 +147,47 @@ class _Home2PageState extends State<Home2Page> {
     }
   }
 
+  Future<void> _showInputDialog() async {
+    String tempInput = '';
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Enter Your Wisdom'),
+        content: TextField(
+          autofocus: true,
+          decoration: InputDecoration(
+            hintText: 'Type something wise...',
+            border: OutlineInputBorder(),
+          ),
+          onChanged: (value) {
+            tempInput = value;
+          },
+        ),
+        actions: [
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () => Navigator.pop(context),
+          ),
+          ElevatedButton(
+            child: Text('Submit'),
+            onPressed: () async {
+              await sendNotificationTopic(
+                  "katasemangat", "kata-kata hari ini", tempInput);
+
+              Navigator.pop(context, tempInput);
+            },
+          ),
+        ],
+      ),
+    );
+
+    if (result != null && result.isNotEmpty) {
+      setState(() {
+        userInput = result;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,10 +253,11 @@ class _Home2PageState extends State<Home2Page> {
                 // Appointment Today Title
                 Text(
                   'Appointment Today',
-     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),                ),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
                 SizedBox(height: 10),
 
                 // Appointment list or loader
@@ -250,6 +316,24 @@ class _Home2PageState extends State<Home2Page> {
                       ),
                     ),
                   ),
+
+                Config.spaceSmall,
+                Text(
+                  'Words Of Wisdom',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: _showInputDialog,
+                  icon: Icon(Icons.edit),
+                  label: Text('Add Wisdom'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ],
             ),
           ),

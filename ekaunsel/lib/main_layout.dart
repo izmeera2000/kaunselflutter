@@ -136,9 +136,7 @@ class _Main2LayoutState extends State<Main2Layout> {
     }
     return Future.value(true); // Allow exit after second back press
   }
-  void subkata() async {
-    await FirebaseMessaging.instance.subscribeToTopic('katasemangat');
-  }
+ 
 
   @override
   Widget build(BuildContext context) {

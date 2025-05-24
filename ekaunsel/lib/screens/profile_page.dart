@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ekaunsel/screens/login_page.dart';
 import 'package:ekaunsel/components/retrive_user.dart'; // Ensure this import is correct
@@ -5,6 +6,7 @@ import 'package:ekaunsel/utils/config.dart';
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -127,6 +129,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.clear(); // clear saved session/token/etc.
+
+                  await FirebaseMessaging.instance.deleteToken();
+
                   if (!context.mounted) return;
 
                   Navigator.pushAndRemoveUntil(

@@ -20,12 +20,10 @@ class _LoginFormState extends State<LoginForm> {
   bool obsecurePass = true;
   bool rememberMe = false;
 
-@override
-void initState() {
-  super.initState();
-}
-
-
+  @override
+  void initState() {
+    super.initState();
+  }
 
   // Function to handle login logic
   Future<void> _login() async {
@@ -65,18 +63,25 @@ void initState() {
 
       // Navigator.of(context).pop(); // Close the loading indicator
       final responseBody = json.decode(response.body);
-
-      if (response.statusCode == 200) {
+       if (response.statusCode == 200) {
         if (responseBody['status'] == 'success') {
           // Navigate to the main page/dashboard on successful login
           final user = responseBody['user'];
 
           String role = user['role'];
 
-          saveUserDetails(user, email, password, rememberMe);
+ 
+
+
+          try {
+            await saveUserDetails(user, email, role, rememberMe);
+          } catch (e) {
+            print('SharedPreferences error: $e');
+          }
+
+  // Navigator.of(context).pop(); // ✅ close loading indicator
 
           if (role == '1') {
-            
             Navigator.pushNamedAndRemoveUntil(
                 context, 'main2', (route) => false);
           } else {
@@ -173,7 +178,7 @@ void initState() {
               return null;
             },
           ),
-           CheckboxListTile(
+          CheckboxListTile(
             title: const Text("Remember Me"),
             value: rememberMe,
             onChanged: (bool? value) {
@@ -184,8 +189,7 @@ void initState() {
             controlAffinity: ListTileControlAffinity.leading,
             contentPadding: EdgeInsets.zero,
           ),
-          
-           Button(
+          Button(
             width: double.infinity,
             title: 'Sign In',
             onPressed: () {
