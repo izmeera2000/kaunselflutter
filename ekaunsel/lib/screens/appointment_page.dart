@@ -178,6 +178,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
 
               return {
+                'id': item['id'],
                 'doctor_name': item['nama'],
                 'doctor_profile':
                     "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
