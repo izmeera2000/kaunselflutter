@@ -5,12 +5,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ChatbotAdminPage extends StatefulWidget {
-  final String studentName;
+  final String? studentName;
   final String? studentImage;
   final String? studentId;
 
   const ChatbotAdminPage(
-      {super.key, this.studentImage, this.studentId, required this.studentName});
+      {super.key, this.studentImage, this.studentId,   this.studentName});
 
   @override
   State<ChatbotAdminPage> createState() => _ChatbotAdminPageState();
@@ -21,11 +21,14 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
   List<Map<String, dynamic>> messages = []; // List to hold messages
   String? studentId; // User ID for the student
   final ScrollController _scrollController = ScrollController();
+  String? studentName ; // User ID for the student
+
 
   @override
   void initState() {
     super.initState();
     studentId = widget.studentId;
+ studentName = widget.studentName; // User ID for the student
 
     if (studentId != null) {
       _fetchPreviousMessages().then((_) {
@@ -131,7 +134,7 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.studentName),
+        title: Text(studentName!),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
