@@ -193,7 +193,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   'date': formattedDate,
                   'local_date': formattedDatelocal,
                   'time':
-                      formattedTime, // Time will be "00:00" if not available
+                      formattedTime, // Time will be "00:00" ssssssif not available
                   'status': item['status'],
                 },
               };
