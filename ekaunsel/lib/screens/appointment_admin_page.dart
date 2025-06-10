@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-
 import 'package:ekaunsel/screens/appointment_details_admin.dart';
 import 'package:ekaunsel/utils/config.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,6 @@ import 'package:ekaunsel/components/appointment_card.dart';
 import 'package:ekaunsel/components/retrive_user.dart';
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:http/http.dart' as http;
-// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
@@ -23,18 +22,32 @@ class AppointmentAdminPage extends StatefulWidget {
 enum FilterStatus { upcoming, completed, cancelled }
 
 class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
-  FilterStatus status = FilterStatus.upcoming; //initial status
+  FilterStatus status = FilterStatus.upcoming;
   Alignment _alignment = Alignment.centerLeft;
-  DateTime _selectedDate = DateTime.now(); // Add this to your State
-
+  DateTime _selectedDate = DateTime.now();
   List<dynamic> schedules = [];
   bool isLoading = true;
-// Static variable to track fetch across all instances
+  int currentYear = DateTime.now().year;
+  Timer? _yearCheckTimer;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    fetchAndSetSchedules();
+    fetchAndSetSchedules(year: currentYear);
+
+    _yearCheckTimer = Timer.periodic(Duration(hours: 1), (timer) {
+      int newYear = DateTime.now().year;
+      if (newYear != currentYear) {
+        currentYear = newYear;
+        fetchAndSetSchedules(year: currentYear);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _yearCheckTimer?.cancel();
+    super.dispose();
   }
 
   Future<List<dynamic>> fetchAppointments({
@@ -43,10 +56,9 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
     required String status2,
     required int limit,
     required int offset,
-    required String user_id, // Add this to accept user_id
+    required String user_id,
   }) async {
     final url = Uri.parse('${Config.base_url}senaraitemujanji');
-
     String formattedStart = DateFormat('yyyy-MM-dd').format(start);
     String formattedEnd = DateFormat('yyyy-MM-dd').format(end);
 
@@ -54,31 +66,23 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
       'senaraitemujanji_admin_flutter': "test",
       'senaraitemujanji_admin_flutter[start]': formattedStart,
       'senaraitemujanji_admin_flutter[end]': formattedEnd,
-      'senaraitemujanji_admin_flutter[user_id]': user_id, // Send user_id here
-      'senaraitemujanji_admin_flutter[status2]': status2, // Send status2
+      'senaraitemujanji_admin_flutter[user_id]': user_id,
+      'senaraitemujanji_admin_flutter[status2]': status2,
       'senaraitemujanji_admin_flutter[limit]': limit.toString(),
       'senaraitemujanji_admin_flutter[offset]': offset.toString(),
     };
 
     final response = await http.post(
       url,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: requestBody,
     );
-    // debugPrint('Request Body: $requestBody');
-    debugPrint('Raw Response: ${response.body}');
-
-    // debugPrint('Status Code: ${response.statusCode}');
 
     if (response.statusCode == 200) {
       try {
         final data = json.decode(response.body);
-        debugPrint('Decoded JSON: $data');
         return data;
       } catch (e) {
-        debugPrint('JSON Decode Error: $e');
         throw Exception('Invalid JSON format');
       }
     } else {
@@ -87,15 +91,14 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
     }
   }
 
-  Future<void> fetchAndSetSchedules() async {
-    DateTime now = DateTime.now();
-    DateTime end = now.add(Duration(days: 365));
+  Future<void> fetchAndSetSchedules({int? year}) async {
+    year ??= DateTime.now().year;
 
+    DateTime now = DateTime(DateTime.now().year, 1, 1);
+    DateTime end = DateTime(DateTime.now().year, 12, 31, 23, 59, 59);
     int limit = 30;
     int offset = 0;
-
     final UserModel user = await getUserDetails();
-
     List<dynamic> combinedData = [];
 
     for (String status2 in ['upcoming', 'completed', 'cancelled']) {
@@ -109,7 +112,6 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
           user_id: user.userId!,
         );
 
-        // Inject the current status into each item
         for (var item in data) {
           item['status2'] = status2;
         }
@@ -125,34 +127,19 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
           .map((item) {
             try {
               DateTime dateTime;
-              String formattedTime =
-                  "00:00"; // Default time is set to "00:00" (midnight)
+              String formattedTime = "00:00";
 
-              // Diagnostic log to check values of masa_mula and tarikh
-              debugPrint('masa_mula: ${item['masa_mula']}');
-              debugPrint('tarikh: ${item['tarikh']}');
-
-              // First, check if masa_mula exists and is not empty
               if (item['masa_mula'] != null && item['masa_mula'].isNotEmpty) {
-                // Parse masa_mula if it exists and is not empty
                 dateTime = DateTime.parse(item['masa_mula']);
-                formattedTime = TimeOfDay.fromDateTime(dateTime)
-                    .format(context); // Get formatted time
-              } else if (item['tarikh'] != null && item['tarikh'].isNotEmpty) {
-                // If masa_mula is null, fall back to tarikh
-                dateTime = DateTime.parse(item['tarikh']);
-
-                // Manually set time to "00:00" if masa_mula is not available
-                // Assuming tarikh is a date in the form "YYYY-MM-DD"
                 formattedTime =
-                    ""; // Default to midnight if no time is provided
+                    TimeOfDay.fromDateTime(dateTime).format(context);
+              } else if (item['tarikh'] != null && item['tarikh'].isNotEmpty) {
+                dateTime = DateTime.parse(item['tarikh']);
+                formattedTime = "";
               } else {
-                // Both masa_mula and tarikh are missing, log the error and throw the exception
-                debugPrint('Both masa_mula and tarikh are null or empty');
                 throw Exception("Both masa_mula and tarikh are null or empty");
               }
 
-              // Format the date in "YYYY-MM-DD" format
               String formattedDate =
                   "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
               String formattedDatelocal =
@@ -173,8 +160,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                   'title': item['masalah'],
                   'date': formattedDate,
                   'local_date': formattedDatelocal,
-                  'time':
-                      formattedTime, // Time will be "00:00" if not available
+                  'time': formattedTime,
                   'status': item['status'],
                 },
               };
@@ -185,52 +171,44 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
           })
           .where((item) => item != null)
           .toList();
-
       isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    //return filtered appointment
-    List<dynamic> filteredSchedules = schedules.where((var schedule) {
-      //switch (schedule['status']) {
-      //  case 'upcoming':
-      //    schedule['status'] = FilterStatus.upcoming;
-      //    break;
-      //  case 'complete':
-      //    schedule['status'] = FilterStatus.complete;
-      //    break;
-      //  case 'cancel':
-      //    schedule['status'] = FilterStatus.cancel;
-      //    break;
-      //}
-      return schedule['status'] == status;
+    // Filter schedules by selected status and date
+    List<dynamic> filteredSchedules = schedules.where((schedule) {
+      bool matchesStatus = schedule['status'] == status;
+
+      String selectedDateFormatted =
+          DateFormat('yyyy-MM-dd').format(_selectedDate);
+      String scheduleDate = schedule['schedule']['date'];
+
+      bool matchesDate = scheduleDate == selectedDateFormatted;
+
+      return matchesStatus && matchesDate;
     }).toList();
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Row(
               children: [
                 Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
+                  child: Center(
                     child: Text(
                       'Appointment Schedule',
-                      textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    fetchAndSetSchedules();
-                  },
+                  onPressed: () => fetchAndSetSchedules(),
                   child: FaIcon(FontAwesomeIcons.rotate),
                 ),
               ],
@@ -240,62 +218,52 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
               firstDate: DateTime(2024, 3, 18),
               lastDate: DateTime(2030, 3, 18),
               onDateChange: (date) {
-                // Handle the selected date.
-                print(date);
+                setState(() {
+                  _selectedDate = date;
+                });
               },
               monthYearPickerOptions: MonthYearPickerOptions(
-                initialCalendarMode: EasyDatePickerMode.month, // default
+                initialCalendarMode: EasyDatePickerMode.month,
                 cancelText: 'Cancel',
                 confirmText: 'Confirm',
               ),
               timelineOptions: TimelineOptions(
-                height: 70, // the height of the timeline
+                height: 70,
               ),
             ),
             Config.spaceSmall,
             Stack(
               children: [
                 Container(
-                  width: double.infinity,
                   height: 55,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //this is the filter tabs
-                      for (FilterStatus filterStatus in FilterStatus.values)
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (filterStatus == FilterStatus.upcoming) {
-                                  status = FilterStatus.upcoming;
-                                  _alignment = Alignment.centerLeft;
-                                } else if (filterStatus ==
-                                    FilterStatus.completed) {
-                                  status = FilterStatus.completed;
-                                  _alignment = Alignment.center;
-                                } else if (filterStatus ==
-                                    FilterStatus.cancelled) {
-                                  status = FilterStatus.cancelled;
-                                  _alignment = Alignment.centerRight;
-                                }
-                              });
-                            },
-                            child: Container(
-                                width: Config.widthSize * 0.33,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  color: Config.whiteColor,
-                                  // borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(child: Text(filterStatus.name))),
+                    children: FilterStatus.values.map((filterStatus) {
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              status = filterStatus;
+                              _alignment = filterStatus == FilterStatus.upcoming
+                                  ? Alignment.centerLeft
+                                  : filterStatus == FilterStatus.completed
+                                      ? Alignment.center
+                                      : Alignment.centerRight;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              filterStatus.name,
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
-                    ],
+                      );
+                    }).toList(),
                   ),
                 ),
                 AnimatedAlign(
@@ -308,14 +276,12 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
                       color: Config.primaryColor,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: GestureDetector(
-                      child: Center(
-                        child: Text(
-                          status.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    child: Center(
+                      child: Text(
+                        status.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -325,33 +291,37 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
             ),
             Config.spaceSmall,
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredSchedules.length,
-                itemBuilder: (context, index) {
-                  var schedule = filteredSchedules[index];
-                  // debugPrint( schedule['id']);
-
-                  return ScheduleCard(
-                    imageUrl: schedule['doctor_profile'] ?? '',
-                    name: schedule['doctor_name'] ?? 'Unknown',
-                    category: schedule['category'] ?? 'Kaunselor',
-                    title: schedule['schedule']['title'] ?? 'No Title',
-                    date: schedule['schedule']['local_date'] ?? '',
-                    time: schedule['schedule']['time'] ?? '',
-                    status: _mapStatus(schedule['schedule']['status']),
-                    onTap: () {
-                      final String scheduleId = schedule['id'].toString();
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) =>
-                              AppointmentDetailsPage(id: scheduleId),
+              child: isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : filteredSchedules.isEmpty
+                      ? Center(child: Text("No appointments found."))
+                      : ListView.builder(
+                          itemCount: filteredSchedules.length,
+                          itemBuilder: (context, index) {
+                            var schedule = filteredSchedules[index];
+                            return ScheduleCard(
+                              imageUrl: schedule['doctor_profile'] ?? '',
+                              name: schedule['doctor_name'] ?? 'Unknown',
+                              category: schedule['category'] ?? 'Kaunselor',
+                              title:
+                                  schedule['schedule']['title'] ?? 'No Title',
+                              date: schedule['schedule']['local_date'] ?? '',
+                              time: schedule['schedule']['time'] ?? '',
+                              status:
+                                  _mapStatus(schedule['schedule']['status']),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) =>
+                                        AppointmentDetailsPage(
+                                            id: schedule['id'].toString()),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
-                      );
-                    },
-                  );
-                },
-              ),
             ),
           ],
         ),

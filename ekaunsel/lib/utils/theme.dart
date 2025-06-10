@@ -11,26 +11,28 @@ class AppTheme {
     colorScheme: ColorScheme.light(
       primary: primaryColor,
       secondary: secondaryColor,
-      background: tertiaryColor,
+      background: Colors.white,
       surface: Colors.white,
-      onPrimary: Colors.white,
-      onSecondary: Colors.white,
-      onSurface: Colors.grey[900]!,
-      onBackground: Colors.grey[900]!,
+      onPrimary: Colors.black,       // 👈 Text on primary (e.g., button text)
+      onSecondary: Colors.black,     // 👈 Text on secondary color
+      onSurface: Colors.black,       // 👈 Text on surfaces
+      onBackground: Colors.black,    // 👈 General background text
       onError: Colors.white,
       error: Colors.red[700]!,
     ),
-    cardColor: tertiaryColor,
+    cardColor: Colors.white,
     appBarTheme: AppBarTheme(
       backgroundColor: primaryColor,
       foregroundColor: Colors.white,
       elevation: 2,
     ),
     iconTheme: IconThemeData(color: primaryColor),
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(color: Colors.grey[900], fontSize: 16),
-      bodyMedium: TextStyle(color: Colors.grey[600], fontSize: 14),
-      titleMedium: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: Colors.black, fontSize: 16),
+      bodyMedium: TextStyle(color: Colors.black, fontSize: 14),
+      titleMedium: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      labelLarge: TextStyle(color: Colors.black),
+      labelMedium: TextStyle(color: Colors.black),
     ),
     inputDecorationTheme: const InputDecorationTheme(
       focusColor: primaryColor,
@@ -41,7 +43,7 @@ class AppTheme {
       floatingLabelStyle: TextStyle(color: primaryColor),
       prefixIconColor: Colors.black38,
     ),
-    scaffoldBackgroundColor: tertiaryColor,
+    scaffoldBackgroundColor: Colors.white,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: primaryColor,
@@ -53,4 +55,3 @@ class AppTheme {
     ),
   );
 }
-

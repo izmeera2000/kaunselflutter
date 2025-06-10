@@ -1,3 +1,4 @@
+import 'package:ekaunsel/components/notification.dart';
 import 'package:ekaunsel/utils/config.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -73,17 +74,20 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
           Uri.parse('${Config.base_url}/send_chat'),
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           body: {
-            'user_id': studentId!,
+            'user_id': studentId!, 
             'message': messages.last['message']!,
             'sender': 'admin', // Ensure sender is student
             'chat_send_admin': 'chat_send_admin',
           },
         );
+
       } catch (error) {
         debugPrint('Error: $error');
       }
+              await sendNotificationTopic(
+                  "user-${studentId}", "Kaunselor", _controller.text, "site1");
 
-      _scrollToBottom();
+       _scrollToBottom();
     }
   }
 

@@ -95,6 +95,8 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+
+
   void showKataSemangatNotification(RemoteNotification notification) {
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,

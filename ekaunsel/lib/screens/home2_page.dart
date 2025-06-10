@@ -172,7 +172,7 @@ class _Home2PageState extends State<Home2Page> {
             child: Text('Submit'),
             onPressed: () async {
               await sendNotificationTopic(
-                  "katasemangat", "kata-kata hari ini", tempInput);
+                  "katasemangat", "kata-kata hari ini", tempInput, "site1");
 
               Navigator.pop(context, tempInput);
             },
@@ -328,10 +328,16 @@ class _Home2PageState extends State<Home2Page> {
                 const SizedBox(height: 24),
                 ElevatedButton.icon(
                   onPressed: _showInputDialog,
-                  icon: Icon(Icons.edit),
-                  label: Text('Add Wisdom'),
+                  icon: const Icon(Icons.edit,
+                      color: Colors.white), // 👈 icon color
+                  label: const Text(
+                    'Add Wisdom',
+                    style: TextStyle(color: Colors.white), // 👈 text color
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor:
+                        Colors.white, // 👈 ensures icon/text are white
                   ),
                 ),
               ],

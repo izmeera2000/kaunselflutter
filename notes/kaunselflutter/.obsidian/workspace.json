@@ -28,17 +28,20 @@
             "id": "aa51aa9c72411a7c",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "kanban",
               "state": {
-                "file": "Flow.canvas",
-                "viewState": {
-                  "x": 267.5380710659899,
-                  "y": 61.10659898477151,
-                  "zoom": -0.5922673013443895
+                "file": "Task.md",
+                "kanbanViewState": {
+                  "kanban-plugin": "board",
+                  "list-collapse": [
+                    false,
+                    false,
+                    false
+                  ]
                 }
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Flow"
+              "icon": "lucide-trello",
+              "title": "Task"
             }
           }
         ],
@@ -190,8 +193,8 @@
   },
   "active": "aa51aa9c72411a7c",
   "lastOpenFiles": [
-    "Task.md",
     "Flow.canvas",
+    "Task.md",
     "Views/Admin/Student/List/Page Ui.canvas",
     "Views/Admin/Student/Details/Page Ui.canvas",
     "Views/Admin/Student/Details/Student Details.md",

@@ -160,6 +160,28 @@
     },
     {
       "height": 60,
+      "id": "415d8162bb9400b5",
+      "styleAttributes": {
+      },
+      "text": "Schedule Details\n",
+      "type": "text",
+      "width": 260,
+      "x": -450,
+      "y": 80
+    },
+    {
+      "height": 60,
+      "id": "66f3696885b7f09a",
+      "styleAttributes": {
+      },
+      "text": "Ujian Psikologi",
+      "type": "text",
+      "width": 260,
+      "x": -800,
+      "y": 320
+    },
+    {
+      "height": 60,
       "id": "c234988ac8eac886",
       "styleAttributes": {
       },
@@ -267,28 +289,6 @@
       "width": 260,
       "x": 920,
       "y": 180
-    },
-    {
-      "height": 60,
-      "id": "415d8162bb9400b5",
-      "styleAttributes": {
-      },
-      "text": "Schedule Details\n",
-      "type": "text",
-      "width": 260,
-      "x": -450,
-      "y": 80
-    },
-    {
-      "height": 60,
-      "id": "66f3696885b7f09a",
-      "styleAttributes": {
-      },
-      "text": "Ujian Psikologi",
-      "type": "text",
-      "width": 260,
-      "x": -800,
-      "y": 320
     }
   ]
 }

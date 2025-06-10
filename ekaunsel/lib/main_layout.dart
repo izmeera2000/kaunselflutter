@@ -158,7 +158,7 @@ class _Main2LayoutState extends State<Main2Layout> {
             Home2Page(),
             ChatListPage(),
             AppointmentAdminPage(),
-            StudentListPage(),
+            // StudentListPage(),
             ProfilePage()
           ],
         ),
@@ -187,10 +187,10 @@ class _Main2LayoutState extends State<Main2Layout> {
               icon: FaIcon(FontAwesomeIcons.solidCalendarCheck),
               label: 'Schedule',
             ),
-                     BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.users),
-              label: 'Students',
-            ),
+            //          BottomNavigationBarItem(
+            //   icon: FaIcon(FontAwesomeIcons.users),
+            //   label: 'Students',
+            // ),
             BottomNavigationBarItem(
               icon: FaIcon(FontAwesomeIcons.user),
               label: 'Profile',

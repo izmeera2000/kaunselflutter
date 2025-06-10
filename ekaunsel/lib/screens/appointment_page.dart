@@ -1,8 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:ekaunsel/screens/appointment_details.dart';
+import 'package:ekaunsel/screens/appointment_details_admin.dart';
 import 'package:ekaunsel/utils/config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
- import 'package:ekaunsel/components/appointment_card.dart';
+import 'package:ekaunsel/components/appointment_card.dart';
 import 'package:ekaunsel/components/retrive_user.dart';
 import 'package:ekaunsel/components/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -21,15 +26,34 @@ enum FilterStatus { upcoming, completed, cancelled }
 class _AppointmentPageState extends State<AppointmentPage> {
   FilterStatus status = FilterStatus.upcoming; //initial status
   Alignment _alignment = Alignment.centerLeft;
+  DateTime _selectedDate = DateTime.now();
 
   List<dynamic> schedules = [];
   bool isLoading = true;
- 
+  int currentYear = DateTime.now().year;
+  Timer? _yearCheckTimer;
+
 
   @override
-  void initState() {
-    super.initState();
-    fetchAndSetSchedules();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchAndSetSchedules(year: currentYear);
+
+    _yearCheckTimer = Timer.periodic(Duration(hours: 1), (timer) {
+      int newYear = DateTime.now().year;
+      if (newYear != currentYear) {
+        currentYear = newYear;
+        fetchAndSetSchedules(year: currentYear);
+      }
+    });
+  }
+
+
+
+   @override
+  void dispose() {
+    _yearCheckTimer?.cancel();
+    super.dispose();
   }
 
   Future<List<dynamic>> fetchAppointments({
@@ -84,11 +108,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
     }
   }
 
+  Future<void> fetchAndSetSchedules({int? year}) async {
+    
+    year ??= DateTime.now().year;
 
-  Future<void> fetchAndSetSchedules() async {
-    DateTime now = DateTime.now();
-    DateTime end = now.add(Duration(days: 365));
-
+    DateTime now = DateTime(DateTime.now().year, 1, 1);
+    DateTime end = DateTime(DateTime.now().year, 12, 31, 23, 59, 59);
     int limit = 10;
     int offset = 0;
 
@@ -107,7 +132,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
           user_id: user.userId!,
           role: user.userId!,
         );
- 
 
         combinedData.addAll(data);
       } catch (e) {
@@ -152,10 +176,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
               String formattedDatelocal =
                   "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
- 
+
               return {
                 'doctor_name': item['nama'],
-                'doctor_profile': "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
+                'doctor_profile':
+                    "${Config.base_url}/assets/img/user/${item['user_id']}/${item['image_url']!}",
                 'category': 'Kaunseling',
                 'status': item['status2'] == 'upcoming'
                     ? FilterStatus.upcoming
@@ -168,7 +193,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   'local_date': formattedDatelocal,
                   'time':
                       formattedTime, // Time will be "00:00" if not available
-                  'status': item['status']  ,
+                  'status': item['status'],
                 },
               };
             } catch (e) {
@@ -183,97 +208,95 @@ class _AppointmentPageState extends State<AppointmentPage> {
     });
   }
 
-
-
-  @override
+   @override
   Widget build(BuildContext context) {
-    //return filtered appointment
-    List<dynamic> filteredSchedules = schedules.where((var schedule) {
-      //switch (schedule['status']) {
-      //  case 'upcoming':
-      //    schedule['status'] = FilterStatus.upcoming;
-      //    break;
-      //  case 'complete':
-      //    schedule['status'] = FilterStatus.complete;
-      //    break;
-      //  case 'cancel':
-      //    schedule['status'] = FilterStatus.cancel;
-      //    break;
-      //}
-      return schedule['status'] == status;
+    // Filter schedules by selected status and date
+    List<dynamic> filteredSchedules = schedules.where((schedule) {
+      bool matchesStatus = schedule['status'] == status;
+
+      String selectedDateFormatted =
+          DateFormat('yyyy-MM-dd').format(_selectedDate);
+      String scheduleDate = schedule['schedule']['date'];
+
+      bool matchesDate = scheduleDate == selectedDateFormatted;
+
+      return matchesStatus && matchesDate;
     }).toList();
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Row(
               children: [
                 Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
+                  child: Center(
                     child: Text(
                       'Appointment Schedule',
-                      textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    fetchAndSetSchedules();
-                  },
+                  onPressed: () => fetchAndSetSchedules(),
                   child: FaIcon(FontAwesomeIcons.rotate),
                 ),
               ],
+            ),
+            EasyDateTimeLinePicker(
+              focusedDate: _selectedDate,
+              firstDate: DateTime(2024, 3, 18),
+              lastDate: DateTime(2030, 3, 18),
+              onDateChange: (date) {
+                setState(() {
+                  _selectedDate = date;
+                });
+              },
+              monthYearPickerOptions: MonthYearPickerOptions(
+                initialCalendarMode: EasyDatePickerMode.month,
+                cancelText: 'Cancel',
+                confirmText: 'Confirm',
+              ),
+              timelineOptions: TimelineOptions(
+                height: 70,
+              ),
             ),
             Config.spaceSmall,
             Stack(
               children: [
                 Container(
-                  width: double.infinity,
                   height: 55,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //this is the filter tabs
-                      for (FilterStatus filterStatus in FilterStatus.values)
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (filterStatus == FilterStatus.upcoming) {
-                                  status = FilterStatus.upcoming;
-                                  _alignment = Alignment.centerLeft;
-                                } else if (filterStatus ==
-                                    FilterStatus.completed) {
-                                  status = FilterStatus.completed;
-                                  _alignment = Alignment.center;
-                                } else if (filterStatus ==
-                                    FilterStatus.cancelled) {
-                                  status = FilterStatus.cancelled;
-                                  _alignment = Alignment.centerRight;
-                                }
-                              });
-                            },
-                            child: Container(
-                                width: Config.widthSize * 0.33,
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  color: Config.whiteColor,
-                                  // borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Center(child: Text(filterStatus.name))),
+                    children: FilterStatus.values.map((filterStatus) {
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              status = filterStatus;
+                              _alignment = filterStatus == FilterStatus.upcoming
+                                  ? Alignment.centerLeft
+                                  : filterStatus == FilterStatus.completed
+                                      ? Alignment.center
+                                      : Alignment.centerRight;
+                            });
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              filterStatus.name,
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
-                    ],
+                      );
+                    }).toList(),
                   ),
                 ),
                 AnimatedAlign(
@@ -286,14 +309,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       color: Config.primaryColor,
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: GestureDetector(
-                      child: Center(
-                        child: Text(
-                          status.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    child: Center(
+                      child: Text(
+                        status.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -303,31 +324,37 @@ class _AppointmentPageState extends State<AppointmentPage> {
             ),
             Config.spaceSmall,
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredSchedules.length,
-                itemBuilder: (context, index) {
-                  var schedule = filteredSchedules[index];
-
-                  return ScheduleCard(
-  imageUrl: schedule['doctor_profile'] ?? '',
-  name: schedule['doctor_name'] ?? 'Unknown',
-  category: schedule['category'] ?? 'Kaunselor',
-  title: schedule['schedule']['title'] ?? 'No Title',
-  date: schedule['schedule']['local_date'] ?? '',
-  time: schedule['schedule']['time'] ?? '',
-  status: _mapStatus(schedule['schedule']['status']),
-  onTap: () {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Tapped on ${schedule['schedule']['date']} schedule!',
-        ),
-      ),
-    );
-  },
-);
-                },
-              ),
+              child: isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : filteredSchedules.isEmpty
+                      ? Center(child: Text("No appointments found."))
+                      : ListView.builder(
+                          itemCount: filteredSchedules.length,
+                          itemBuilder: (context, index) {
+                            var schedule = filteredSchedules[index];
+                            return ScheduleCard(
+                              imageUrl: schedule['doctor_profile'] ?? '',
+                              name: schedule['doctor_name'] ?? 'Unknown',
+                              category: schedule['category'] ?? 'Kaunselor',
+                              title:
+                                  schedule['schedule']['title'] ?? 'No Title',
+                              date: schedule['schedule']['local_date'] ?? '',
+                              time: schedule['schedule']['time'] ?? '',
+                              status:
+                                  _mapStatus(schedule['schedule']['status']),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) =>
+                                        AppointmentDetailsPage2(
+                                            id: schedule['id'].toString()),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
             ),
           ],
         ),
@@ -335,6 +362,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     );
   }
 }
+
 String _mapStatus(dynamic status) {
   switch (status?.toString()) {
     case '1':

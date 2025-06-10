@@ -7,16 +7,17 @@ import '../utils/config.dart'; // Update import as needed
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 
-class AppointmentDetailsPage extends StatefulWidget {
+class AppointmentDetailsPage2 extends StatefulWidget {
   final String id;
 
-  const AppointmentDetailsPage({super.key, required this.id});
+  const AppointmentDetailsPage2({super.key, required this.id});
 
   @override
-  State<AppointmentDetailsPage> createState() => _AppointmentDetailsPageState();
+  State<AppointmentDetailsPage2> createState() =>
+      _AppointmentDetailsPage2State();
 }
 
-class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
+class _AppointmentDetailsPage2State extends State<AppointmentDetailsPage2> {
   // Time pickers for start and end times
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
@@ -27,8 +28,8 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
 
   Future<Map<String, dynamic>?> fetchDetail() async {
     final url = Uri.parse('${Config.base_url}senaraitemujanji');
-    print("id is ${widget.id}");
 
+    print("id is ${widget.id}");
     final requestBody = {
       'senaraitemujanji_details_flutter': 'test', // Required by your PHP logic
       'senaraitemujanji_details_flutter[id]': widget.id,
@@ -48,195 +49,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     }
   }
 
-  Future<void> _showApproveDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text('Select Time'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: Text('Start Time'),
-                    subtitle: Text(_startTime.format(context)),
-                    trailing: Icon(Icons.access_time),
-                    onTap: () async {
-                      TimeOfDay? selected = await showTimePicker(
-                        context: context,
-                        initialTime: _startTime,
-                      );
-                      if (selected != null) {
-                        setState(() => _startTime = selected);
-                      }
-                    },
-                  ),
-                  ListTile(
-                    title: Text('End Time'),
-                    subtitle: Text(_endTime.format(context)),
-                    trailing: Icon(Icons.access_time),
-                    onTap: () async {
-                      TimeOfDay? selected = await showTimePicker(
-                        context: context,
-                        initialTime: _endTime,
-                      );
-                      if (selected != null) {
-                        setState(() => _endTime = selected);
-                      }
-                    },
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    if (!mounted) return;
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    // Call function with selected times
-                    await _approveAppointment();
-                    if (!context.mounted) return;
-
-                    Navigator.pop(context);
-                    if (!mounted) return;
-                    Navigator.pushReplacement(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (_) =>
-                              AppointmentDetailsPage(id: widget.id)),
-                    );
-                  },
-                  child: Text('Approve'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
-  }
-
-  // Function to show rejection reason dialog
-  Future<void> _showRejectDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter Rejection Reason'),
-          content: TextField(
-            controller: _rejectReasonController,
-            decoration: InputDecoration(hintText: "Enter reason for rejection"),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                // Send reject request to backend here
-                _rejectAppointment();
-                Navigator.pop(context);
-              },
-              child: Text('Reject'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Reject Appointment (send to backend)
-  Future<void> _rejectAppointment() async {
-    final UserModel user = await getUserDetails();
-
-    final url = Uri.parse(
-        '${Config.base_url}kaunselor_reject_flutter'); // Your backend URL
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: {
-        'kaunselor_reject_flutter[id]': widget.id,
-        'kaunselor_reject_flutter[sebab]': _rejectReasonController.text,
-        'kaunselor_reject_flutter[user_id]': user.userId,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      debugPrint("Appointment rejected successfully");
-    } else {
-      debugPrint("Failed to reject appointment");
-    }
-  }
-
-  Future<void> _approveAppointment() async {
-    final url = Uri.parse('${Config.base_url}kaunselor_approve_flutter');
-    final mula = _startTime.format(context); // e.g., 10:30 AM
-    final tamat = _endTime.format(context); // e.g., 11:30 AM
-    final UserModel user = await getUserDetails();
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: {
-          'kaunselor_approve_flutter[id]': widget.id,
-          'kaunselor_approve_flutter[mula]': mula,
-          'kaunselor_approve_flutter[tamat]': tamat,
-          'kaunselor_approve_flutter[user_id]': user.userId,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        debugPrint("✅ Appointment approved successfully");
-        // Optionally show a dialog/snackbar:
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Appointment approved.')),
-        );
-        if (!mounted) return;
-        Navigator.pop(context); // Close the screen/dialog
-      } else {
-        debugPrint(
-            "❌ Failed to approve appointment. Status: ${response.statusCode}");
-        debugPrint("Response body: ${response.body}");
-        _showErrorDialog("Failed to approve appointment.");
-      }
-    } catch (e) {
-      debugPrint("❌ Error: $e");
-      _showErrorDialog("Something went wrong. Please try again.");
-    }
-  }
-
-  Future<void> startAppointment() async {
-    final url = Uri.parse('${Config.base_url}temujanji_update_flutter');
-    final UserModel user = await getUserDetails();
-    TimeOfDay time = TimeOfDay(hour: 14, minute: 30);
-    String formattedTime = '${time.hour}:${time.minute}';
-    final response = await http.post(url, body: {
-      'temujanji_update_flutter[meeting_id]': widget.id,
-      'temujanji_update_flutter[start]': formattedTime,
-      'temujanji_update_flutter[user_id]': user.userId,
-    });
-
-    if (response.statusCode == 200) {
-      debugPrint('Appointment started successfully');
-    } else {
-      debugPrint('Failed to start appointment: ${response.body}');
-    }
-    Navigator.pushReplacement(
-      context,
-      CupertinoPageRoute(builder: (_) => AppointmentDetailsPage(id: widget.id)),
-    );
-  }
+ 
 
   void _showErrorDialog(String message) {
     showDialog(
@@ -274,7 +87,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
         Navigator.pushReplacement(
           context,
           CupertinoPageRoute(
-              builder: (_) => AppointmentDetailsPage(id: widget.id)),
+              builder: (_) => AppointmentDetailsPage2(id: widget.id)),
         );
       } else {
         debugPrint('Failed to end appointment: ${response.statusCode}');
@@ -448,7 +261,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
             context,
             CupertinoPageRoute(
               builder: (_) =>
-                  AppointmentDetailsPage(id: newMeetingId.toString()),
+                  AppointmentDetailsPage2(id: newMeetingId.toString()),
             ),
           );
         } else {
@@ -549,77 +362,9 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                     ),
                     SizedBox(height: 16),
 
-                    // If the status is 1, show the buttons
-                    if (isStatusOne) ...[
-                      const SizedBox(height: 20), // space above buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .center, // center buttons horizontally
-                        children: [
-                          ElevatedButton(
-                            onPressed: _showApproveDialog,
-                            child: const Text("Approve"),
-                          ),
-                          const SizedBox(width: 16), // space between buttons
-                          ElevatedButton(
-                            onPressed: _showRejectDialog,
-                            child: const Text("Reject"),
-                          ),
-                        ],
-                      ),
-                    ],
-
-                    if (isStatusTwo) ...[
-                      const SizedBox(
-                          height: 20), // Add space between text and buttons
-
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () async {
-                          debugPrint("start startAppointment");
-                          await startAppointment();
-                        }, // Approve Appointment
-                        child: Text("Start"),
-                      ),
-                    ],
-                    if (isStatusThree) ...[
-                      const SizedBox(
-                          height: 20), // Add space between text and buttons
-
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          endAppointment(widget.id); // Pass actual meeting ID
-
-                          // Optionally re-render or refresh current screen
-                        },
-                        child: Text("End"),
-                      ),
-                    ],
-                    if (isStatusFour) ...[
-                      const SizedBox(
-                          height: 20), // Add space between text and buttons
-
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          // await endAppointment(widget.id); // Pass actual meeting ID
-                          showFinalizeDialog(
-                            context,
-                            meetingId: widget.id,
-                            userId: details['user_id'],
-                          );
-                          // Optionally re-render or refresh current screen
-                          Navigator.pushReplacement(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (_) =>
-                                    AppointmentDetailsPage(id: widget.id)),
-                          );
-                        },
-                        child: Text("Repeat"),
-                      ),
-                    ],
+         
+                  
+                    
                   ],
                 ),
               );

@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchUserDetails().then((_) => fetchTodaysAppointments());
-    FirebaseMessaging.instance.subscribeToTopic('semangat');
+    subscribeToTopic('semangat');
   }
 
   // Fetch user details from SharedPreferences
@@ -55,6 +55,8 @@ class _HomePageState extends State<HomePage> {
         if (userId.isNotEmpty && imageUrl.isNotEmpty) {
           userProfileImageUrl =
               '${Config.base_url}assets/img/user/$userId/$imageUrl';
+
+          subscribeToTopic('user-${userId}');
         } else {
           userProfileImageUrl =
               ''; // Default image or fallback can be assigned here
@@ -320,7 +322,12 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Config.spaceSmall,
-            
+                 Config.spaceSmall,
+                Column(
+                  children: List.generate(1, (index) {
+                    return const DoctorCard(route: 'doctor_details');
+                  }),
+                ),
               ],
             ),
           ),
