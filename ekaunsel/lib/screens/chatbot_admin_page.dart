@@ -148,11 +148,7 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const Text(
-                'Chat',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+ 
               const SizedBox(height: 10),
 
               // Chat History

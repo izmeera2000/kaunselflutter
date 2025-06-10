@@ -92,7 +92,7 @@ class _ChatListPageState extends State<ChatListPage> {
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => ChatbotAdminPage(
+                        builder: (_) => ChatbotAdminPage(studentName: chat['name'],
                           studentId: chat['user_id'],
                         ),
                       ),
