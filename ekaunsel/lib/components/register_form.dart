@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart'; // Add this package in pubspec.yaml
 import 'package:ekaunsel/utils/config.dart';
 import 'package:ekaunsel/components/button.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -26,6 +29,9 @@ class _RegisterFormState extends State<RegisterForm> {
   final _phoneController = TextEditingController();
   final _passController = TextEditingController();
   final _confirmPassController = TextEditingController();
+  String? _selectedJantina; // You can also use a controller if needed
+  String? _selectedAgama;
+String? _selectedStatusKahwin;
 
   bool obsecurePass = true;
   bool obsecureConfirmPass = true;
@@ -36,10 +42,29 @@ class _RegisterFormState extends State<RegisterForm> {
   Future<void> pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
+      File originalFile = File(image.path);
+      File compressedFile = await compressImage(originalFile);
+
       setState(() {
-        _pickedImage = image;
+        _pickedImage = XFile(compressedFile.path);
       });
     }
+  }
+
+  Future<File> compressImage(File file) async {
+    final dir = await getTemporaryDirectory();
+    final targetPath = path.join(
+      dir.path,
+      'compressed_${DateTime.now().millisecondsSinceEpoch}.jpg',
+    );
+
+    final XFile? result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 70,
+    );
+
+    return result != null ? File(result.path) : file;
   }
 
   Future<void> _register() async {
@@ -96,11 +121,13 @@ class _RegisterFormState extends State<RegisterForm> {
       );
 
       // Prepare multipart request
-      final uri = Uri.parse('${Config.base_url}/register');
+      final uri = Uri.parse('${Config.base_url}register');
       var request = http.MultipartRequest('POST', uri);
-
+      print("sending");
       // Add text fields
-      request.fields['user_register'] = '1';
+      request.headers['Content-Type'] = 'multipart/form-data';
+
+      request.fields['user_register_flutter'] = '1';
       request.fields['ndp'] = ndp;
       request.fields['fullname'] = fullname;
       request.fields['sem'] = sem;
@@ -121,7 +148,7 @@ class _RegisterFormState extends State<RegisterForm> {
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
       if (!mounted) return;
-      Navigator.of(context).pop(); // Close loading
+      // Navigator.of(context).pop(); // Close loading
 
       final jsonResp = json.decode(responseBody);
       debugPrint(responseBody);
@@ -131,12 +158,15 @@ class _RegisterFormState extends State<RegisterForm> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(jsonResp['message'])),
           );
-          Navigator.of(context).pushReplacementNamed('main');
+          Navigator.of(context).pushNamed('/login');
+          
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content: Text(jsonResp['message'] ?? 'Registration failed')),
           );
+                if (!mounted) return;
+      Navigator.of(context).pop(); // Close loading
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -162,6 +192,8 @@ class _RegisterFormState extends State<RegisterForm> {
         children: <Widget>[
           TextFormField(
             controller: _ndpController,
+                        keyboardType: TextInputType.number,
+
             decoration: const InputDecoration(
               hintText: 'NDP',
               labelText: 'NDP',
@@ -232,7 +264,7 @@ class _RegisterFormState extends State<RegisterForm> {
           Config.spaceSmall,
           TextFormField(
             controller: _semController,
-            keyboardType: TextInputType.text,
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               hintText: 'Semester',
               labelText: 'Semester',
@@ -250,16 +282,26 @@ class _RegisterFormState extends State<RegisterForm> {
 
           // Jantina as text input
           Config.spaceSmall,
-          TextFormField(
-            controller: _jantinaController,
+          DropdownButtonFormField<String>(
+            value: _selectedJantina,
             decoration: const InputDecoration(
               labelText: 'Jantina',
               prefixIcon: Icon(Icons.person),
               prefixIconColor: Config.primaryColor,
             ),
+            items: const [
+              DropdownMenuItem(value: '1', child: Text('Lelaki')),
+              DropdownMenuItem(value: '0', child: Text('Perempuan')),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _selectedJantina = value;
+                _jantinaController.text = value ?? '';
+              });
+            },
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Sila isi jantina';
+                return 'Sila pilih jantina';
               }
               return null;
             },
@@ -267,16 +309,29 @@ class _RegisterFormState extends State<RegisterForm> {
 
           // Agama as text input
           Config.spaceSmall,
-          TextFormField(
-            controller: _agamaController,
+          DropdownButtonFormField<String>(
+            value: _selectedAgama,
             decoration: const InputDecoration(
               labelText: 'Agama',
               prefixIcon: Icon(Icons.account_balance),
               prefixIconColor: Config.primaryColor,
             ),
+            items: const [
+              DropdownMenuItem(value: 'Islam', child: Text('Islam')),
+              DropdownMenuItem(value: 'Hindu', child: Text('Hindu')),
+              DropdownMenuItem(value: 'Buddha', child: Text('Buddha')),
+              DropdownMenuItem(value: 'Kristian', child: Text('Kristian')),
+              DropdownMenuItem(value: 'Lain-lain', child: Text('Lain-lain')),
+            ],
+            onChanged: (value) {
+              setState(() {
+                _selectedAgama = value;
+                _agamaController.text = value ?? '';
+              });
+            },
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Sila isi agama';
+                return 'Sila pilih agama';
               }
               return null;
             },
@@ -284,20 +339,31 @@ class _RegisterFormState extends State<RegisterForm> {
 
           // Status Kahwin as text input
           Config.spaceSmall,
-          TextFormField(
-            controller: _statuskahwinController,
-            decoration: const InputDecoration(
-              labelText: 'Status Perkahwinan',
-              prefixIcon: Icon(Icons.family_restroom),
-              prefixIconColor: Config.primaryColor,
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Sila isi status kahwin';
-              }
-              return null;
-            },
-          ),
+
+DropdownButtonFormField<String>(
+  value: _selectedStatusKahwin,
+  decoration: const InputDecoration(
+    labelText: 'Status Perkahwinan',
+    prefixIcon: Icon(Icons.family_restroom),
+    prefixIconColor: Config.primaryColor,
+  ),
+  items: const [
+    DropdownMenuItem(value: 'Tidak Berkahwin', child: Text('Tidak Berkahwin')),
+    DropdownMenuItem(value: 'Berkahwin', child: Text('Berkahwin')),
+  ],
+  onChanged: (value) {
+    setState(() {
+      _selectedStatusKahwin = value;
+      _statuskahwinController.text = value ?? '';
+    });
+  },
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Sila pilih status kahwin';
+    }
+    return null;
+  },
+),
 
           // Bangsa as text input (add this since you check it)
           Config.spaceSmall,

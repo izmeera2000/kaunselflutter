@@ -122,7 +122,7 @@ class DetailBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Config.spaceSmall,
-          const DoctorInfo(),
+          // const DoctorInfo(),
           Config.spaceBig,
           const Text(
             'About',

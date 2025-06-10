@@ -33,7 +33,41 @@ class _IntroScreenState extends State<IntroScreen> {
   void initState() {
     super.initState();
     loadSavedCredentials();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkLoginStatus(context);
+    });
   }
+
+
+
+  Future<void> checkLoginStatus(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("check");
+    String? userId = prefs.getString('user_id');
+    String? userRole = prefs.getString('role');
+    print(userId);
+    print(userRole);
+
+    if (userId != null && userRole != null) {
+      // User is logged in, navigate to the appropriate page based on their role
+      if (userRole == '1') {
+        Future.delayed(Duration.zero, () {
+          if (context.mounted) {
+            Navigator.of(context).pushReplacementNamed('main2');
+          }
+        });
+        print("admin");
+      } else {
+        print("user");
+        Future.delayed(Duration.zero, () {
+          if (context.mounted) {
+            Navigator.of(context).pushReplacementNamed('main');
+          }
+        });
+      }
+    }  
+  }
+
 
   Future<void> loadSavedCredentials() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();

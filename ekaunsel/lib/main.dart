@@ -46,7 +46,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   void initNotifications() async {
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -97,8 +97,6 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
     );
   }
 
-
-
   void showKataSemangatNotification(RemoteNotification notification) {
     flutterLocalNotificationsPlugin.show(
       notification.hashCode,
@@ -136,32 +134,41 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
     super.initState();
     initNotifications();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkLoginStatus(context);
-    });
+
   }
 
   Future<void> checkLoginStatus(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     print("check");
     String? userId = prefs.getString('user_id');
-     String? userRole = prefs.getString('role');
+    String? userRole = prefs.getString('role');
     print(userId);
     print(userRole);
 
     if (userId != null && userRole != null) {
       // User is logged in, navigate to the appropriate page based on their role
       if (userRole == '1') {
-        Navigator.of(context).pushReplacementNamed('main2');
+        Future.delayed(Duration.zero, () {
+          if (context.mounted) {
+            Navigator.of(context).pushReplacementNamed('main2');
+          }
+        });
         print("admin");
       } else {
         print("user");
-
-        Navigator.of(context).pushReplacementNamed('main');
+        Future.delayed(Duration.zero, () {
+          if (context.mounted) {
+            Navigator.of(context).pushReplacementNamed('main');
+          }
+        });
       }
     } else {
       // User is not logged in, stay on the login page
-      Navigator.of(context).pushReplacementNamed('/login');
+      Future.delayed(Duration.zero, () {
+        if (context.mounted) {
+          Navigator.of(context).pushReplacementNamed('/login');
+        }
+      });
     }
   }
 
@@ -170,8 +177,7 @@ final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   Widget build(BuildContext context) {
     //define theme data here
     return MaterialApp(
-        navigatorObservers: [routeObserver],
-
+      navigatorObservers: [routeObserver],
       navigatorKey: MyApp.navigatorKey,
       title: 'Flutter e-Kaunseling App',
       debugShowCheckedModeBanner: false,

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:ekaunsel/components/appointment_card.dart';
 import 'package:ekaunsel/components/doctor_card.dart';
 import 'package:ekaunsel/components/notification.dart';
+import 'package:ekaunsel/components/save_user.dart';
+import 'package:ekaunsel/screens/appointment_details.dart';
 import 'package:ekaunsel/utils/config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> todaysAppointments = [];
   bool isLoadingToday = true;
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     fetchUserDetails().then((_) => fetchTodaysAppointments());
     subscribeToTopic('semangat');
@@ -41,14 +43,14 @@ class _HomePageState extends State<HomePage> {
     try {
       // Fetch the user details as a UserModel instance
       UserModel user = await getUserDetails();
+      await printSavedUserDetails();
 
       setState(() {
         // Safely check and update user details
         userName = user.nama!.isNotEmpty
             ? user.nama!
             : 'User'; // Default to 'User' if no name found
-
-        // Safely construct the profile image URL
+         // Safely construct the profile image URL
         String userId = user.userId!; // Ensure userId exists
         String imageUrl = user.imageUrl!; // Ensure imageUrl exists
 
@@ -308,7 +310,15 @@ class _HomePageState extends State<HomePage> {
                                 //         AppointmentDetailsPage(id: scheduleId),
                                 //   ),
                                 // );
-                              },
+                                 Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) =>
+                                        AppointmentDetailsPage2(
+                                            id: scheduleId),
+                                  ),
+                                );
+                               },
                             ),
                           );
                         }).toList(),

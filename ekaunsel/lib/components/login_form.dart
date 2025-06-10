@@ -63,15 +63,12 @@ class _LoginFormState extends State<LoginForm> {
 
       // Navigator.of(context).pop(); // Close the loading indicator
       final responseBody = json.decode(response.body);
-       if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         if (responseBody['status'] == 'success') {
           // Navigate to the main page/dashboard on successful login
           final user = responseBody['user'];
-
+          print(responseBody['user']);
           String role = user['role'];
-
- 
-
 
           try {
             await saveUserDetails(user, email, role, rememberMe);
@@ -79,7 +76,7 @@ class _LoginFormState extends State<LoginForm> {
             print('SharedPreferences error: $e');
           }
 
-  // Navigator.of(context).pop(); // ✅ close loading indicator
+          // Navigator.of(context).pop(); // ✅ close loading indicator
 
           if (role == '1') {
             Navigator.pushNamedAndRemoveUntil(
