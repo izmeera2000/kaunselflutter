@@ -418,7 +418,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     required String tarikh1,
     required String masalah1,
   }) async {
-    final url = Uri.parse('${Config.base_url}temujanji_final_flutterx');
+    final url = Uri.parse('${Config.base_url}temujanji_final_flutter');
 
     try {
       final response = await http.post(
