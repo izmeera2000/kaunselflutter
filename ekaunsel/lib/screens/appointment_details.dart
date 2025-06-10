@@ -362,7 +362,7 @@ class _AppointmentDetailsPage2State extends State<AppointmentDetailsPage2> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: 8),
                         Text('Masalah : ${details['masalah']}'),
-                        Text('Status : ${details['status']}'),
+Text('Status: ${_getStatusLabel(details['status'])}'),
                       ],
                     ),
                     SizedBox(height: 16),
@@ -374,5 +374,19 @@ class _AppointmentDetailsPage2State extends State<AppointmentDetailsPage2> {
         ],
       ),
     );
+  }
+}
+String _getStatusLabel(dynamic status) {
+  switch (status) {
+    case 1:
+      return 'Pending';
+    case 2:
+      return 'Confirmed';
+    case 3:
+      return 'Started';
+    case 4:
+      return 'Completed';
+    default:
+      return 'Unknown';
   }
 }

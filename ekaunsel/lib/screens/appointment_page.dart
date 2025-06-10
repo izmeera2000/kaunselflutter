@@ -23,7 +23,7 @@ class AppointmentPage extends StatefulWidget {
 
 enum FilterStatus { upcoming, completed, cancelled }
 
-class _AppointmentPageState extends State<AppointmentPage> {
+class _AppointmentPageState extends State<AppointmentPage> with RouteAware {
   FilterStatus status = FilterStatus.upcoming; //initial status
   Alignment _alignment = Alignment.centerLeft;
   DateTime _selectedDate = DateTime.now();
@@ -54,6 +54,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
   void dispose() {
     _yearCheckTimer?.cancel();
     super.dispose();
+  }
+
+
+    // Called when this page is again visible after popping another page
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    // Refresh your data here
+    fetchAndSetSchedules();
   }
 
   Future<List<dynamic>> fetchAppointments({
@@ -208,6 +217,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
       isLoading = false;
     });
   }
+
+
+
 
    @override
   Widget build(BuildContext context) {

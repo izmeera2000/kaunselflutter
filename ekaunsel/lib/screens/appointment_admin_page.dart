@@ -21,7 +21,8 @@ class AppointmentAdminPage extends StatefulWidget {
 
 enum FilterStatus { upcoming, completed, cancelled }
 
-class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
+class _AppointmentAdminPageState extends State<AppointmentAdminPage>
+    with RouteAware {
   FilterStatus status = FilterStatus.upcoming;
   Alignment _alignment = Alignment.centerLeft;
   DateTime _selectedDate = DateTime.now();
@@ -48,6 +49,14 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage> {
   void dispose() {
     _yearCheckTimer?.cancel();
     super.dispose();
+  }
+
+  // Called when this page is again visible after popping another page
+  @override
+  void didPopNext() {
+    super.didPopNext();
+    // Refresh your data here
+    fetchAndSetSchedules();
   }
 
   Future<List<dynamic>> fetchAppointments({

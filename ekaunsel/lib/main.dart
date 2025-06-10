@@ -46,6 +46,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   void initNotifications() async {
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -169,6 +170,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //define theme data here
     return MaterialApp(
+        navigatorObservers: [routeObserver],
+
       navigatorKey: MyApp.navigatorKey,
       title: 'Flutter e-Kaunseling App',
       debugShowCheckedModeBanner: false,

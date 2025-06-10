@@ -169,7 +169,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     } else {
       debugPrint("Failed to reject appointment");
     }
-     Navigator.pushReplacement(
+    Navigator.pushReplacement(
       context,
       CupertinoPageRoute(builder: (_) => AppointmentDetailsPage(id: widget.id)),
     );
@@ -285,7 +285,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     } catch (e) {
       debugPrint('Error ending appointment: $e');
     }
-    
   }
 
   Future<void> showFinalizeDialog(
@@ -556,7 +555,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: 8),
                         Text('Masalah : ${details['masalah']}'),
-                        Text('Status : ${details['status']}'),
+                        Text('Status: ${_getStatusLabel(details['status'])}'),
                       ],
                     ),
                     SizedBox(height: 16),
@@ -640,5 +639,20 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
         ],
       ),
     );
+  }
+}
+
+String _getStatusLabel(dynamic status) {
+  switch (status) {
+    case 1:
+      return 'Pending';
+    case 2:
+      return 'Confirmed';
+    case 3:
+      return 'Started';
+    case 4:
+      return 'Completed';
+    default:
+      return 'Unknown';
   }
 }
