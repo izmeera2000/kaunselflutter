@@ -5,12 +5,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ChatbotAdminPage extends StatefulWidget {
-  final String? studentName;
+  final String studentName;
   final String? studentImage;
   final String? studentId;
 
   const ChatbotAdminPage(
-      {super.key, this.studentImage, this.studentId, this.studentName});
+      {super.key, this.studentImage, this.studentId, required this.studentName});
 
   @override
   State<ChatbotAdminPage> createState() => _ChatbotAdminPageState();
@@ -74,20 +74,19 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
           Uri.parse('${Config.base_url}/send_chat'),
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           body: {
-            'user_id': studentId!, 
+            'user_id': studentId!,
             'message': messages.last['message']!,
             'sender': 'admin', // Ensure sender is student
             'chat_send_admin': 'chat_send_admin',
           },
         );
-
       } catch (error) {
         debugPrint('Error: $error');
       }
-              await sendNotificationTopic(
-                  "user-${studentId}", "Kaunselor", _controller.text, "site1");
+      await sendNotificationTopic(
+          "user-${studentId}", "Kaunselor", _controller.text, "site1");
 
-       _scrollToBottom();
+      _scrollToBottom();
     }
   }
 
@@ -131,6 +130,15 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.studentName),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
@@ -166,32 +174,31 @@ class _ChatbotAdminPageState extends State<ChatbotAdminPage> {
                 ),
               ),
               Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  hintText: "Type a message",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        decoration: InputDecoration(
+                          hintText: "Type a message",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: _sendMessage, // Send message on button click
+                    ),
+                  ],
                 ),
               ),
-            ),
-            IconButton(
-              icon: Icon(Icons.send),
-              onPressed: _sendMessage, // Send message on button click
-            ),
-          ],
-        ),
-      ),
             ],
           ),
         ),
       ),
-           
     );
   }
 }
@@ -203,7 +210,10 @@ class MessageBubble extends StatelessWidget {
   final String senderName;
 
   const MessageBubble(
-      {super.key, required this.message, required this.sender, required this.senderName});
+      {super.key,
+      required this.message,
+      required this.sender,
+      required this.senderName});
 
   @override
   Widget build(BuildContext context) {

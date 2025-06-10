@@ -49,8 +49,6 @@ class _AppointmentDetailsPage2State extends State<AppointmentDetailsPage2> {
     }
   }
 
- 
-
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -278,7 +276,15 @@ class _AppointmentDetailsPage2State extends State<AppointmentDetailsPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Appointment Details")),
+      appBar: AppBar(
+        title: const Text("Appointment Details"),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -334,7 +340,6 @@ class _AppointmentDetailsPage2State extends State<AppointmentDetailsPage2> {
                       ],
                     ),
                     SizedBox(height: 20),
-
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -361,10 +366,6 @@ class _AppointmentDetailsPage2State extends State<AppointmentDetailsPage2> {
                       ],
                     ),
                     SizedBox(height: 16),
-
-         
-                  
-                    
                   ],
                 ),
               );
