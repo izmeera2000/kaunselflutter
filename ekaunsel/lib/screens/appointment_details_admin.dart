@@ -285,6 +285,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     } catch (e) {
       debugPrint('Error ending appointment: $e');
     }
+    
   }
 
   Future<void> showFinalizeDialog(
