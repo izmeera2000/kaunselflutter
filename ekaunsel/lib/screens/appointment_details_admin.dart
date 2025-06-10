@@ -555,7 +555,7 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         SizedBox(height: 8),
                         Text('Masalah : ${details['masalah']}'),
-                        Text('Status: ${_getStatusLabel(details['status'])}'),
+                        Text('Status: ${_getStatusLabel(status)}'),
                       ],
                     ),
                     SizedBox(height: 16),
