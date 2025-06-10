@@ -72,3 +72,19 @@ Future<void> subscribeToTopic(String topic) async {
   }
 }
 
+Future<void> unsubscribeFromAllTopics() async {
+  final prefs = await SharedPreferences.getInstance();
+  final topics = prefs.getStringList('subscribed_topics') ?? [];
+
+  for (final topic in topics) {
+    try {
+      await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+      print('Unsubscribed from topic: $topic');
+    } catch (e) {
+      print('Failed to unsubscribe from $topic: $e');
+    }
+  }
+
+  // Optionally clear the list
+  await prefs.remove('subscribed_topics');
+}

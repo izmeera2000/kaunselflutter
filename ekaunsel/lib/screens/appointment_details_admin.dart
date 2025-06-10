@@ -105,12 +105,6 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
 
                     Navigator.pop(context);
                     if (!mounted) return;
-                    Navigator.pushReplacement(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (_) =>
-                              AppointmentDetailsPage(id: widget.id)),
-                    );
                   },
                   child: Text('Approve'),
                 ),
@@ -175,6 +169,10 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
     } else {
       debugPrint("Failed to reject appointment");
     }
+     Navigator.pushReplacement(
+      context,
+      CupertinoPageRoute(builder: (_) => AppointmentDetailsPage(id: widget.id)),
+    );
   }
 
   Future<void> _approveAppointment() async {
@@ -214,6 +212,11 @@ class _AppointmentDetailsPageState extends State<AppointmentDetailsPage> {
       debugPrint("❌ Error: $e");
       _showErrorDialog("Something went wrong. Please try again.");
     }
+
+    Navigator.pushReplacement(
+      context,
+      CupertinoPageRoute(builder: (_) => AppointmentDetailsPage(id: widget.id)),
+    );
   }
 
   Future<void> startAppointment() async {

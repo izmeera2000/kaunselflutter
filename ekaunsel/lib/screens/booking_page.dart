@@ -244,7 +244,7 @@ class _BookingPageState extends State<BookingPage> {
                     // Close the dialog and navigate to success screen
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(
-                        'success_booking'); // Navigate to success page
+                        '/success_booking'); // Navigate to success page
                   } else {
                     // Handle server error or failure
                     debugPrint(

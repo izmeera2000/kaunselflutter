@@ -1,3 +1,4 @@
+import 'package:ekaunsel/components/notification.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:ekaunsel/screens/login_page.dart';
@@ -127,12 +128,19 @@ class _ProfilePageState extends State<ProfilePage> {
                 leading: const Icon(Icons.logout),
                 title: const Text('Logout'),
                 onTap: () async {
+                    unsubscribeFromAllTopics();
+
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.clear(); // clear saved session/token/etc.
 
                   await FirebaseMessaging.instance.deleteToken();
 
                   if (!context.mounted) return;
+
+                  // Sign out from Firebase
+
+                  // Navigate to login screen and replace current route
+                  Navigator.pushReplacementNamed(context, '/login');
 
                   Navigator.pushAndRemoveUntil(
                     context,

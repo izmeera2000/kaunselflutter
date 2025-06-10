@@ -3,6 +3,7 @@ import 'package:ekaunsel/screens/chat_list_page.dart';
 import 'package:ekaunsel/screens/chatbot_admin_page.dart';
 import 'package:ekaunsel/screens/chatbot_page.dart';
 import 'package:ekaunsel/screens/doctor_details.dart';
+import 'package:ekaunsel/screens/succes_booked.dart';
 import 'package:ekaunsel/utils/theme.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -183,7 +184,7 @@ class _MyAppState extends State<MyApp> {
         'booking_page': (context) => BookingPage(),
         '/chat_list': (context) => ChatListPage(),
         '/chat_user': (context) => ChatbotPage(),
-        '/chat_admin': (context) => ChatbotAdminPage(),
+        '/success_booking': (context) => AppointmentBooked(),
       },
     );
   }
