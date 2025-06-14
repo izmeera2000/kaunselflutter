@@ -123,7 +123,7 @@ class _AppointmentPageState extends State<AppointmentPage> with RouteAware {
 
     DateTime now = DateTime(DateTime.now().year, 1, 1);
     DateTime end = DateTime(DateTime.now().year, 12, 31, 23, 59, 59);
-    int limit = 10;
+    int limit = 100;
     int offset = 0;
 
     final UserModel user = await getUserDetails();

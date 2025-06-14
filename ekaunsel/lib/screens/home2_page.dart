@@ -100,7 +100,7 @@ class _Home2PageState extends State<Home2Page> {
       'senaraitemujanji_admin_flutter[end]': formattedDate,
       'senaraitemujanji_admin_flutter[user_id]': userId,
       'senaraitemujanji_admin_flutter[status2]': 'upcoming',
-      'senaraitemujanji_admin_flutter[limit]': '10',
+      'senaraitemujanji_admin_flutter[limit]': '100',
       'senaraitemujanji_admin_flutter[offset]': '0',
     };
     final response = await http.post(

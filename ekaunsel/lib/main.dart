@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   void initNotifications() async {
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidInit = AndroidInitializationSettings('@mipmap/launcher_icon');
     const initSettings = InitializationSettings(android: androidInit);
 
     await flutterLocalNotificationsPlugin.initialize(initSettings);

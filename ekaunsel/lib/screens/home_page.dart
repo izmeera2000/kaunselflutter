@@ -32,25 +32,24 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> todaysAppointments = [];
   bool isLoadingToday = true;
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     fetchUserDetails().then((_) => fetchTodaysAppointments());
-    subscribeToTopic('semangat');
-  }
+   }
 
   // Fetch user details from SharedPreferences
   Future<void> fetchUserDetails() async {
     try {
       // Fetch the user details as a UserModel instance
       UserModel user = await getUserDetails();
-      await printSavedUserDetails();
+ 
 
       setState(() {
         // Safely check and update user details
         userName = user.nama!.isNotEmpty
             ? user.nama!
             : 'User'; // Default to 'User' if no name found
-         // Safely construct the profile image URL
+        // Safely construct the profile image URL
         String userId = user.userId!; // Ensure userId exists
         String imageUrl = user.imageUrl!; // Ensure imageUrl exists
 
@@ -87,7 +86,7 @@ class _HomePageState extends State<HomePage> {
       'senaraitemujanji_flutter[end]': formattedDate,
       'senaraitemujanji_flutter[user_id]': userId,
       'senaraitemujanji_flutter[status2]': 'upcoming',
-      'senaraitemujanji_flutter[limit]': '10',
+      'senaraitemujanji_flutter[limit]': '100',
       'senaraitemujanji_flutter[offset]': '0',
       'senaraitemujanji_flutter[role]': role,
     };
@@ -310,15 +309,14 @@ class _HomePageState extends State<HomePage> {
                                 //         AppointmentDetailsPage(id: scheduleId),
                                 //   ),
                                 // );
-                                 Navigator.push(
+                                Navigator.push(
                                   context,
                                   CupertinoPageRoute(
                                     builder: (context) =>
-                                        AppointmentDetailsPage2(
-                                            id: scheduleId),
+                                        AppointmentDetailsPage2(id: scheduleId),
                                   ),
                                 );
-                               },
+                              },
                             ),
                           );
                         }).toList(),
@@ -332,7 +330,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Config.spaceSmall,
-                 Config.spaceSmall,
+                Config.spaceSmall,
                 Column(
                   children: List.generate(1, (index) {
                     return const DoctorCard(route: 'doctor_details');

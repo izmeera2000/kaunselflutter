@@ -69,14 +69,14 @@ class _LoginFormState extends State<LoginForm> {
           final user = responseBody['user'];
           print(responseBody['user']);
           String role = user['role'];
-
+ 
           try {
             await saveUserDetails(user, email, role, rememberMe);
           } catch (e) {
             print('SharedPreferences error: $e');
           }
 
-          // Navigator.of(context).pop(); // ✅ close loading indicator
+          Navigator.of(context).pop(); // ✅ close loading indicator
 
           if (role == '1') {
             Navigator.pushNamedAndRemoveUntil(

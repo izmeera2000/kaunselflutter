@@ -105,7 +105,7 @@ class _AppointmentAdminPageState extends State<AppointmentAdminPage>
 
     DateTime now = DateTime(DateTime.now().year, 1, 1);
     DateTime end = DateTime(DateTime.now().year, 12, 31, 23, 59, 59);
-    int limit = 30;
+    int limit = 1000;
     int offset = 0;
     final UserModel user = await getUserDetails();
     List<dynamic> combinedData = [];

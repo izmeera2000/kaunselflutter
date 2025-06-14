@@ -44,6 +44,7 @@ class _MainLayoutState extends State<MainLayout> {
     }
     return Future.value(true); // Allow exit after second back press
   }
+
   void subkata() async {
     await FirebaseMessaging.instance.subscribeToTopic('katasemangat');
   }
@@ -52,7 +53,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvokedWithResult: _onWillPop,
-            canPop: false,
+      canPop: false,
       child: Scaffold(
         body: PageView(
           physics: NeverScrollableScrollPhysics(),
@@ -62,7 +63,6 @@ class _MainLayoutState extends State<MainLayout> {
 
             setState(() {
               currentPage = value;
-
             });
           },
           children: const <Widget>[
@@ -108,8 +108,6 @@ class _MainLayoutState extends State<MainLayout> {
   }
 }
 
-
-
 class Main2Layout extends StatefulWidget {
   const Main2Layout({super.key});
 
@@ -136,13 +134,12 @@ class _Main2LayoutState extends State<Main2Layout> {
     }
     return Future.value(true); // Allow exit after second back press
   }
- 
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
       onPopInvokedWithResult: _onWillPop,
-            canPop: false,
+      canPop: false,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         body: PageView(
