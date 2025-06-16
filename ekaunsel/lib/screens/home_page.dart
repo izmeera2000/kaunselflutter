@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> medCat = [
     {"icon": FontAwesomeIcons.heartPulse, "category": "Kaunseling"},
   ];
+      late UserModel user;
 
   String userName = 'Loading...'; // Default value for the user name
   String userProfileImageUrl = ' ';
@@ -114,7 +115,6 @@ class _HomePageState extends State<HomePage> {
     });
 
     try {
-      final UserModel user = await getUserDetails();
       final data = await fetchAppointmentsToday(user.userId!, user.role!);
 
       // Filter only status == 2 (Confirmed)

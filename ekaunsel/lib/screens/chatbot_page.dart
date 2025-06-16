@@ -18,12 +18,13 @@ class _ChatbotPageState extends State<ChatbotPage> {
       []; // List to hold messages with dynamic types
   String? userId; // User ID, which needs to be fetched
   final ScrollController _scrollController = ScrollController();
+      late UserModel user;
 
   // Fetch the user details and set userId
   Future<void> fetchUserDetails() async {
     try {
       // Fetch user details as a UserModel
-      UserModel user = await getUserDetails();
+       user = await getUserDetails();
       setState(() {
         userId = user.userId; // Ensure user_id exists
       });
