@@ -126,7 +126,7 @@ String? _selectedStatusKahwin;
       print("sending");
       // Add text fields
       request.headers['Content-Type'] = 'multipart/form-data';
-
+  print(jantina);
       request.fields['user_register_flutter'] = '1';
       request.fields['ndp'] = ndp;
       request.fields['fullname'] = fullname;
@@ -154,20 +154,20 @@ String? _selectedStatusKahwin;
       debugPrint(responseBody);
 
       if (response.statusCode == 200) {
-        if (jsonResp['status'] == 'success') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(jsonResp['message'])),
-          );
-          Navigator.of(context).pushNamed('/login');
+      //   if (jsonResp['status'] == 'success') {
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(content: Text(jsonResp['message'])),
+      //     );
+      //     Navigator.of(context).pushNamed('/login');
           
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(jsonResp['message'] ?? 'Registration failed')),
-          );
-                if (!mounted) return;
-      Navigator.of(context).pop(); // Close loading
-        }
+      //   } else {
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(
+      //           content: Text(jsonResp['message'] ?? 'Registration failed')),
+      //     );
+      //           if (!mounted) return;
+      // Navigator.of(context).pop(); // Close loading
+      //   }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed: ${response.statusCode}')),
